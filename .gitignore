@@ -1,0 +1,28 @@
+# Системные файлы
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Локальные настройки редакторов
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.bak
+
+# Локальные секреты; образец конфигурации можно хранить в Git
+.env
+.env.*
+!.env.example
+
+# Возможные зависимости и результаты сборки
+node_modules/
+dist/
+build/
+.cache/
+__pycache__/
