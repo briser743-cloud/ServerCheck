@@ -1,0 +1,13 @@
+{
+  "name": "servercheck",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Проверка совместимости серверных комплектующих",
+  "engines": { "node": ">=22.9" },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "test": "node --test",
+    "test:browser": "node scripts/browser-check.mjs"
+  }
+}
