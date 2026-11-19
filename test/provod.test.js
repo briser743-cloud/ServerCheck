@@ -2,7 +2,43 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { analyzeConfig } from '../engine.js';
 import { researchConfiguration } from '../research.js';
-import { documentMatchesPosition, researchWithProvod } from '../provod.js';
+import { documentMatchesPosition, researchWithProvod, selectEvidenceExcerpt, collectProvodDocuments, researchAssemblyWithProvod } from '../provod.js';
+
+test('model receives configured manufacturer documentation before other sources', async () => {
+  const position = {id:'line-1',sku:'CPU-1234',description:'Acme CPU-1234 processor',kind:'cpu',quantity:1,requiredChecks:[]};
+  const local = {positions:[position]};
+  const collected = new Map([[position.id,{research:{},documents:[
+    {url:'https://seller.example/CPU-1234',title:'CPU-1234 seller',text:'CPU-1234 details',positionIds:[position.id]},
+    {url:'https://docs.acme.example/CPU-1234',title:'CPU-1234 manufacturer',text:'CPU-1234 details',positionIds:[position.id]},
+  ]}]]);
+  let sent;
+  await researchAssemblyWithProvod(local,[position],{apiKey:'test',model:'test',instructions:'test',priorityResources:[{manufacturer:'Acme',domain:'acme.example'}],fetchImpl:async (_url,request) => {
+    sent = JSON.parse(JSON.parse(request.body).messages.at(-1).content);
+    return new Response(JSON.stringify({choices:[{finish_reason:'stop',message:{content:JSON.stringify({positions:[],assemblyAnalysis:{groups:[],purchaseNotes:[]}})}}]}));
+  }},collected);
+  assert.equal(new URL(sent.documents[0].url).hostname,'docs.acme.example');
+});
+
+test('preferred domains are searched and passed before other relevant results', async () => {
+  const position = {id:'line-1',sku:'ABC-1234',description:'Acme ABC-1234 server',kind:'platform',quantity:1};
+  const calls = [];
+  const result = await collectProvodDocuments(position,{positions:[position]}, {tavilyApiKey:'test',priorityResources:[{manufacturer:'Acme',domain:'primary.example'},{manufacturer:'Acme',domain:'secondary.example'}],fetchImpl:async (_url,request) => {
+    const input = JSON.parse(request.body); calls.push(input);
+    const domain = input.include_domains?.[0] || 'seller.example';
+    return new Response(JSON.stringify({results:[{url:`https://${domain}/ABC-1234`,title:'Acme ABC-1234 specifications',content:'Acme ABC-1234 documentation'}]}));
+  }});
+  assert.deepEqual(calls.slice(0,2).map(call => call.include_domains[0]),['primary.example','secondary.example']);
+  assert.deepEqual(result.documents.slice(0,2).map(doc => new URL(doc.url).hostname),['primary.example','secondary.example']);
+});
+
+test('manual storage connector section is retained beyond opening text', () => {
+  const raw = 'Введение '.repeat(700) + 'Storage Bay: 24 front bays. Backplane connectors: 12 x MCIO x2 for NVMe; 6 x SlimSAS x4 for SATA. MB onboard connectors: 2 x M.2 connectors.';
+  const text = selectEvidenceExcerpt({content:'Описание платформы',raw_content:raw});
+  assert.match(text,/12 x MCIO x2/);
+  assert.match(text,/6 x SlimSAS x4/);
+  assert.match(text,/2 x M\.2 connectors/);
+  assert.ok(text.length <= 3200);
+});
 
 test('document relevance requires the specific SKU or matching brand and model', () => {
   const platform = { sku: 'PLATFORM-TEST', description: 'Server platform PLATFORM-TEST' };

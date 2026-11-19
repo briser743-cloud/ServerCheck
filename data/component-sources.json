@@ -1,0 +1,475 @@
+{
+  "version": 1,
+  "components": {
+    "90SF03X1-M000R0": {
+      "links": [
+        {
+          "url": "https://servers.asus.com/products/servers/rack-servers/rs521a-e12-rs24U",
+          "title": "ASUS RS521A-E12-RS24U | ASUS Servers",
+          "modelOnly": true
+        },
+        {
+          "url": "https://nix.ru/autocatalog/server_systems_asustek/ASUS-2U-RS521A-E12-RS24U-2000W16NG-90SF03X1-M000R0-SP5-4xPCI-E-SVGA-16xHS-NVMe-2xGbLAN-24DDR5-2000W-HS_858722.html",
+          "title": "NIX: RS521A-E12-RS24U 90SF03X1-M000R0 (Socket SP5, 1x)",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:55:54.930Z"
+    },
+    "100-000000794": {
+      "links": [
+        {
+          "url": "https://smicro.eu/amd-epyc-genoa-9274f-dp-up-24c-48t-4-05g-256mb-320w-sp5-100-000000794-1",
+          "title": "AMD EPYC Genoa 9274F DP/UP 24C/48T 4.05G 256MB 320W SP5 - 100-000000794 | smicro.eu",
+          "modelOnly": false
+        },
+        {
+          "url": "https://1ya.ru/-processor-amd-epyc-9274f-oem-100-000000794-184006431",
+          "title": "ᐉ Процессор AMD EPYC 9274F OEM (100-000000794) купить 218879 руб",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "HUS726T4TALE6L4": {
+      "links": [
+        {
+          "url": "https://www.8anet.com/Product/16641/4TB-WD-0B36040-HUS726T4TALE6L4---SATA-3-5-inch-HDD-Ultrastar-DC-HC310-512e-SE-Enterprise-SATA-6-0GB-s-7200rpm-256MB",
+          "title": "8ANET - 4TB WD 0B36040 / HUS726T4TALE6L4 - SATA 3.5-inch HDD Ultrastar DC HC310 512e SE Enterprise SATA 6.0GB/s 7200rpm 256MB",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.newegg.com/hgst-hus726t4tale6l4-4tb/p/1Z4-001J-007X0",
+          "title": "HGST/WD Ultrastar 4TB 7200 RPM 512e SATA 6Gb/s 3.5-Inch Enterprise Hard Drive (HUS726T4TALE6L4) - Newegg.com",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "90SF03Y1-M000N0": {
+      "links": [
+        {
+          "url": "https://www.dateks.lv/en/cenas/serveri-brand/1228930-asus-platforma-asus-rack-1u-rs501a-e12-rs4-amd-epyc-9005-9004-4x-nvme-sata-hs-2xm-2-2x1gbe-ipmi-1-1-1600w-",
+          "title": "Asus Platforma Asus Rack (1U) RS501A-E12-RS4 AMD Epyc 9005/9004 (4x NVMe/SATA HS, 2xM.2, 2x1Gbe, IPMI, 1+1 1600W ) (90SF03Y1-M000N0)",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.nix.ru/autocatalog/server_systems_asustek/ASUS-1U-RS501A-E12-RS4-90SF03Y1-M000N0-SP5-3xPCI-E-SVGA-4xHS-SAS-SATA-NVMe-2xGbLAN-24DDR5-1600W-HS_858724.html",
+          "title": "1U ASUS RS501A-E12-RS4 90SF03Y1-M000N0 (1U, 1x Socket SP5, 24x Registered DDR5, 4   NVMe SSD, 4   2.5\" HDD/SSD, 4   3.5\" HDD/SSD, 2x 1 /, )  ,   , ",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "100-000001552": {
+      "links": [
+        {
+          "url": "https://www.centralcomputer.com/amd-epyc-9115-16c-32t-2-6ghz-processor-4-1ghz-boost-tray-64-mb-l3-cache-125w-tdp-100-000001552.html",
+          "title": "AMD EPYC 9115 16C/32T 2.6GHz Processor 4.1GHz Boost Tray 64 MB L3 Cache 125W TDP 100-000001552EPYC 9005 Series",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.bezvasplatky.cz/p/amd-epyc-9115-2-6-ghz-turbo-4-1ghz-16c32t-l3-64mb-sp5-125w-100-000001552-1",
+          "title": "AMD EPYC 9115 @ 2.6 GHz / Turbo 4.1GHz / 16C32T / L3 64MB / SP5 / 125W (100-000001552) • Home Credit, a. s.",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.dateks.lv/en/cenas/serveru-procesori/1209408-amd-epyc-turin-9115-16c-32t-2-6-ghz-64mb-cache-sp5-125w-",
+          "title": "AMD EPYC TURIN 9115 (16C/32T, 2.6 GHz, 64MB Cache, SP5, 125W) (100-000001552)",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:55:54.931Z"
+    },
+    "05-60004-00": {
+      "links": [
+        {
+          "url": "https://ibertronica.es/broadcom-05-60004-00-cable-slim-sas-sff-8654-a-2x4-slim-sas-sff-8654-1-m",
+          "title": "Broadcom 05-60004-00. Cable Slim SAS SFF-8654 a 2x4 SFF-8654. 1 m. - Ibertronica",
+          "modelOnly": false
+        },
+        {
+          "url": "https://docs.broadcom.com/doc/12354774",
+          "title": "Документация производителя",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:55:54.931Z"
+    },
+    "AL15SEB12EQ": {
+      "links": [
+        {
+          "url": "https://www.serverdirect.nl/product/toshiba/storage/e-perf+hdd+12tb+25+10k+sas+12gbit%2Fs+5x--al15seb12eq?_l=en",
+          "title": "Toshiba E-Perf HDD 1.2TB 2.5 10k SAS 12Gbit/s 5x (AL15SEB12EQ) | ServerDirect",
+          "modelOnly": false
+        },
+        {
+          "url": "https://born-shop.ru/catalog/216155.html",
+          "title": "HDD Toshiba SAS 1.2TB 2.5 10K 128Mb AL15SEB12EQ — купить с доставкой по выгодной цене | Борн",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "05-50077-02": {
+      "links": [
+        {
+          "url": "https://www.haehnlein-it.com/Broadcom-LSI-9500-16i-Tri-Mode-HBA-Controller-12Gbps-SATA-SAS-PCIe-4.0-x8-Avago-IT-Mode/05-50077-02",
+          "title": "Broadcom LSI 9500-16i Tri-Mode HBA Controller 12Gbps SATA SAS PCIe 4.0 x8 Avago IT-Mode | Neu | 05-50077-02",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.8anet.com/Product/17654/Broadcom-HBA-9500-16i-05-50077-02-16-Int-Ports-12Gb-s-SAS-6Gb-s-SATA-PCIe-(NVMe)-Gen4-Tri-Mode-2x8-SFF-8654-LP-Single",
+          "title": "8ANET - Broadcom HBA 9500-16i 05-50077-02 16-Int Ports 12Gb/s SAS/6Gb/s SATA/PCIe (NVMe) Gen4 Tri-Mode 2x8 SFF-8654 LP Single",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "MODEL:ASUS RS700-E12-RS12U": {
+      "links": [
+        {
+          "url": "https://mitxpc.com/products/rs700-e12-rs12u-2kw10g",
+          "title": "ASUS RS700-E12-RS12U — MITXPC",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.avendor.com/products/rs700-e12-rs12u-2kw10g",
+          "title": "ASUS RS700-E12-RS12U 1U Server Dual Xeon 6 DDR5 12xNVMe 2000W – Avendor",
+          "modelOnly": true
+        },
+        {
+          "url": "https://servers.asus.com/products/servers/rack-servers/RS700-E12-RS12U",
+          "title": "ASUS RS700-E12-RS12U — страница производителя",
+          "modelOnly": true
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "MODEL:INTEL XEON 6511P": {
+      "links": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/242666/intel-xeon-6511p-processor-72m-cache-2-30-ghz/specifications.html",
+          "title": "Intel Xeon 6511P — спецификация производителя",
+          "modelOnly": true
+        },
+        {
+          "url": "https://nix.ru/autocatalog/intel/CPU-Intel-Xeon-6511P-23-GHz-16core-72Mb-150W-LGA4710_942341.html",
+          "title": "Intel Xeon 6511P — NIX",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.itcreations.com/product/151797",
+          "title": "INTEL XEON 6511P - New - INTEL XEON 6 Series 16 CORE Processor 6511P 2.3GHZ Base / 4.2GHZ Max 72MB Cache TDP 150W FCLGA4710 ( Granite Rapids ) ( 6TH Gen ) ( 6500 Series ) ( 2.30GHZ / 4.20GHZ )",
+          "modelOnly": true
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "MODEL:SOLIDIGM D7-P5620": {
+      "links": [
+        {
+          "url": "https://www.morele.net/dysk-ssd-solidigm-d7-series-d7-p5620-3-2tb-2-5-u-2-pcie-4-0-x4-nvme-ssdpf2ke032t11z-14071690",
+          "title": "Solidigm D7-P5620 3.2TB U.2 — Morele",
+          "modelOnly": true
+        },
+        {
+          "url": "https://kvan.tech/catalog/komplektuyushchie/zhestkie-diski/zhestkie-diski-intel/3-2tb-ssd-intel-d7-p5620-u-2-2-5-15mm-nvme-pcie-4-0-x4-tlc-r-w-6700-3600mb-s-iops-1000000-341000-tbw",
+          "title": "SSD накопитель 3.2TB SSD Intel D7-P5620, U.2(2.5\" 15mm), NVMe, PCIe 4.0 x4, TLC, R/W 6700/3600MB/s, IOPs 1000000/341000, TBW 17500, DWPD 3 купить в интернет-магазине Kvantech | Цена, описание, характеристики",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.solidigm.com/content/dam/solidigm/en/site/products/data-center/d7/p5620/documents/042222-Solidigm-P5520-P5620-ProductBrief-Final-V5.pdf",
+          "title": "Solidigm D7-P5620 — спецификация семейства",
+          "modelOnly": true
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "MODEL:CONNECTX-4 LX": {
+      "links": [
+        {
+          "url": "https://networking-docs.nvidia.com/connectx4lxfwrn/14321908/firmware-compatible-products",
+          "title": "NVIDIA ConnectX-4 Lx — совместимые продукты",
+          "modelOnly": true
+        },
+        {
+          "url": "https://networking-docs.nvidia.com/connectx4lxfwrn/14321912/firmware-compatible-products",
+          "title": "Firmware Compatible Products | ConnectX-4 Lx Firmware RN",
+          "modelOnly": true
+        },
+        {
+          "url": "https://servero.co.uk/mellanox-mcx4421a-acqn-mcx4421a-acqn-cx4421a-connectx-4-lx-en-ocp-network-interface-card-25gbe-dual-port-sfp28-pcie3.0-x8-refurbished",
+          "title": "MCX4421A-ACQN CX4421A ConnectX-4 Lx EN OCP Network Interface Card 25GbE Dual-Port SFP28 PCIe3.0 x8",
+          "modelOnly": true
+        },
+        {
+          "url": "https://docs.nvidia.com/nvidia-connectx-4-lx-ethernet-adapter-cards-user-manual.pdf",
+          "title": "NVIDIA ConnectX-4 Lx — руководство семейства адаптеров",
+          "modelOnly": true
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "MODEL:SAMSUNG DDR5 64GB RDIMM 5600": {
+      "links": [
+        {
+          "url": "https://corewavelabs.com/m321r8ga0pb0-cwm-samsung-64gb-ddr5-5600-rdimm",
+          "title": "Пример: Samsung 64GB DDR5-5600 RDIMM M321R8GA0PB0-CWM — артикул модуля в спецификации не указан",
+          "modelOnly": true
+        },
+        {
+          "url": "https://corewavelabs.com/m321r8ga0eb0-cwm-samsung-64gb-ddr5-5600-rdimm",
+          "title": "M321R8GA0EB0-CWM Samsung | 64GB DDR5-5600 RDIMM",
+          "modelOnly": true
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "PK8072205559500": {
+      "links": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/237560/intel-xeon-gold-6526y-processor-37-5m-cache-2-80-ghz/ordering.html",
+          "title": "Документация производителя",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.wiredzone.com/shop/product/10031228-intel-pk8072205559500-xeon-scalable-gold-6526y-2-80ghz-16-core-processor-5th-generation-emerald-rapids-13913",
+          "title": "Intel PK8072205559500 Xeon Scalable Gold 6526Y 2.80GHz 16-Core Processor 5th Generation - Emerald Rapids",
+          "modelOnly": false
+        },
+        {
+          "url": "https://smicro.eu/intel-xeon-gold-6526y-16c-32t-2-80-3-90ghz-37-5mb-195w-pk8072205559500-1",
+          "title": "Intel Xeon Gold 6526Y 16C/32T 2.80-3.90GHz 37.5MB 195W - PK8072205559500 | smicro.eu",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "SEDC600M/480G": {
+      "links": [
+        {
+          "url": "https://geekskart.com/product/kingston-dc600m-480gb-2-5-sata3-internal-solid-state-drive-ssd",
+          "title": "Kingston DC600M 480GB Enterprise SATA SSD | Kingston",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.kingston.com/datasheets/SEDC600M_en.pdf",
+          "title": "Спецификация производителя",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "05-50077-01": {
+      "links": [
+        {
+          "url": "https://www.8anet.com/Product/17443/BROADCOM-MegaRAID-9560-8i-05-50077-01-8-Ports-12Gb-s-SAS-SATA-PCIe-(NVMe)-Gen-4-0-Tri-Mode-1x8-SFF-8654-4GB-DDR4-LP-Single",
+          "title": "8ANET - BROADCOM MegaRAID 9560-8i 05-50077-01 8-Ports 12Gb/s SAS/SATA/PCIe (NVMe) Gen 4.0 Tri-Mode 1x8 SFF-8654 4GB DDR4 LP Single",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.softmagazin.ru/lsi-broadcom/05-50077-01",
+          "title": "Softmagazin: контроллер 05-50077-01 — 8-Port, PCIe 4.0 x8 (1 карта)",
+          "modelOnly": false
+        },
+        {
+          "url": "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/7152/PA-295701.pdf",
+          "title": "Документ Broadcom у дистрибьютора",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "QLE2772-SR-SP": {
+      "links": [
+        {
+          "url": "https://www.it-houst.com/modules-product/qlogic-module/qle2772",
+          "title": "[QLE2772] ราคา จำหน่าย Qlogic QLE2772-SR-SP PCIe 4.0 x8 Dual-port 32GFC SR-Optic SFP+ Enhanced 32Gb Fibre Channel Adapter - IT Houst By ITK Connecting Co.,Ltd.",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.idealo.de/preisvergleich/OffersOfProduct/212306620_-qle2772-sr-sp-fibre-channel-hostbus-adapter-pcie-32gb-s-2-ports-qle2772-sr-sp-qlogic.html",
+          "title": "Qlogic QLE2772-SR-SP Fibre Channel Hostbus-Adapter, PCIe, 32Gb/s, 2 Ports (QLE2772-SR-SP) ab 1.079,00 € (November 2026) | Vergleiche 6 Angebote auf idealo.de",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.marvell.com/products/fibre-channel-adapters-and-controllers/2770-series.html",
+          "title": "Страница производителя",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "LREC9712HT": {
+      "links": [
+        {
+          "url": "https://www.lr-link.com.cn/adaptercarddetail/LREC9712HT.html",
+          "title": "Страница производителя",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.shop.lr-link.com/products/lrec9712ht-ethernet-network-card-2-port-lan-card-i350-pcie-express-dual-ports-network-adapter.html",
+          "title": "LREC9712HT: PCIe x4; совместимость с PCIe x8 и x16 по структурной установке",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "0.95.002.1070": {
+      "links": [
+        {
+          "url": "https://www.gooxi.us/ProductList/info_lcid_65_itemid_2808.html",
+          "title": "Страница производителя для модели",
+          "modelOnly": true
+        },
+        {
+          "url": "https://brtrade.ru/catalog/servery/komplektuyushchie_dlya_serverov/servernye_platformy/10379/",
+          "title": "Партномер у поставщика",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "MTC20F1045S1RC56BD1": {
+      "links": [
+        {
+          "url": "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/9044/MTC20F1045S1RC.pdf",
+          "title": "Спецификация Micron у дистрибьютора",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "LRES4164PF-2SFP28": {
+      "links": [
+        {
+          "url": "https://www.ebay.com/itm/136209800885",
+          "title": "Нет подтверждения размеров/механики именно LRES4164PF-2SFP28 в предоставленных материалах",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.lr-link.com.cn/productshow/LRES4164PF-2SFP28.html",
+          "title": "Страница производителя",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "0.95.002.0103": {
+      "links": [
+        {
+          "url": "https://www.nix.ru/autocatalog/server_systems_gooxi/Gooxi-2U-SL201-D12R-G3-0950020103-LGA4189-C621A-SVGA-12xHS-SAS-SATA-2xGbLAN-32DDR4-1300W-HS_859727.html",
+          "title": "  2U Gooxi SL201-D12R-G3 0.95.002.0103 (2U, 2x Socket LGA4189, 32x LRDIMM DDR4, SATA RAID 0, 1, 10, 5, 2   NVMe SSD, 14   2.5\" HDD/SSD, 12   3.5\" HDD/SSD, 2x 1 /, )  ,   , ",
+          "modelOnly": false
+        },
+        {
+          "url": "https://server-market.ru/catalog/servery/gooxi_sl201_d12r_g3_2u_2xlga4189_32x_ddr4_12x_3_5_2_5_sata_sas_2x_2_5_rear_sas_sata_2x_2_5_rear_nvme",
+          "title": "Купить Gooxi SL201-D12R-G3 2U, 2xLGA4189; 32x DDR4; 12x 3.5(2.5\") SATA/SAS; 2x 2.5\" rear SAS/SATA; 2x 2.5\" rear NVMe; 2х M.2 NVMe 2280; 2xPCIe 4.0x16; 4xPCIe в Сервер Маркет | SL201-D12R-G3",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.netlab.ru/katalog/servery-gooxi/gooxi-sl201-d12r-g3-2u-2xlga4189-32x-ddr4-12x-3-5-2-5-sata-sas-2x-2-5-rear-sas-sata-2x-2-5-rear-nvme-2h-m-2-nvme-2280-2xpcie-4-0x16-4xpcie-4-0x8-ocp3-0-2x1gbe-i350-ipmi-rail-2x1200w",
+          "title": "Купить Gooxi SL201-D12R-G3 2U, 2xLGA4189; 32x DDR4; 12x 3.5(2.5\") SATA/SAS; 2x 2.5\" rear SAS/SATA; 2x 2.5\" rear NVMe; 2х M.2 NVMe 2280; 2xPCIe 4.0x16; 4xPCIe 4.0x8; OCP3.0; 2x1GbE i350; IPMI; RAIL; 2x1200W в Москве оптом - Цены на опт от производител",
+          "modelOnly": true
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "CD8068904657502": {
+      "links": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/215274/intel-xeon-gold-6326-processor-24m-cache-2-90-ghz/ordering.html",
+          "title": "Intel Xeon Gold 6326 — официальный партномер CD8068904657502",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.newegg.com/intel-xeon-gold-6326-lga-4189/p/19-118-317?Item=9SIATRNK7F0946&cm_sp=SP-_-3010539-_-Pers_ProductsYouMayAlsoLike%2B-_-5-_-9SIATRNK7F0946-_-intel+xeon-_--_-2",
+          "title": "Intel Xeon Gold 6326 Ice Lake 2.9 GHz 24MB L3 Cache LGA 4189 185W CD8068904657502 Server Processor - Newegg.com",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.newegg.com/intel-xeon-gold-6326-lga-4189/p/N82E16819118317?Item=9SIATRNK7F0946",
+          "title": "Intel Xeon Gold 6326 Ice Lake 2.9 GHz 24MB L3 Cache LGA 4189 185W CD8068904657502 Server Processor - Newegg.com",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.singular.com.cy/intel-xeon-gold-6326-2.9-ghz-16-core-32-threads-24mb-cache-oem.html",
+          "title": "Intel Xeon Gold 6326 16-Core LGA4189 Server CPU OEM",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:54:14.953Z"
+    },
+    "90SF03S1-M00160": {
+      "links": [
+        {
+          "url": "https://servers.asus.com/products/detail/overview/rs700-e12-rs12u",
+          "title": "Asus | Product Apipage",
+          "modelOnly": true
+        },
+        {
+          "url": "https://servers.asus.com/products/detail/overview/RS700-E12-RS12U",
+          "title": "Asus | Product Apipage",
+          "modelOnly": true
+        }
+      ],
+      "updatedAt": "2026-11-19T14:37:35.855Z"
+    },
+    "PK8072006398801": {
+      "links": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/242666/intel-xeon-6511p-processor-72m-cache-2-30-ghz/specifications.html",
+          "title": "Intel® Xeon® 6511P Processor (72M Cache, 2.30 GHz) Specifications",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.thailand.intel.com/content/www/th/th/products/sku/242666/intel-xeon-6511p-processor-72m-cache-2-30-ghz/downloads.html",
+          "title": "Intel® Xeon® 6511P Processor",
+          "modelOnly": true
+        }
+      ],
+      "updatedAt": "2026-11-19T14:37:35.855Z"
+    },
+    "SSDPF2KE032T11Z": {
+      "links": [
+        {
+          "url": "https://solidigm.com/products/data-center/d7/p5620.html",
+          "title": "Solidigm D7-P5620: endurance/серия (без точного соответствия TBW 17500 в предоставленном фрагменте)",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.morele.net/dysk-ssd-solidigm-d7-series-d7-p5620-3-2tb-2-5-u-2-pcie-4-0-x4-nvme-ssdpf2ke032t11z-14071690",
+          "title": "Solidigm D7-P5620 3.2TB 2.5\" U.2 PCI-E x4 Gen4 NVMe (SSDPF2KE032T11Z) - Dysk serwerowy - Morele.net",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.memoryclearance.com/SSDPF2KE032T11Z-1737332.html",
+          "title": "SOLIDIGM SSDPF2KE032T11Z D7-p5620 3.2tb Pcie 4.0 X4 3d4 Tlc | Memory Clearance",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:37:35.855Z"
+    },
+    "MCX4121A-ACUT": {
+      "links": [
+        {
+          "url": "https://www.amazon.com/connectx-4-lx/s?k=connectx-4+lx",
+          "title": "ConnectX-4 Lx EN listing: PCIe 3.0 x8",
+          "modelOnly": true
+        }
+      ],
+      "updatedAt": "2026-11-19T14:37:35.855Z"
+    },
+    "SEDC2000BM8/480G": {
+      "links": [
+        {
+          "url": "https://gzhls.at/blob/ldb/6/f/0/4/7c9fd30052082a0e598a3d706490e1d69e78.pdf",
+          "title": "[PDF] Data Center DC2000B – PCIe 4.0 NVMe M.2 Server SSD",
+          "modelOnly": false
+        }
+      ],
+      "updatedAt": "2026-11-19T14:55:54.931Z"
+    }
+  }
+}

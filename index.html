@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="light dark">
   <meta name="description" content="Проверка совместимости серверных комплектующих и установки в корпусе.">
   <title>ServerCheck — совместимость серверной сборки</title>
   <link rel="stylesheet" href="styles.css">
@@ -16,6 +16,7 @@
     <p class="sidebar-caption">РАБОЧЕЕ ПРОСТРАНСТВО</p>
     <a class="side-link selected" href="#configuration"><span aria-hidden="true">⊞</span> Конфигурация</a>
     <a class="side-link" href="#report"><span aria-hidden="true">≡</span> Отчёт проверки</a>
+    <a class="side-link" href="#settings"><span aria-hidden="true">⚙</span> Настройки</a>
     <a class="side-link" href="#method"><span aria-hidden="true">ⓘ</span> Как это работает</a>
     <div class="sidebar-bottom"><span class="status-dot"></span> Локальный проект<small>Ваш черновик — в этом браузере</small></div>
   </aside>
@@ -23,7 +24,7 @@
     <header class="topbar"><span>Инструменты <span class="divider">/</span> <strong>Совместимость сервера</strong></span><span class="version">WORKSPACE / 01</span></header>
     <main id="main">
       <section class="page-heading">
-        <div><p class="eyebrow">ПРОВЕРИТЬ ПЕРЕД СБОРКОЙ</p><h1>Всё должно работать.<br><span>И помещаться в корпус.</span></h1><p class="lead">Соберите конфигурацию. Найдите конфликты, проверьте ограничения<br class="desktop-break"> и получите рекомендации по улучшению.</p></div>
+        <div><p class="eyebrow">ПРОВЕРИТЬ ПЕРЕД СБОРКОЙ</p><h1>Проверьте спецификацию.<br><span>Будьте уверены в совместимости.</span></h1><p class="lead">Загрузите спецификацию. Найдите конфликты, проверьте ограничения<br class="desktop-break"> и получите рекомендации по улучшению.</p></div>
         <div class="server-visual" aria-hidden="true"><div class="rack-top"></div><div class="rack-unit"><i></i><i></i><i></i><b></b></div><div class="rack-unit"><i></i><i></i><i></i><b></b></div><div class="rack-unit"><i></i><i></i><i></i><b></b></div><span>BUILD WITH CONFIDENCE</span></div>
       </section>
       <div class="work-grid">
@@ -33,12 +34,14 @@
             <div class="panel project-panel">
               <div class="bom-heading"><label for="bom">Спецификация комплектующих</label><div class="bom-heading-actions"><span class="optional">можно вставить из Excel</span><button type="button" class="text-button muted" id="clear-bom">Очистить</button></div></div>
               <textarea id="bom" name="bom" rows="7" maxlength="16000"></textarea>
-              <p class="field-hint">Последнее число в каждой строке — количество этой позиции. Числа внутри описания — её характеристики. Поддерживаются табуляция, «;», «|» и списки с количеством в конце.</p>
+              <p id="packaging-notice" class="field-hint" role="status" hidden></p>
+              <p class="field-hint">Количество указывается отдельной колонкой после описания; следующая цена игнорируется. Числа внутри описания — её характеристики. Поддерживаются табуляция, «;», «|» и списки с количеством в конце.</p>
               <div id="bom-preview" class="bom-preview" aria-live="polite"></div>
+              <p id="source-save-status" class="field-hint" role="status" hidden></p>
             </div>
-            <div class="components-heading"><span>КОМПЛЕКТУЮЩИЕ И ХАРАКТЕРИСТИКИ</span><span id="filled-count">0 полей заполнено</span></div>
+            <details class="manual-settings" hidden><summary>Дополнительные параметры вручную <span>необязательно</span></summary><p class="field-hint">Заполните эти поля, если хотите вручную добавить известные характеристики. Найденные сведения отображаются в списке выше и в отчёте.</p><div class="components-heading"><span>ДОПОЛНИТЕЛЬНЫЕ ПОЛЯ</span><span id="filled-count">0 полей заполнено</span></div>
             <label class="manual-toggle"><input type="checkbox" id="manual-mode" name="manualMode" value="include"><span>Учитывать дополнительные поля вместе со спецификацией<small>По умолчанию анализируется только текущий список. Противоречия источников требуют сверки, а не замены оборудования.</small></span></label>
-            <div id="component-fields"></div>
+            <div id="component-fields"></div></details>
             <div class="form-bottom"><span id="save-status" role="status">Черновик сохраняется автоматически</span><button type="button" class="text-button muted" id="reset">Очистить</button></div>
           </form>
         </section>
@@ -62,6 +65,7 @@
         <div class="section-heading"><div><span class="step-number">02</span><h2 id="report-heading">Результат проверки</h2></div><button class="secondary-button" id="export-report" type="button" disabled>Скачать отчёт ↓</button></div>
         <div id="report-content" aria-live="polite"><div class="empty-report"><span class="empty-icon" aria-hidden="true">⌕</span><h3>Сначала — конфигурация</h3><p>Добавьте комплектующие и запустите проверку.<br>Для каждой позиции появятся статус, объяснение и источники.</p></div></div>
       </section>
+      <details class="settings-panel panel" id="settings"><summary>Настройки <span>Развернуть</span></summary><h2>Внешний вид</h2><label class="theme-setting" for="theme-select">Фон и тема страницы<select id="theme-select"><option value="system">Как в системе</option><option value="light">Светлая</option><option value="dark">Тёмная</option></select></label><h2>Приоритетные ресурсы</h2><p>Укажите производителя и сайт, который следует проверять в первую очередь. Настройки сохраняются в файле проекта и переносятся вместе с ним.</p><div id="priority-list"></div><form id="priority-form" class="priority-form"><label>Производитель<input id="priority-maker" maxlength="80" placeholder="Например, ASUS" required></label><label>Интернет-ресурс<input id="priority-url" type="url" placeholder="https://www.asus.com" required></label><button class="secondary-button" type="submit">Добавить</button></form><p id="priority-message" role="status"></p><small>Для поиска через Provod используется дополнительный запрос Tavily; он может расходовать квоту. Если подходящих данных нет, поиск продолжается по другим источникам.</small></details>
       <section class="method" id="method"><div><p class="eyebrow">ПРОЗРАЧНЫЙ ПОДХОД</p><h2>Документы проверяются до результатов.</h2></div><div><p>Каждая позиция проходит поиск по артикулу и модели. Найденные первичные документы открываются для чтения. После проверки всех строк формируется отчёт с причинами и ссылками.</p><p>Если применимый документ не найден или недоступен, в результате указывается итог выполненного поиска. При сбое сервиса проверку можно повторить после устранения ошибки подключения.</p><p>Доступ к сервису задаётся в локальном файле .env. При наличии списка дополнительные поля учитываются после явного включения.</p></div></section>
       <footer><span>ServerCheck <span class="accent">/</span> Инженерный подход к сборке</span><span>HTML · CSS · JavaScript</span></footer>
     </main>

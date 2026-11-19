@@ -125,7 +125,8 @@ async function researchPosition(position, local, options) {
 
 export async function researchConfiguration(local, options) {
   const results = [];
-  const pending = local.positions.filter(position => position.quantity !== 0);
+  const pending = local.positions.filter(position => position.quantity !== 0 && (!options.targetPositionId || position.id === options.targetPositionId));
+  if (options.targetPositionId && !pending.length) throw new Error('Позиция для повторной проверки не найдена в конфигурации.');
   const notify = options.onProgress || (() => {});
   let completed = 0;
   const collected = new Map();
@@ -161,7 +162,12 @@ export async function researchConfiguration(local, options) {
   const positions = reconcilePositions(local.positions, candidates, readSources).map(position => {
     if (position.quantity === 0) return position;
     const result = results.find(item => item.position.id === position.id);
-    const updated = { ...position, research: result.research, readSources: result.readSources.map(({ text: _evidenceText, ...source }) => source) };
+    if (!result) return position;
+    const skuKey = String(position.sku || '').toLowerCase().replace(/[^a-z0-9]/g,'');
+    const updated = { ...position, research: result.research, readSources: result.readSources.map(({ text: evidenceText, ...source }) => ({
+      ...source,
+      exactSkuMentioned: skuKey.length >= 5 && String(`${source.title || ''} ${source.url || ''} ${evidenceText || ''}`).toLowerCase().replace(/[^a-z0-9]/g,'').includes(skuKey),
+    })) };
     if (position.status === 'unconfirmed' && !(result.research.documentsSelected ?? result.research.openedDocuments)) {
       updated.reason = 'После поиска не удалось прочитать применимый источник по этой позиции.';
       updated.missing = [...new Set(['Среди первых трёх результатов нет доступного применимого документа.', ...position.missing])];
@@ -169,5 +175,5 @@ export async function researchConfiguration(local, options) {
     return updated;
   });
 
-  return { positions, research: results.map(result => result.research), assemblyAnalysis };
+  return { positions: options.targetPositionId ? positions.filter(position => position.id === options.targetPositionId) : positions, research: results.map(result => result.research), assemblyAnalysis };
 }

@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "initialized": true,
+  "resources": [
+    {
+      "manufacturer": "Asus",
+      "url": "https://servers.asus.com"
+    },
+    {
+      "manufacturer": "Gooxi",
+      "url": "https://www.gooxi.us"
+    },
+    {
+      "manufacturer": "Intel",
+      "url": "https://www.intel.com"
+    },
+    {
+      "manufacturer": "AIC",
+      "url": "https://www.aicipc.com"
+    },
+    {
+      "manufacturer": "Broadcom",
+      "url": "https://www.broadcom.com"
+    },
+    {
+      "manufacturer": "Toshiba",
+      "url": "https://www.toshiba-storage.com"
+    },
+    {
+      "manufacturer": "Nvidia",
+      "url": "https://www.nvidia.com"
+    },
+    {
+      "manufacturer": "Solidigm",
+      "url": "https://www.solidigm.com"
+    },
+    {
+      "manufacturer": "Samsung",
+      "url": "https://www.nix.ru"
+    }
+  ]
+}

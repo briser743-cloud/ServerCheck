@@ -5,6 +5,21 @@ import { resolve, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createCachedProvodFetch } from '../provod-cache.js';
 
+test('successful identical search is reused after a day', async t => {
+  const root = resolve('.tmp');
+  await mkdir(root, { recursive: true });
+  const directory = await mkdtemp(resolve(root, 'search-cache-test-'));
+  t.after(() => rm(directory, { recursive:true, force:true }));
+  let clock = 1000;
+  let calls = 0;
+  const cached = createCachedProvodFetch(async () => { calls++; return new Response(JSON.stringify({results:[{url:'https://example.com/model'}]})); }, pathToFileURL(directory + sep), () => clock);
+  const request = {method:'POST',headers:{Authorization:'Bearer test'},body:'{"query":"example model"}'};
+  await cached('https://api.tavily.com/search',request);
+  clock += 86400001;
+  assert.equal((await cached('https://api.tavily.com/search',request)).headers.get('x-servercheck-cache'),'hit');
+  assert.equal(calls,1);
+});
+
 test('Provod cache reuses exact successful requests, expires and isolates credentials and payloads', async t => {
   const root = resolve('.tmp');
   await mkdir(root, { recursive: true });

@@ -287,6 +287,15 @@ export function reconcilePositions(baseline,candidates,searchedSources = []) {
       reason = candidate.status === 'compatible' ? text(candidate.reason) : [...new Set(checks.filter(check => position.requiredChecks.includes(check.aspect)).map(check => check.reason))].join(' ');
     }
     const recommendation = [...new Set([status !== 'unconfirmed' && sources.length ? text(candidate.recommendation) : '', ...optionalNotes,inference?.recommendation || ''])].filter(Boolean).join(' ');
+    // Intel documents this exact model as 1S; socket fit cannot establish 2P operation.
+    const platforms = baseline.filter(item => ['platform','board'].includes(item.kind) && item.quantity !== 0);
+    if (position.kind === 'cpu' && position.quantity > 1 && platforms.length === 1 && platforms[0].quantity === 1 && /\b(?:intel\s+)?xeon\s+6511p\b/i.test(`${position.sku || ''} ${position.description || ''}`)) {
+      const source = {url:'https://www.intel.com/content/www/us/en/products/sku/242666/intel-xeon-6511p-processor-72m-cache-2-30-ghz/specifications.html',title:'Intel Xeon 6511P: Scalability 1S',scope:'component',sourceType:'manufacturer'};
+      const reason = `Intel указывает для Xeon 6511P масштабируемость 1S: один процессор в системе. В одной платформе указано ${position.quantity} процессора; двухпроцессорная конфигурация не поддерживается.`;
+      const corrected = checks.filter(check => check.aspect !== 'quantity');
+      corrected.push({aspect:'quantity',status:'incompatible',reason,sources:[source]});
+      return {...position,status:'incompatible',reason,missing:[],checks:corrected,sources:[source,...sources.filter(item => item.url !== source.url)],technicalSpecs,recommendation:'Используйте один процессор либо подберите модель с подтверждённой поддержкой двухпроцессорной конфигурации и совместимостью с платформой.'};
+    }
     return {...position,status,reason,missing:status === 'compatible' ? [] : missing,checks,sources,technicalSpecs,recommendation};
   });
 }

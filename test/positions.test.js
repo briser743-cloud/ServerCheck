@@ -3,11 +3,32 @@ import assert from 'node:assert/strict';
 import { prepareConfig } from '../bom.js';
 import { analyzeConfig } from '../engine.js';
 import { createPositions, reconcilePositions, countVerdicts } from '../positions.js';
-import { renderPositionsMarkup } from '../report-view.js';
+import { renderPositionsMarkup, omitRepeatedReferences, sortSourcesByPriority } from '../report-view.js';
+
+test('configured source domains appear first in order, including their subdomains', () => {
+  const sources = [{url:'https://seller.example/p'}, {url:'https://www.intel.com/p'}, {url:'https://docs.asus.com/p'}, {url:'https://fakeintel.com/p'}];
+  const ordered = sortSourcesByPriority(sources,['asus.com','www.intel.com']);
+  assert.deepEqual(ordered.map(source => source.url),['https://docs.asus.com/p','https://www.intel.com/p','https://seller.example/p','https://fakeintel.com/p']);
+});
+
+test('reference links already shown in component details do not appear twice', () => {
+  const sources = [{url:'https://www.example.com/manual#section'}, {url:'https://example.com/other'}, {url:'https://www.example.com/other#top'}, {url:'javascript:alert(1)'}];
+  const filtered = omitRepeatedReferences(sources,['https://example.com/manual']);
+  assert.deepEqual(filtered.map(source => source.url),['https://example.com/other']);
+});
 
 const sources = [{url:'https://manufacturer.example/support-matrix',title:'Матрица поддержки'}];
 const baseline = () => createPositions(prepareConfig({bom:'GPU-1\tGPU 24GB\t2'}));
 const proven = position => ({id:position.id,status:'compatible',reason:'Указанное количество карт поддерживается платформой.',missing:[],checks:position.requiredChecks.map(aspect => ({aspect,status:'compatible',reason:'Комбинация указана в матрице поддержки.',sources:[{...sources[0],scope:'joint'}]}))});
+
+test('one-socket processor is not compatible as two CPUs in one system despite matching sockets', () => {
+  const base = createPositions(prepareConfig({bom:'SERVER-1\tServer platform 2U LGA4710\t1\nCPU-1\tIntel Xeon 6511P LGA4710\t2'}));
+  const result = reconcilePositions(base,base.map(proven),sources);
+  const cpu = result.find(item => item.kind === 'cpu');
+  assert.equal(cpu.status,'incompatible');
+  assert.match(cpu.reason,/1S/);
+  assert.ok(cpu.sources.some(source => source.url.includes('intel.com')));
+});
 
 test('one yellow result per input row, quantities and duplicate SKUs preserved',() => {
   const report = analyzeConfig({bom:'R-1\t16GB DDR5 RDIMM\t4\nR-1\t16GB DDR5 RDIMM\t2\nD-2\tSSD 960GB U.2 NVMe\t0'});

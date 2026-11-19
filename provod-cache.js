@@ -12,7 +12,7 @@ export function createCachedProvodFetch(fetchImpl, directory = new URL('./.cache
     const file = new URL(`${hash}.json`, directory);
     try {
       const cached = JSON.parse(await readFile(file, 'utf8'));
-      if (now() >= cached.savedAt && now() - cached.savedAt < 86400000) {
+      if (now() >= cached.savedAt && (searchRequest || now() - cached.savedAt < 86400000)) {
         return new Response(cached.body, { headers: { 'Content-Type': 'application/json', 'X-ServerCheck-Cache': 'hit' } });
       }
     } catch { /* Отсутствие или повреждение кеша допускает обычный запрос. */ }
