@@ -129,11 +129,13 @@ export async function researchConfiguration(local, options) {
   const notify = options.onProgress || (() => {});
   let completed = 0;
   const collected = new Map();
+  let assemblyAnalysis = {groups:[],purchaseNotes:[]};
   if (options.provider === 'provod') {
     const documentsByPosition = await collectProvodAssemblyDocuments(pending, local, { ...options, onProgress: notify });
     for (const entry of documentsByPosition) collected.set(...entry);
     const analyzed = await researchAssemblyWithProvod(local, pending, options, collected);
-    for (const result of analyzed) {
+    assemblyAnalysis = analyzed.assemblyAnalysis || assemblyAnalysis;
+    for (const result of analyzed.results) {
       completed += 1;
       notify({ phase: 'reviewed', ...result.research, completed, total: pending.length });
       results.push(result);
@@ -167,5 +169,5 @@ export async function researchConfiguration(local, options) {
     return updated;
   });
 
-  return { positions, research: results.map(result => result.research) };
+  return { positions, research: results.map(result => result.research), assemblyAnalysis };
 }

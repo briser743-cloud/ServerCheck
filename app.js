@@ -173,6 +173,21 @@ function exportReport() {
   if (!currentReport) return;
   const r = currentReport;
   const lines = ['# ServerCheck — отчёт', '', `Сборка: ${r.config.projectName || 'Без названия'}`, `Дата: ${r.createdAt}`, `Режим: ${r.mode === 'local' ? 'Быстрая проверка' : 'ИИ + документация'}`, '', ...(isStale() ? ['ВНИМАНИЕ: конфигурация была изменена после проверки. Отчёт относится к снимку ниже.', ''] : []), `## ${r.title}`, r.summary, ''];
+  if (r.assemblyAnalysis?.groups?.length) {
+    lines.push('## Проверка совместимости по узлам','');
+    for (const group of r.assemblyAnalysis.groups) {
+      const related = (r.positions || []).filter(position => group.positionIds?.includes(position.id));
+      const status = related.some(position => position.status === 'incompatible') ? 'Не совместимо'
+        : !related.length || related.some(position => position.status === 'unconfirmed') ? 'Не подтверждено' : 'Совместимо';
+      lines.push(`### ${group.title} — ${status}`, group.summary, '');
+      if (group.recommendation) lines.push('Замечание: '+group.recommendation, '');
+      if (group.sources?.length) lines.push('Источники:', ...group.sources.map(source => '- '+source.title+': '+source.url), '');
+    }
+  }
+  if (r.assemblyAnalysis?.purchaseNotes?.length) {
+    lines.push('## Перед покупкой и сборкой','');
+    for (const note of r.assemblyAnalysis.purchaseNotes) lines.push(`### ${note.title}`,note.text,...(note.sources?.length ? ['Источники:',...note.sources.map(source => '- '+source.title+': '+source.url)] : []),'');
+  }
   for (const position of r.positions || []) {
     lines.push(`## ${position.sku || position.description} — ${verdictLabels[position.status]}`,
       `Количество: ${position.quantity ?? 'не указано'}`, position.reason, '');

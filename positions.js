@@ -49,7 +49,19 @@ export function createPositions(prepared) {
 
 export const positionReportFormat = {
   type:'json_schema',name:'server_compatibility_positions',strict:true,
-  schema:{type:'object',additionalProperties:false,required:['positions'],properties:{positions:{type:'array',items:{
+  schema:{type:'object',additionalProperties:false,required:['positions','assemblyAnalysis'],properties:{
+    assemblyAnalysis:{type:'object',additionalProperties:false,required:['groups','purchaseNotes'],properties:{
+      groups:{type:'array',maxItems:8,items:{type:'object',additionalProperties:false,required:['title','positionIds','summary','recommendation','sources'],properties:{
+        title:{type:'string',maxLength:100},positionIds:{type:'array',minItems:1,items:{type:'string'}},
+        summary:{type:'string',maxLength:900},recommendation:{type:'string',maxLength:500},
+        sources:{type:'array',maxItems:4,items:{type:'object',additionalProperties:false,required:['url','title','scope','sourceType'],properties:{url:{type:'string'},title:{type:'string',maxLength:180},scope:{type:'string',enum:['component','platform','joint']},sourceType:{type:'string',enum:Object.keys(sourceTypeLabels)}}}},
+      }}},
+      purchaseNotes:{type:'array',maxItems:8,items:{type:'object',additionalProperties:false,required:['title','text','positionIds','sources'],properties:{
+        title:{type:'string',maxLength:100},text:{type:'string',maxLength:700},positionIds:{type:'array',minItems:1,items:{type:'string'}},
+        sources:{type:'array',maxItems:4,items:{type:'object',additionalProperties:false,required:['url','title','scope','sourceType'],properties:{url:{type:'string'},title:{type:'string',maxLength:180},scope:{type:'string',enum:['component','platform','joint']},sourceType:{type:'string',enum:Object.keys(sourceTypeLabels)}}}},
+      }}},
+    }},
+    positions:{type:'array',items:{
     type:'object',additionalProperties:false,required:['id','status','reason','missing','checks','technicalSpecs','recommendation'],properties:{
       id:{type:'string'},status:{type:'string',enum:Object.keys(verdictLabels)},reason:{type:'string',maxLength:500},missing:{type:'array',items:{type:'string',maxLength:240}},
       recommendation:{type:'string',maxLength:400},
