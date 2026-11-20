@@ -4,6 +4,11 @@
     "90SF03X1-M000R0": {
       "links": [
         {
+          "url": "https://dlcdnets.asus.com/pub/ASUS/server/RS521A-E12-RS24U/Manual/E23615_RS521A-E12-RS24U_UM_WEB_20241001.pdf?model=RS521A-E12-RS24U",
+          "title": "Руководство производителя для модели",
+          "modelOnly": false
+        },
+        {
           "url": "https://servers.asus.com/products/servers/rack-servers/rs521a-e12-rs24U",
           "title": "ASUS RS521A-E12-RS24U | ASUS Servers",
           "modelOnly": true
@@ -15,7 +20,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.432Z"
+      "updatedAt": "2026-11-20T11:19:02.531Z"
     },
     "100-000000794": {
       "links": [
@@ -31,7 +36,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "HUS726T4TALE6L4": {
       "links": [
@@ -47,10 +52,20 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "90SF03Y1-M000N0": {
       "links": [
+        {
+          "url": "https://servers.asus.com/products/servers/rack-servers/RS501A-E12-RS4",
+          "title": "Страница производителя для модели",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.factoriapc.com/products/show/servidor-asus-rs501a-e12-rs4-1g-1600w-ocp-47341",
+          "title": "Партномер у поставщика",
+          "modelOnly": false
+        },
         {
           "url": "https://www.dateks.lv/en/cenas/serveri-brand/1228930-asus-platforma-asus-rack-1u-rs501a-e12-rs4-amd-epyc-9005-9004-4x-nvme-sata-hs-2xm-2-2x1gbe-ipmi-1-1-1600w-",
           "title": "Asus Platforma Asus Rack (1U) RS501A-E12-RS4 AMD Epyc 9005/9004 (4x NVMe/SATA HS, 2xM.2, 2x1Gbe, IPMI, 1+1 1600W ) (90SF03Y1-M000N0)",
@@ -63,10 +78,15 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "100-000001552": {
       "links": [
+        {
+          "url": "https://www.amd.com/en/products/processors/server/epyc/9005-series/amd-epyc-9115.html",
+          "title": "Сайт производителя",
+          "modelOnly": false
+        },
         {
           "url": "https://www.centralcomputer.com/amd-epyc-9115-16c-32t-2-6ghz-processor-4-1ghz-boost-tray-64-mb-l3-cache-125w-tdp-100-000001552.html",
           "title": "AMD EPYC 9115 16C/32T 2.6GHz Processor 4.1GHz Boost Tray 64 MB L3 Cache 125W TDP 100-000001552EPYC 9005 Series",
@@ -84,23 +104,23 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "05-60004-00": {
       "links": [
         {
-          "url": "https://ibertronica.es/broadcom-05-60004-00-cable-slim-sas-sff-8654-a-2x4-slim-sas-sff-8654-1-m",
-          "title": "Broadcom 05-60004-00. Cable Slim SAS SFF-8654 a 2x4 SFF-8654. 1 m. - Ibertronica",
+          "url": "https://docs.broadcom.com/doc/12354774",
+          "title": "Документация производителя",
           "modelOnly": false
         },
         {
-          "url": "https://docs.broadcom.com/doc/12354774",
-          "title": "Документация производителя",
+          "url": "https://ibertronica.es/broadcom-05-60004-00-cable-slim-sas-sff-8654-a-2x4-slim-sas-sff-8654-1-m",
+          "title": "Broadcom 05-60004-00. Cable Slim SAS SFF-8654 a 2x4 SFF-8654. 1 m. - Ibertronica",
           "modelOnly": false
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "AL15SEB12EQ": {
       "links": [
@@ -116,10 +136,15 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "05-50077-02": {
       "links": [
+        {
+          "url": "https://docs.broadcom.com/doc/Storage-Solutions-Selection-Guide",
+          "title": "Документация производителя",
+          "modelOnly": false
+        },
         {
           "url": "https://www.haehnlein-it.com/Broadcom-LSI-9500-16i-Tri-Mode-HBA-Controller-12Gbps-SATA-SAS-PCIe-4.0-x8-Avago-IT-Mode/05-50077-02",
           "title": "Broadcom LSI 9500-16i Tri-Mode HBA Controller 12Gbps SATA SAS PCIe 4.0 x8 Avago IT-Mode | Neu | 05-50077-02",
@@ -132,7 +157,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "MODEL:ASUS RS700-E12-RS12U": {
       "links": [
@@ -153,7 +178,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "MODEL:INTEL XEON 6511P": {
       "links": [
@@ -174,7 +199,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "MODEL:SOLIDIGM D7-P5620": {
       "links": [
@@ -195,7 +220,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "MODEL:CONNECTX-4 LX": {
       "links": [
@@ -221,7 +246,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "MODEL:SAMSUNG DDR5 64GB RDIMM 5600": {
       "links": [
@@ -237,7 +262,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "PK8072205559500": {
       "links": [
@@ -258,26 +283,31 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "SEDC600M/480G": {
       "links": [
         {
-          "url": "https://geekskart.com/product/kingston-dc600m-480gb-2-5-sata3-internal-solid-state-drive-ssd",
-          "title": "Kingston DC600M 480GB Enterprise SATA SSD | Kingston",
+          "url": "https://www.kingston.com/datasheets/SEDC600M_en.pdf",
+          "title": "Спецификация производителя",
           "modelOnly": false
         },
         {
-          "url": "https://www.kingston.com/datasheets/SEDC600M_en.pdf",
-          "title": "Спецификация производителя",
+          "url": "https://geekskart.com/product/kingston-dc600m-480gb-2-5-sata3-internal-solid-state-drive-ssd",
+          "title": "Kingston DC600M 480GB Enterprise SATA SSD | Kingston",
           "modelOnly": false
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.693Z"
     },
     "05-50077-01": {
       "links": [
+        {
+          "url": "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/7152/PA-295701.pdf",
+          "title": "Документ Broadcom у дистрибьютора",
+          "modelOnly": false
+        },
         {
           "url": "https://www.8anet.com/Product/17443/BROADCOM-MegaRAID-9560-8i-05-50077-01-8-Ports-12Gb-s-SAS-SATA-PCIe-(NVMe)-Gen-4-0-Tri-Mode-1x8-SFF-8654-4GB-DDR4-LP-Single",
           "title": "8ANET - BROADCOM MegaRAID 9560-8i 05-50077-01 8-Ports 12Gb/s SAS/SATA/PCIe (NVMe) Gen 4.0 Tri-Mode 1x8 SFF-8654 4GB DDR4 LP Single",
@@ -289,16 +319,21 @@
           "modelOnly": false
         },
         {
-          "url": "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/7152/PA-295701.pdf",
-          "title": "Документ Broadcom у дистрибьютора",
+          "url": "https://smicro.eu/broadcom-lsi-megaraid-sas-9560-8i-8x-12gb-s-sas-1x-sff-8654-pcie-4-0-x8-4gb-05-50077-01-1",
+          "title": "MegaRAID 9560-8i — PCIe 4.0 x8",
           "modelOnly": false
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "QLE2772-SR-SP": {
       "links": [
+        {
+          "url": "https://www.marvell.com/products/fibre-channel-adapters-and-controllers/2770-series.html",
+          "title": "Страница производителя",
+          "modelOnly": false
+        },
         {
           "url": "https://www.it-houst.com/modules-product/qlogic-module/qle2772",
           "title": "[QLE2772] ราคา จำหน่าย Qlogic QLE2772-SR-SP PCIe 4.0 x8 Dual-port 32GFC SR-Optic SFP+ Enhanced 32Gb Fibre Channel Adapter - IT Houst By ITK Connecting Co.,Ltd.",
@@ -308,15 +343,10 @@
           "url": "https://www.idealo.de/preisvergleich/OffersOfProduct/212306620_-qle2772-sr-sp-fibre-channel-hostbus-adapter-pcie-32gb-s-2-ports-qle2772-sr-sp-qlogic.html",
           "title": "Qlogic QLE2772-SR-SP Fibre Channel Hostbus-Adapter, PCIe, 32Gb/s, 2 Ports (QLE2772-SR-SP) ab 1.079,00 € (November 2026) | Vergleiche 6 Angebote auf idealo.de",
           "modelOnly": false
-        },
-        {
-          "url": "https://www.marvell.com/products/fibre-channel-adapters-and-controllers/2770-series.html",
-          "title": "Страница производителя",
-          "modelOnly": false
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "LREC9712HT": {
       "links": [
@@ -332,7 +362,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T11:19:02.549Z"
     },
     "0.95.002.1070": {
       "links": [
@@ -348,7 +378,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "MTC20F1045S1RC56BD1": {
       "links": [
@@ -359,23 +389,23 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "LRES4164PF-2SFP28": {
       "links": [
         {
-          "url": "https://www.ebay.com/itm/136209800885",
-          "title": "Нет подтверждения размеров/механики именно LRES4164PF-2SFP28 в предоставленных материалах",
+          "url": "https://www.lr-link.com.cn/productshow/LRES4164PF-2SFP28.html",
+          "title": "Страница производителя",
           "modelOnly": false
         },
         {
-          "url": "https://www.lr-link.com.cn/productshow/LRES4164PF-2SFP28.html",
-          "title": "Страница производителя",
+          "url": "https://www.ebay.com/itm/136209800885",
+          "title": "Нет подтверждения размеров/механики именно LRES4164PF-2SFP28 в предоставленных материалах",
           "modelOnly": false
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "0.95.002.0103": {
       "links": [
@@ -396,7 +426,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "CD8068904657502": {
       "links": [
@@ -422,7 +452,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "90SF03S1-M00160": {
       "links": [
@@ -438,7 +468,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "PK8072006398801": {
       "links": [
@@ -454,7 +484,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "SSDPF2KE032T11Z": {
       "links": [
@@ -475,7 +505,7 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "MCX4121A-ACUT": {
       "links": [
@@ -486,10 +516,15 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "SEDC2000BM8/480G": {
       "links": [
+        {
+          "url": "https://www.kingston.com.cn/datasheets/SEDC2000B_en.pdf",
+          "title": "Спецификация производителя",
+          "modelOnly": false
+        },
         {
           "url": "https://gzhls.at/blob/ldb/6/f/0/4/7c9fd30052082a0e598a3d706490e1d69e78.pdf",
           "title": "[PDF] Data Center DC2000B – PCIe 4.0 NVMe M.2 Server SSD",
@@ -497,10 +532,15 @@
         }
       ],
       "technicalSpecs": [],
-      "updatedAt": "2026-11-20T08:10:19.433Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "05-25420-081": {
       "links": [
+        {
+          "url": "https://andpro.ru/catalog/computer_hardware/controllers/raid_kontroller_broadcom_9361_8i_sas_12_gb_s_sgl_05_25420_081/",
+          "title": "Карточка поставщика",
+          "modelOnly": false
+        },
         {
           "url": "https://comparema.ru/kontroller-raid-servernyy-megaraid-sas-9361-8i-sgl-8-port-int-12gb-s-sata-sas-pcie-3-0-1gb-ddriii-megaraid-sas-9361-8i-quick-installation-guide-lp-bracket-346443",
           "title": "Контроллер RAID LSI MegaRAID SAS 9361-8i 12Gb/s PCIe 3.0 1GB DDRIII - 8-Port Internal SATA+SAS купить в CompaREMA.ru",
@@ -563,10 +603,15 @@
           ]
         }
       ],
-      "updatedAt": "2026-11-20T08:11:35.279Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "LRES3039PF-OCP": {
       "links": [
+        {
+          "url": "https://www.lr-link.com.cn/productshow/LRES3039PF-OCP.html",
+          "title": "Сайт производителя",
+          "modelOnly": false
+        },
         {
           "url": "https://www.amazon.com/OCP-Dual-Port-Ethernet-Network-Adapter/dp/B0D3DLFN8P",
           "title": "Amazon.com: OCP 3.0 Dual-Port 10G SFP+ Ethernet Network Adapter : Everything Else",
@@ -613,7 +658,7 @@
           ]
         }
       ],
-      "updatedAt": "2026-11-20T08:11:35.279Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "MZILG960HCHQ-00A07": {
       "links": [
@@ -658,7 +703,7 @@
           ]
         }
       ],
-      "updatedAt": "2026-11-20T08:11:35.279Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "MZILG1T9HCJR-00A07": {
       "links": [
@@ -713,7 +758,7 @@
           ]
         }
       ],
-      "updatedAt": "2026-11-20T08:11:35.279Z"
+      "updatedAt": "2026-11-20T09:43:12.694Z"
     },
     "0.95.001.1001": {
       "links": [
@@ -801,7 +846,7 @@
           ]
         }
       ],
-      "updatedAt": "2026-11-20T08:11:35.279Z"
+      "updatedAt": "2026-11-20T09:43:12.695Z"
     },
     "MZILG3T8HCLS-00A07": {
       "links": [
@@ -846,74 +891,17 @@
           ]
         }
       ],
-      "updatedAt": "2026-11-20T08:11:35.279Z"
+      "updatedAt": "2026-11-20T09:43:12.695Z"
     },
     "CD8068904657901": {
-      "links": [
-        {
-          "url": "https://www.intel.com/content/www/us/en/products/sku/215277/intel-xeon-silver-4310-processor-18m-cache-2-10-ghz/specifications.html",
-          "title": "Intel® Xeon® Silver 4310 Processor (18M Cache, 2.10 GHz) Specifications",
-          "modelOnly": false
-        }
+      "links": [],
+      "technicalSpecs": [],
+      "updatedAt": "2026-11-20T14:13:46.273Z",
+      "excludedUrls": [
+        "https://www.dateks.lv/en/cenas/serveru-procesori/777047-intel-xeon-silver-4310-12c-24t-2-1-ghz-18mb-cache-lga-4189-120w-",
+        "https://starmicroinc.net/intel-xeon-silver-4310-2-1ghz-lga4189-4-12-core-ice-lake-server-oem-cpu-srkxn-cd8068904657901"
       ],
-      "technicalSpecs": [
-        {
-          "name": "Socket",
-          "value": "FCLGA4189 (LGA4189)",
-          "sources": [
-            {
-              "url": "https://www.intel.com/content/www/us/en/products/sku/215277/intel-xeon-silver-4310-processor-18m-cache-2-10-ghz/specifications.html",
-              "title": "Intel® Xeon® Silver 4310 Processor (18M Cache, 2.10 GHz) Specifications",
-              "modelOnly": false
-            }
-          ]
-        },
-        {
-          "name": "Ядра/потоки",
-          "value": "12C/24T",
-          "sources": [
-            {
-              "url": "https://www.intel.com/content/www/us/en/products/sku/215277/intel-xeon-silver-4310-processor-18m-cache-2-10-ghz/specifications.html",
-              "title": "Intel® Xeon® Silver 4310 Processor (18M Cache, 2.10 GHz) Specifications",
-              "modelOnly": false
-            }
-          ]
-        },
-        {
-          "name": "TDP",
-          "value": "120 W",
-          "sources": [
-            {
-              "url": "https://www.intel.com/content/www/us/en/products/sku/215277/intel-xeon-silver-4310-processor-18m-cache-2-10-ghz/specifications.html",
-              "title": "Intel® Xeon® Silver 4310 Processor (18M Cache, 2.10 GHz) Specifications",
-              "modelOnly": false
-            }
-          ]
-        },
-        {
-          "name": "Max Turbo",
-          "value": "до 3.30 GHz",
-          "sources": [
-            {
-              "url": "https://www.intel.com/content/www/us/en/products/sku/215277/intel-xeon-silver-4310-processor-18m-cache-2-10-ghz/specifications.html",
-              "title": "Intel® Xeon® Silver 4310 Processor (18M Cache, 2.10 GHz) Specifications",
-              "modelOnly": false
-            }
-          ]
-        },
-        {
-          "name": "Cache",
-          "value": "18 MB",
-          "sources": [
-            {
-              "url": "https://www.intel.com/content/www/us/en/products/sku/215277/intel-xeon-silver-4310-processor-18m-cache-2-10-ghz/specifications.html",
-              "title": "Intel® Xeon® Silver 4310 Processor (18M Cache, 2.10 GHz) Specifications",
-              "modelOnly": false
-            }
-          ]
-        }
-      ],
-      "updatedAt": "2026-11-20T08:11:35.279Z"
+      "sourcesEdited": true
     },
     "MTA36ASF4G72PZ-3G2": {
       "links": [
@@ -974,7 +962,1661 @@
           ]
         }
       ],
-      "updatedAt": "2026-11-20T08:11:35.279Z"
+      "updatedAt": "2026-11-20T09:43:12.695Z"
+    },
+    "MTC20F2085S1RC56BD1": {
+      "links": [
+        {
+          "url": "https://www.serversupply.com/MEMORY/PC5-44800/32GB/MICRON/MTC20F2085S1RC56BD1_386027.htm",
+          "title": "Micron MTC20F2085S1RC56BD1 32GB DDR5 5600MHz PC5-44800 ECC Memory",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.ark-pc.co.jp/category/DDR5%20R-DIMM%20ECC%20(288pin)?p2=c21258",
+          "title": "DDR5 R-DIMM ECC (288pin)カテゴリページ | パソコンSHOPアーク（ark）",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": "2026-11-20T09:43:12.695Z"
+    },
+    "SSDSC2KB960GZ1Z": {
+      "links": [
+        {
+          "url": "https://www.solidigm.com/content/dam/solidigm/en/site/products/data-center/d3/s4520/documents/d3-s4520-series-product-brief.pdf",
+          "title": "Solidigm d3-s4520 product brief — 2.5” 7mm",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.solidigm.com/content/dam/solidigm/en/site/products/documents/pcn/PCNREBRANDING-01.pdf",
+          "title": "[PDF] Product Change Notification - Solidigm",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.solidigm.com/content/dam/solidigm/en/site/products/documents/pcn/PCN0000019719-00.pdf",
+          "title": "[PDF] Product Change Notification - Solidigm",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": "2026-11-20T09:43:12.695Z"
+    },
+    "HUS726T4TAL5204": {
+      "links": [
+        {
+          "url": "https://www.serversupply.com/HARD%20DRIVES/SAS-12GBPS/4TB-7200RPM/WESTERN%20DIGITAL/HUS726T4TAL5204_310056.htm",
+          "title": "WD HUS726T4TAL5204 ultrastar 7K6 4TB 7.2k sas-12gbps 256mb 512e hdd",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Форм-фактор",
+          "value": "3.5\"",
+          "sources": [
+            {
+              "url": "https://www.serversupply.com/HARD%20DRIVES/SAS-12GBPS/4TB-7200RPM/WESTERN%20DIGITAL/HUS726T4TAL5204_310056.htm",
+              "title": "WD HUS726T4TAL5204 ultrastar 7K6 4TB 7.2k sas-12gbps 256mb 512e hdd",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Интерфейс",
+          "value": "SAS 12Gb/s",
+          "sources": [
+            {
+              "url": "https://www.serversupply.com/HARD%20DRIVES/SAS-12GBPS/4TB-7200RPM/WESTERN%20DIGITAL/HUS726T4TAL5204_310056.htm",
+              "title": "WD HUS726T4TAL5204 ultrastar 7K6 4TB 7.2k sas-12gbps 256mb 512e hdd",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Ёмкость",
+          "value": "4 TB",
+          "sources": [
+            {
+              "url": "https://www.serversupply.com/HARD%20DRIVES/SAS-12GBPS/4TB-7200RPM/WESTERN%20DIGITAL/HUS726T4TAL5204_310056.htm",
+              "title": "WD HUS726T4TAL5204 ultrastar 7K6 4TB 7.2k sas-12gbps 256mb 512e hdd",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Скорость шпинделя",
+          "value": "7200 RPM",
+          "sources": [
+            {
+              "url": "https://www.serversupply.com/HARD%20DRIVES/SAS-12GBPS/4TB-7200RPM/WESTERN%20DIGITAL/HUS726T4TAL5204_310056.htm",
+              "title": "WD HUS726T4TAL5204 ultrastar 7K6 4TB 7.2k sas-12gbps 256mb 512e hdd",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Cache/512e",
+          "value": "256MB cache; 512E",
+          "sources": [
+            {
+              "url": "https://www.serversupply.com/HARD%20DRIVES/SAS-12GBPS/4TB-7200RPM/WESTERN%20DIGITAL/HUS726T4TAL5204_310056.htm",
+              "title": "WD HUS726T4TAL5204 ultrastar 7K6 4TB 7.2k sas-12gbps 256mb 512e hdd",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T09:43:12.695Z"
+    },
+    "X710DA2OCPV3": {
+      "links": [
+        {
+          "url": "https://cdrdv2-public.intel.com/641694/Intel%20Ethernet%20Network%20Adapter%20X710-DA2-DA4%20for%20OCP%203.pdf",
+          "title": "Intel® Ethernet Network Adapter X710-DA2/-DA4 for OCP 3.0",
+          "modelOnly": false
+        },
+        {
+          "url": "https://cdrdv2-public.intel.com/641698/Intel%20Ethernet%20Server%20Adapter%20X710-DA2%20for%20OCP.pdf",
+          "title": "[PDF] Intel® Ethernet Server Adapter X710-DA2 for OCP",
+          "modelOnly": true
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": "2026-11-20T09:43:12.695Z"
+    },
+    "PK8072205559800": {
+      "links": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/237569/intel-xeon-gold-6544y-processor-45m-cache-3-60-ghz/specifications.html",
+          "title": "Intel® Xeon® Gold 6544Y Processor (45M Cache, 3.60 GHz) Specifications",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Платформа/семейство",
+          "value": "Intel 5th Gen Intel® Xeon® Scalable (Emerald Rapids)",
+          "sources": [
+            {
+              "url": "https://www.intel.com/content/www/us/en/products/sku/237569/intel-xeon-gold-6544y-processor-45m-cache-3-60-ghz/specifications.html",
+              "title": "Intel® Xeon® Gold 6544Y Processor (45M Cache, 3.60 GHz) Specifications",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Сокет",
+          "value": "FCLGA4677 (LGA4677)",
+          "sources": [
+            {
+              "url": "https://www.intel.com/content/www/us/en/products/sku/237569/intel-xeon-gold-6544y-processor-45m-cache-3-60-ghz/specifications.html",
+              "title": "Intel® Xeon® Gold 6544Y Processor (45M Cache, 3.60 GHz) Specifications",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Ядра/потоки",
+          "value": "16C / 32T",
+          "sources": [
+            {
+              "url": "https://www.intel.com/content/www/us/en/products/sku/237569/intel-xeon-gold-6544y-processor-45m-cache-3-60-ghz/specifications.html",
+              "title": "Intel® Xeon® Gold 6544Y Processor (45M Cache, 3.60 GHz) Specifications",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "TDP",
+          "value": "270 W",
+          "sources": [
+            {
+              "url": "https://www.intel.com/content/www/us/en/products/sku/237569/intel-xeon-gold-6544y-processor-45m-cache-3-60-ghz/specifications.html",
+              "title": "Intel® Xeon® Gold 6544Y Processor (45M Cache, 3.60 GHz) Specifications",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "2S поддержка",
+          "value": "Scalability: 2S",
+          "sources": [
+            {
+              "url": "https://www.intel.com/content/www/us/en/products/sku/237569/intel-xeon-gold-6544y-processor-45m-cache-3-60-ghz/specifications.html",
+              "title": "Intel® Xeon® Gold 6544Y Processor (45M Cache, 3.60 GHz) Specifications",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T09:43:12.695Z"
+    },
+    "M321R4GA3PB0-CWMKJ": {
+      "links": [
+        {
+          "url": "https://www.verilicense.co.uk/products/ddr5-32gb-5600-rdimm",
+          "title": "DDR5-32GB-5600-RDIMM — 32GB DDR5 ECC RDIMM",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Тип",
+          "value": "DDR5 RDIMM (ECC Registered)",
+          "sources": [
+            {
+              "url": "https://www.verilicense.co.uk/products/ddr5-32gb-5600-rdimm",
+              "title": "DDR5-32GB-5600-RDIMM — 32GB DDR5 ECC RDIMM",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Ёмкость",
+          "value": "32 GB",
+          "sources": [
+            {
+              "url": "https://www.verilicense.co.uk/products/ddr5-32gb-5600-rdimm",
+              "title": "DDR5-32GB-5600-RDIMM — 32GB DDR5 ECC RDIMM",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Частота/класс",
+          "value": "DDR5-5600 (PC5-44800)",
+          "sources": [
+            {
+              "url": "https://www.verilicense.co.uk/products/ddr5-32gb-5600-rdimm",
+              "title": "DDR5-32GB-5600-RDIMM — 32GB DDR5 ECC RDIMM",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Организация",
+          "value": "Dual rank, 2Rx8 (ECC)",
+          "sources": [
+            {
+              "url": "https://www.verilicense.co.uk/products/ddr5-32gb-5600-rdimm",
+              "title": "DDR5-32GB-5600-RDIMM — 32GB DDR5 ECC RDIMM",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Форм-фактор",
+          "value": "288-pin RDIMM",
+          "sources": [
+            {
+              "url": "https://www.verilicense.co.uk/products/ddr5-32gb-5600-rdimm",
+              "title": "DDR5-32GB-5600-RDIMM — 32GB DDR5 ECC RDIMM",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T11:19:02.532Z"
+    },
+    "05-50077-00": {
+      "links": [
+        {
+          "url": "https://www.centralcomputer.com/lsi-logic-05-50077-00-cc-9560-16i-16pt-int-12gb-s-tri-mode-sata-sas-pcie-nvme-megaraid-adapter-card-pcie-gen-4-0.html",
+          "title": "LSI Logic 05-50077-00 CC 9560-16i 16PT Int 12Gb/s Tri mode SATA+SAS+PCIe(NVMe) MegaRAID Adapter Card PCIe Gen 4.0",
+          "modelOnly": false
+        },
+        {
+          "url": "https://smicro.eu/broadcom-megaraid-9560-16i-16x-12gb-s-sas-2x-sff-8654-pcie-4-0-x8-8gb-05-50077-00-1",
+          "title": "Broadcom MegaRAID 9560-16i 16x 12Gb/s SAS (2x SFF-8654), PCIe 4.0 x8, 8GB - 05-50077-00 | smicro.eu",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Host interface",
+          "value": "PCI Express 4.0 x8",
+          "sources": [
+            {
+              "url": "https://www.centralcomputer.com/lsi-logic-05-50077-00-cc-9560-16i-16pt-int-12gb-s-tri-mode-sata-sas-pcie-nvme-megaraid-adapter-card-pcie-gen-4-0.html",
+              "title": "LSI Logic 05-50077-00 CC 9560-16i 16PT Int 12Gb/s Tri mode SATA+SAS+PCIe(NVMe) MegaRAID Adapter Card PCIe Gen 4.0",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "SAS ports",
+          "value": "16 internal SAS/SATA",
+          "sources": [
+            {
+              "url": "https://www.centralcomputer.com/lsi-logic-05-50077-00-cc-9560-16i-16pt-int-12gb-s-tri-mode-sata-sas-pcie-nvme-megaraid-adapter-card-pcie-gen-4-0.html",
+              "title": "LSI Logic 05-50077-00 CC 9560-16i 16PT Int 12Gb/s Tri mode SATA+SAS+PCIe(NVMe) MegaRAID Adapter Card PCIe Gen 4.0",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "SAS connectors",
+          "value": "2 × SFF-8654",
+          "sources": [
+            {
+              "url": "https://www.centralcomputer.com/lsi-logic-05-50077-00-cc-9560-16i-16pt-int-12gb-s-tri-mode-sata-sas-pcie-nvme-megaraid-adapter-card-pcie-gen-4-0.html",
+              "title": "LSI Logic 05-50077-00 CC 9560-16i 16PT Int 12Gb/s Tri mode SATA+SAS+PCIe(NVMe) MegaRAID Adapter Card PCIe Gen 4.0",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Форм-фактор",
+          "value": "Plug-in card",
+          "sources": [
+            {
+              "url": "https://www.centralcomputer.com/lsi-logic-05-50077-00-cc-9560-16i-16pt-int-12gb-s-tri-mode-sata-sas-pcie-nvme-megaraid-adapter-card-pcie-gen-4-0.html",
+              "title": "LSI Logic 05-50077-00 CC 9560-16i 16PT Int 12Gb/s Tri mode SATA+SAS+PCIe(NVMe) MegaRAID Adapter Card PCIe Gen 4.0",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Размер (Д×Ш)",
+          "value": "155.65 mm × 68.90 mm",
+          "sources": [
+            {
+              "url": "https://smicro.eu/broadcom-megaraid-9560-16i-16x-12gb-s-sas-2x-sff-8654-pcie-4-0-x8-8gb-05-50077-00-1",
+              "title": "Broadcom MegaRAID 9560-16i 16x 12Gb/s SAS (2x SFF-8654), PCIe 4.0 x8, 8GB - 05-50077-00 | smicro.eu",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T09:43:12.695Z"
+    },
+    "3.05.192.1063": {
+      "links": [
+        {
+          "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+          "title": "Gooxi",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Назначение/стандарт",
+          "value": "SFF-8654 / slimline interconnect",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+              "title": "Gooxi",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Версия PCIe",
+          "value": "PCIe 4.0 (до 16 GT/s заявлено для cable в источнике)",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+              "title": "Gooxi",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Сигнальный тип",
+          "value": "Slimline STR 4X input/output; 2× slimline x8 ports (PCIe4.0 x8 signal)",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+              "title": "Gooxi",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Длина",
+          "value": "800 mm",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+              "title": "Gooxi",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Слоты платформы под slimline",
+          "value": "2 slimline x8 ports с PCIe 4.0 x8 signal",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+              "title": "Gooxi",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T09:43:12.695Z"
+    },
+    "S1201Y03960GP021T0200": {
+      "links": [
+        {
+          "url": "https://ogo1.ru/market/servernye_zhestkie_diski/403795",
+          "title": "Внутренний SSD-накопитель Samsung SSD PM9A3, 960GB, U.2(2.5\" 7mm), NVMe, PCIe 4.0 x4, 3D TLC, R/W 6500/1500MB/s, IOPs 580 000/70 000, TBW 1752, DWPD 1 купить в ОГО! | 403795 | цена | характеристики",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.mitcor.ru/servery-i-seti/servery/komplektuusie-k-serveram/servernye-tverdotelnye-nakopiteli/crucial/19049643",
+          "title": "Купить Твердотельный накопитель Твердотельный накопитель/ Micron SSD 5300 MAX, 960GB, 2.5\" 7mm, SATA3, 3D TLC, R/W 540/520MB/s, IOPs 95 000/75 000, TBW 8760, DWPD 5 (12 мес.) в каталоге интернет магазина Миткор.ру по выгодной цене с доставкой.",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "не подтверждено",
+          "value": "Не удалось найти подтверждённые характеристики именно для S1201Y03960GP021T0200 в переданных документах",
+          "sources": [
+            {
+              "url": "https://ogo1.ru/market/servernye_zhestkie_diski/403795",
+              "title": "Внутренний SSD-накопитель Samsung SSD PM9A3, 960GB, U.2(2.5\" 7mm), NVMe, PCIe 4.0 x4, 3D TLC, R/W 6500/1500MB/s, IOPs 580 000/70 000, TBW 1752, DWPD 1 купить в ОГО! | 403795 | цена | характеристики",
+              "modelOnly": false
+            },
+            {
+              "url": "https://www.mitcor.ru/servery-i-seti/servery/komplektuusie-k-serveram/servernye-tverdotelnye-nakopiteli/crucial/19049643",
+              "title": "Купить Твердотельный накопитель Твердотельный накопитель/ Micron SSD 5300 MAX, 960GB, 2.5\" 7mm, SATA3, 3D TLC, R/W 540/520MB/s, IOPs 95 000/75 000, TBW 8760, DWPD 5 (12 мес.) в каталоге интернет магазина Миткор.ру по выгодной цене с доставкой.",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T09:43:12.695Z"
+    },
+    "LRES3041PT-OCP": {
+      "links": [
+        {
+          "url": "https://www.intel.com/content/www/us/en/products/sku/184824/intel-ethernet-network-adapter-i350t4-for-ocp-3-0/specifications.html",
+          "title": "Intel® Ethernet Network Adapter I350-T4 for OCP 3.0 Specifications",
+          "modelOnly": false
+        },
+        {
+          "url": "https://cdrdv2-public.intel.com/639737/Intel%20Ethernet%20Network%20Adapter%20I350-T4%20for%20OCP%203.pdf",
+          "title": "Intel® Ethernet Network Adapter I350-T4 for OCP 3.0",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Форм-фактор",
+          "value": "OCP 3.0 NIC adapter",
+          "sources": [
+            {
+              "url": "https://www.intel.com/content/www/us/en/products/sku/184824/intel-ethernet-network-adapter-i350t4-for-ocp-3-0/specifications.html",
+              "title": "Intel® Ethernet Network Adapter I350-T4 for OCP 3.0 Specifications",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Порты/скорость",
+          "value": "Quad-port 1GbE (4×1GbE)",
+          "sources": [
+            {
+              "url": "https://www.intel.com/content/www/us/en/products/sku/184824/intel-ethernet-network-adapter-i350t4-for-ocp-3-0/specifications.html",
+              "title": "Intel® Ethernet Network Adapter I350-T4 for OCP 3.0 Specifications",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Интерфейс хоста",
+          "value": "PCIe v2.1 (5.0 GT/s) x4 Lane",
+          "sources": [
+            {
+              "url": "https://www.intel.com/content/www/us/en/products/sku/184824/intel-ethernet-network-adapter-i350t4-for-ocp-3-0/specifications.html",
+              "title": "Intel® Ethernet Network Adapter I350-T4 for OCP 3.0 Specifications",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Кабель",
+          "value": "Twisted-pair copper; Cat 5+ для 1000BASE-T",
+          "sources": [
+            {
+              "url": "https://cdrdv2-public.intel.com/639737/Intel%20Ethernet%20Network%20Adapter%20I350-T4%20for%20OCP%203.pdf",
+              "title": "Intel® Ethernet Network Adapter I350-T4 for OCP 3.0",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Контроллер",
+          "value": "Intel Ethernet Controller i350",
+          "sources": [
+            {
+              "url": "https://www.intel.com/content/www/us/en/products/sku/184824/intel-ethernet-network-adapter-i350t4-for-ocp-3-0/specifications.html",
+              "title": "Intel® Ethernet Network Adapter I350-T4 for OCP 3.0 Specifications",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T09:43:12.696Z"
+    },
+    "M321R4GA0EB2-CCPKC": {
+      "links": [
+        {
+          "url": "https://calhountechnologies.com/products/samsung-32gb-ddr5-6400-rdimm-ecc-m321r4ga0eb2-ccpkc",
+          "title": "Карточка поставщика",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "MZ1L2960HCJR-00A07": {
+      "links": [
+        {
+          "url": "https://www.stesz.com/Upload/SAMSUNG/PM9A3/PM9A3-M.2-Datasheet.pdf",
+          "title": "Спецификация Samsung",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "900-5G190-2570-000": {
+      "links": [
+        {
+          "url": "https://www.nvidia.com/en-sg/products/workstations/rtx-4000/",
+          "title": "Характеристики NVIDIA",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.pny.com/File%20Library/Company/Support/Product%20Brochures/NVIDIA%20Data%20Center%20GPUs/NVIDIA-Professional-Graphics-Linecard.pdf",
+          "title": "Артикул в каталоге PNY",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "900-5G192-2240-000": {
+      "links": [
+        {
+          "url": "https://www.nvidia.com/en-sg/products/workstations/rtx-2000/",
+          "title": "Характеристики NVIDIA",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.pny.com/File%20Library/Company/Support/linecards/pro-viz-gpus/NVIDIA-Professional-Graphics-Linecard.pdf",
+          "title": "Артикул в каталоге PNY",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "0.96.002.1051": {
+      "links": [
+        {
+          "url": "https://www.gooxi.us/uploadfiles/2024/03/20240315175430209.pdf",
+          "title": "Документация производителя для модели",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "100-000001542": {
+      "links": [
+        {
+          "url": "https://www.amd.com/en/products/processors/server/epyc/9005-series/amd-epyc-9455.html",
+          "title": "Сайт производителя",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "M321RYGA0PB2-CCPKF": {
+      "links": [
+        {
+          "url": "https://www.kns.ru/product/operativnaya-pamyat-samsung-m321ryga0pb2-ccpkf/characteristics/",
+          "title": "Карточка поставщика",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "HUH721010ALN604": {
+      "links": [
+        {
+          "url": "https://documents.westerndigital.com/content/dam/doc-library/en_us/assets/public/western-digital/product/data-center-drives/ultrastar-sata-series/product-manual-ultrastar-dc-hc510-sata-oem-spec.pdf",
+          "title": "Руководство производителя",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "05-26112-001, LSI00405": {
+      "links": [
+        {
+          "url": "https://www.netlab.ru/katalog/raid-kontrollery-kabeli/lsi-lsi00405-cbl-sff8643-10m-1-0m-acd-sff8643-10m-6705047-100/",
+          "title": "Карточка поставщика",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "M321R2GA3EB0-CWMCH": {
+      "links": [
+        {
+          "url": "https://www.kns.ru/product/operativnaya-pamyat-samsung-m321r2ga3eb0-cwmch/characteristics/",
+          "title": "Карточка поставщика",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "AL15SEB24EQ": {
+      "links": [
+        {
+          "url": "https://www.toshiba-storage.com/wp/wp-content/uploads/2018/04/TOSHIBA-Datasheet-ALSeries-barrierfree-EN.pdf",
+          "title": "Спецификация производителя",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
+    },
+    "0.95.004.1023": {
+      "links": [
+        {
+          "url": "https://www.gooxi.us/ProductList/info_lcid_148_itemid_1201.html",
+          "title": "Gooxi AS4105G-D12R-G3 — страница производителя",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.seccw.com/Goods/info/id/5835.html",
+          "title": "Gooxi国鑫Whitley平台服务器-AS4105G-D12R-G3",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.netlab.ru/katalog/servery-gooxi/gooxi-as4105g-d12r-g3-4u-5gpu-16-ddr4-2-2200w-12disks",
+          "title": "Купить Gooxi AS4105G-D12R-G3 4U-5GPU,16*DDR4,2*2200W,12disks в Москве оптом - Цены на опт от производителя для юр лиц, отгрузка со склада Netlab",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.kns.ru/product/server-gooxi-as4105g-d12r-g3",
+          "title": "Gooxi AS4105G-D12R-G3 купить в KNS. Сервер Gooxi AS4105G-D12R-G3 - цена, характеристики, описание",
+          "modelOnly": true
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Корпус/форм-фактор",
+          "value": "19\" rack, 4U (в источниках — AS4105G-D12R-G3)",
+          "sources": [
+            {
+              "url": "https://www.netlab.ru/katalog/servery-gooxi/gooxi-as4105g-d12r-g3-4u-5gpu-16-ddr4-2-2200w-12disks",
+              "title": "Купить Gooxi AS4105G-D12R-G3 4U-5GPU,16*DDR4,2*2200W,12disks в Москве оптом - Цены на опт от производителя для юр лиц, отгрузка со склада Netlab",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "CPU-установка",
+          "value": "в источниках указано 'возможна установка 2' CPU",
+          "sources": [
+            {
+              "url": "https://www.netlab.ru/katalog/servery-gooxi/gooxi-as4105g-d12r-g3-4u-5gpu-16-ddr4-2-2200w-12disks",
+              "title": "Купить Gooxi AS4105G-D12R-G3 4U-5GPU,16*DDR4,2*2200W,12disks в Москве оптом - Цены на опт от производителя для юр лиц, отгрузка со склада Netlab",
+              "modelOnly": false
+            },
+            {
+              "url": "https://www.seccw.com/Goods/info/id/5835.html",
+              "title": "Gooxi国鑫Whitley平台服务器-AS4105G-D12R-G3",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Память",
+          "value": "16× DDR4 DIMM слотов; поддержка DDR4 2666/2933/3200MHz (LRDIMM/RDIMM) заявлена",
+          "sources": [
+            {
+              "url": "https://www.seccw.com/Goods/info/id/5835.html",
+              "title": "Gooxi国鑫Whitley平台服务器-AS4105G-D12R-G3",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "PCIe",
+          "value": "заявлено до 10 PCIe слотов, включая PCIe 4.0 x16 (точная раскладка линий по CPU/слотам не дана)",
+          "sources": [
+            {
+              "url": "https://www.seccw.com/Goods/info/id/5835.html",
+              "title": "Gooxi国鑫Whitley平台服务器-AS4105G-D12R-G3",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Размер системы",
+          "value": "695×433×176.5 мм (D16)",
+          "sources": [
+            {
+              "url": "https://www.seccw.com/Goods/info/id/5835.html",
+              "title": "Gooxi国鑫Whitley平台服务器-AS4105G-D12R-G3",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T14:15:56.813Z"
+    },
+    "ASG-2015S-E1CR24L": {
+      "links": [
+        {
+          "url": "https://www.supermicro.com/en/products/system/storage/2u/asg-2015s-e1cr24l",
+          "title": "Supermicro ASG-2015S-E1CR24L — страница производителя",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Система",
+          "value": "Supermicro ASG-2015S-E1CR24L, 2U",
+          "sources": [
+            {
+              "url": "https://www.supermicro.com/en/products/system/storage/2u/asg-2015s-e1cr24l",
+              "title": "Supermicro ASG-2015S-E1CR24L — страница производителя",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Процессор",
+          "value": "1 × AMD EPYC 9004/9005, Socket SP5",
+          "sources": [
+            {
+              "url": "https://www.supermicro.com/en/products/system/storage/2u/asg-2015s-e1cr24l",
+              "title": "Supermicro ASG-2015S-E1CR24L — страница производителя",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Память",
+          "value": "12 слотов DDR5 RDIMM",
+          "sources": [
+            {
+              "url": "https://www.supermicro.com/en/products/system/storage/2u/asg-2015s-e1cr24l",
+              "title": "Supermicro ASG-2015S-E1CR24L — страница производителя",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Отсеки",
+          "value": "24 × 3,5″ SAS/SATA с горячей заменой",
+          "sources": [
+            {
+              "url": "https://www.supermicro.com/en/products/system/storage/2u/asg-2015s-e1cr24l",
+              "title": "Supermicro ASG-2015S-E1CR24L — страница производителя",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Платформа для EPYC 9005",
+          "value": "Требуется ревизия платы 2.x",
+          "sources": [
+            {
+              "url": "https://www.supermicro.com/en/products/system/storage/2u/asg-2015s-e1cr24l",
+              "title": "Supermicro ASG-2015S-E1CR24L — страница производителя",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T12:08:20.765Z"
+    },
+    "0.81.606.1000": {
+      "links": [
+        {
+          "url": "https://www.gooxi.us/uploadfiles/2025/06/20250609151540147.pdf",
+          "title": "Gooxi SYR6108G-D12R-G5 — спецификация производителя",
+          "modelOnly": true
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Модель",
+          "value": "Gooxi SYR6108G-D12R-G5, 6U",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/uploadfiles/2025/06/20250609151540147.pdf",
+              "title": "Gooxi SYR6108G-D12R-G5 — спецификация производителя",
+              "modelOnly": true
+            }
+          ]
+        },
+        {
+          "name": "Процессоры",
+          "value": "AMD EPYC 9005, совместимость с 9004",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/uploadfiles/2025/06/20250609151540147.pdf",
+              "title": "Gooxi SYR6108G-D12R-G5 — спецификация производителя",
+              "modelOnly": true
+            }
+          ]
+        },
+        {
+          "name": "Память",
+          "value": "24 слота DDR5",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/uploadfiles/2025/06/20250609151540147.pdf",
+              "title": "Gooxi SYR6108G-D12R-G5 — спецификация производителя",
+              "modelOnly": true
+            }
+          ]
+        },
+        {
+          "name": "GPU",
+          "value": "До 8 GPU мощностью до 600 Вт",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/uploadfiles/2025/06/20250609151540147.pdf",
+              "title": "Gooxi SYR6108G-D12R-G5 — спецификация производителя",
+              "modelOnly": true
+            }
+          ]
+        },
+        {
+          "name": "Отсеки",
+          "value": "12 отсеков 3,5/2,5″ SAS/SATA/NVMe",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/uploadfiles/2025/06/20250609151540147.pdf",
+              "title": "Gooxi SYR6108G-D12R-G5 — спецификация производителя",
+              "modelOnly": true
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T12:08:20.770Z"
+    },
+    "SYS-422GB-NRT": {
+      "links": [
+        {
+          "url": "https://www.supermicro.com/en/products/system/gpu/4u/sys-422gb-nrt",
+          "title": "Supermicro SYS-422GB-NRT — страница производителя",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Модель",
+          "value": "Supermicro SYS-422GB-NRT, 4U",
+          "sources": [
+            {
+              "url": "https://www.supermicro.com/en/products/system/gpu/4u/sys-422gb-nrt",
+              "title": "Supermicro SYS-422GB-NRT — страница производителя",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Процессоры",
+          "value": "2 сокета E2 (LGA-4710), Intel Xeon 6700/6500 с P-ядрами",
+          "sources": [
+            {
+              "url": "https://www.supermicro.com/en/products/system/gpu/4u/sys-422gb-nrt",
+              "title": "Supermicro SYS-422GB-NRT — страница производителя",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Память",
+          "value": "32 слота DDR5",
+          "sources": [
+            {
+              "url": "https://www.supermicro.com/en/products/system/gpu/4u/sys-422gb-nrt",
+              "title": "Supermicro SYS-422GB-NRT — страница производителя",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "PCIe",
+          "value": "До 13 × PCIe 5.0 x16 FHFL",
+          "sources": [
+            {
+              "url": "https://www.supermicro.com/en/products/system/gpu/4u/sys-422gb-nrt",
+              "title": "Supermicro SYS-422GB-NRT — страница производителя",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Питание",
+          "value": "4 × 3200 Вт, резервирование 3+1",
+          "sources": [
+            {
+              "url": "https://www.supermicro.com/en/products/system/gpu/4u/sys-422gb-nrt",
+              "title": "Supermicro SYS-422GB-NRT — страница производителя",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T12:16:53.153Z"
+    },
+    "0.96.002.1050": {
+      "links": [
+        {
+          "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+          "title": "Gooxi SR201-D12RE-G2 — страница производителя",
+          "modelOnly": true
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Модель",
+          "value": "Gooxi SR201-D12RE-G2, 2U",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+              "title": "Gooxi SR201-D12RE-G2 — страница производителя",
+              "modelOnly": true
+            }
+          ]
+        },
+        {
+          "name": "Процессоры",
+          "value": "2 × AMD EPYC 9004 (Genoa)",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+              "title": "Gooxi SR201-D12RE-G2 — страница производителя",
+              "modelOnly": true
+            }
+          ]
+        },
+        {
+          "name": "Память",
+          "value": "24 слота DDR5 RDIMM 4400/4800",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+              "title": "Gooxi SR201-D12RE-G2 — страница производителя",
+              "modelOnly": true
+            }
+          ]
+        },
+        {
+          "name": "Передние отсеки",
+          "value": "12 × 3,5/2,5″ SAS/SATA/NVMe",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+              "title": "Gooxi SR201-D12RE-G2 — страница производителя",
+              "modelOnly": true
+            }
+          ]
+        },
+        {
+          "name": "M.2",
+          "value": "2 × M.2 PCIe 5.0 x4, 2280 (страница модели)",
+          "sources": [
+            {
+              "url": "https://www.gooxi.us/en/ProductList/info_lcid_62_itemid_1217.html",
+              "title": "Gooxi SR201-D12RE-G2 — страница производителя",
+              "modelOnly": true
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T12:16:53.154Z"
+    },
+    "100-000001147": {
+      "links": [
+        {
+          "url": "https://www.amd.com/en/products/processors/server/epyc/9005-series/amd-epyc-9535.html",
+          "title": "AMD EPYC 9535 — страница производителя, 100-000001147",
+          "modelOnly": false
+        },
+        {
+          "url": "https://shop.by/protsessory/amd_epyc_9535",
+          "title": "Процессор AMD EPYC 9535 (OEM) купить недорого в Минске, цены – Shop.by",
+          "modelOnly": true
+        },
+        {
+          "url": "https://www.itcreations.com/product/148898",
+          "title": "100-000001147 - New - AMD EPYC 64 CORE Processor 9535 2.4GHZ Base / 4.3GHZ Max 256MB L3 Cache TDP 300W SP5 Socket ( Turin ) ( 5TH Gen ) ( Unlocked )",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Сокет",
+          "value": "SP5",
+          "sources": [
+            {
+              "url": "https://www.amd.com/en/products/processors/server/epyc/9005-series/amd-epyc-9535.html",
+              "title": "AMD EPYC 9535 — страница производителя, 100-000001147",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Количество сокетов",
+          "value": "1P/2P",
+          "sources": [
+            {
+              "url": "https://www.amd.com/en/products/processors/server/epyc/9005-series/amd-epyc-9535.html",
+              "title": "AMD EPYC 9535 — страница производителя, 100-000001147",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Ядра/потоки",
+          "value": "64C/128T",
+          "sources": [
+            {
+              "url": "https://www.amd.com/en/products/processors/server/epyc/9005-series/amd-epyc-9535.html",
+              "title": "AMD EPYC 9535 — страница производителя, 100-000001147",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Базовая/boost частота",
+          "value": "2.4 / до 4.3 GHz",
+          "sources": [
+            {
+              "url": "https://www.amd.com/en/products/processors/server/epyc/9005-series/amd-epyc-9535.html",
+              "title": "AMD EPYC 9535 — страница производителя, 100-000001147",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "TDP (default)",
+          "value": "300W (configurable 240–300W)",
+          "sources": [
+            {
+              "url": "https://www.amd.com/en/products/processors/server/epyc/9005-series/amd-epyc-9535.html",
+              "title": "AMD EPYC 9535 — страница производителя, 100-000001147",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T13:43:49.702Z"
+    },
+    "SSDPF2KX960HZN1": {
+      "links": [
+        {
+          "url": "https://www.chipdip.kz/product/intel-ssd-d5-p5530-series-960gb-u-2-2.5-15mm-nvme-8037976299",
+          "title": "SSDPF2KX960HZN1, Твердотельный диск 960GB Intel D5-P5530 Series, 2.5\" 15mm, U.2, NVMe, PCIe 4.0 x4,[R/W - 5500/1600 MB/s],TBW 1700, DWPD1 – купить оптом и в розницу",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.chipdip.kz/product/intel-d5-p5530-series-ssdpf2kx960hzn1-tverdotelnyy-8013371927",
+          "title": "Intel D5-P5530 Series SSDPF2KX960HZN1, Твердотельный накопитель – купить оптом и в розницу",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.chipdip.by/product/intel-d5-p5530-series-ssdpf2kx960hzn1-tverdotelnyy-8013371927",
+          "title": "Intel D5-P5530 Series SSDPF2KX960HZN1, Твердотельный накопитель – купить оптом и в розницу",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": "2026-11-20T14:11:57.296Z"
+    },
+    "90SF0404-M00ZR0": {
+      "links": [
+        {
+          "url": "https://servers.asus.com/products/servers/gpu-servers/esc8000a-e13p",
+          "title": "ESC8000A-E13P | ASUS Servers",
+          "modelOnly": true
+        },
+        {
+          "url": "https://servers.asus.com/products/servers/gpu-servers/ESC8000A-E13P",
+          "title": "ESC8000A-E13P | ASUS Servers",
+          "modelOnly": true
+        },
+        {
+          "url": "https://servers.asus.com/products/Servers/GPU-Servers/ESC8000A-E13P",
+          "title": "ESC8000A-E13P | ASUS Servers",
+          "modelOnly": true
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Платформа/CPU поколение",
+          "value": "4U MGX, поддержка AMD EPYC 9005/9004, dual-processor",
+          "sources": [
+            {
+              "url": "https://servers.asus.com/products/servers/gpu-servers/esc8000a-e13p",
+              "title": "ESC8000A-E13P | ASUS Servers",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Память",
+          "value": "DDR5, до 6400 MHz; до 24 DIMM (в заявлении ключевых особенностей)",
+          "sources": [
+            {
+              "url": "https://servers.asus.com/products/servers/gpu-servers/esc8000a-e13p",
+              "title": "ESC8000A-E13P | ASUS Servers",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "GPU (поддержка H200)",
+          "value": "Поддержка восьми dual-slot NVIDIA H200 (и NVIDIA MGX)",
+          "sources": [
+            {
+              "url": "https://servers.asus.com/products/servers/gpu-servers/esc8000a-e13p",
+              "title": "ESC8000A-E13P | ASUS Servers",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "PCIe",
+          "value": "Заявлено 5 PCIe 5.0 slots (в источнике ключевых особенностей)",
+          "sources": [
+            {
+              "url": "https://servers.asus.com/products/servers/gpu-servers/esc8000a-e13p",
+              "title": "ESC8000A-E13P | ASUS Servers",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "2.5\" NVMe",
+          "value": "Заявлено 8× 2.5\" NVMe (в источнике ключевых особенностей)",
+          "sources": [
+            {
+              "url": "https://servers.asus.com/products/servers/gpu-servers/esc8000a-e13p",
+              "title": "ESC8000A-E13P | ASUS Servers",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T13:43:49.702Z"
+    },
+    "05-50134-03": {
+      "links": [
+        {
+          "url": "https://docs.broadcom.com/doc/MegaRAID-9500-Tri-Mode-Storage-Adapters",
+          "title": "Broadcom MegaRAID 9540-8i — спецификация производителя, 05-50134-03",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.exxactcorp.com/Broadcom-05-50134-03-E158553327",
+          "title": "Broadcom 05-50134-03 Storage Adapter - 9540-8i - PCIe 4.0 x8 - 1x x8 SFF-8654 - SATA/SAS - 8x Int Port | Exxact",
+          "modelOnly": false
+        },
+        {
+          "url": "https://zhongxindata.hk/products/server-nas-storage-raid-controller-megaraid-9540-8i-05-50134",
+          "title": "Server NAS Storage RAID Controller MegaRAID 9540-8i 05-50134-03 – Zhongxin Data",
+          "modelOnly": false
+        },
+        {
+          "url": "https://jacob.de/produkte/broadcom-bcm-megaraid-05-50134-03-artnr-7975619.html",
+          "title": "Broadcom MegaRAID 9540-8i Speichercontroller RAID 05-50134-03",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Хост-интерфейс",
+          "value": "x8 PCIe Gen4 (до 16.0GT/s per lane, full duplex)",
+          "sources": [
+            {
+              "url": "https://docs.broadcom.com/doc/MegaRAID-9500-Tri-Mode-Storage-Adapters",
+              "title": "Broadcom MegaRAID 9540-8i — спецификация производителя, 05-50134-03",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Storage интерфейс (Tri-Mode)",
+          "value": "12Gb/s SAS, 6Gb/s SATA, Gen4 PCIe (NVMe)",
+          "sources": [
+            {
+              "url": "https://docs.broadcom.com/doc/MegaRAID-9500-Tri-Mode-Storage-Adapters",
+              "title": "Broadcom MegaRAID 9540-8i — спецификация производителя, 05-50134-03",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Внутренний коннектор",
+          "value": "1× SFF-8654 (SlimSAS)",
+          "sources": [
+            {
+              "url": "https://docs.broadcom.com/doc/MegaRAID-9500-Tri-Mode-Storage-Adapters",
+              "title": "Broadcom MegaRAID 9540-8i — спецификация производителя, 05-50134-03",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Порты/устройства",
+          "value": "Up to 240 SAS/SATA devices; up to 32 NVMe devices (в спецификации 9500 series)",
+          "sources": [
+            {
+              "url": "https://docs.broadcom.com/doc/MegaRAID-9500-Tri-Mode-Storage-Adapters",
+              "title": "Broadcom MegaRAID 9540-8i — спецификация производителя, 05-50134-03",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "PCIe поколение (коннектор)",
+          "value": "Compatible with U.3 bay type via SFF-TA-1001/UBM, negotiated tri-mode",
+          "sources": [
+            {
+              "url": "https://docs.broadcom.com/doc/MegaRAID-9500-Tri-Mode-Storage-Adapters",
+              "title": "Broadcom MegaRAID 9540-8i — спецификация производителя, 05-50134-03",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T13:43:49.702Z"
+    },
+    "900-21010-0040-000": {
+      "links": [
+        {
+          "url": "https://www.nvidia.com/en-us/data-center/h200/",
+          "title": "NVIDIA H200 NVL — страница производителя",
+          "modelOnly": true
+        },
+        {
+          "url": "https://networking-docs.nvidia.com/connectx7hw/specifications",
+          "title": "Specifications | NVIDIA ConnectX-7 Adapter Cards User Manual",
+          "modelOnly": false
+        },
+        {
+          "url": "https://supermicrosunucu.com/parts/nvidia-h200-nvl-graphic-card-141-gb-passive-pcie-900-21010-0040-000-1",
+          "title": "Nvidia H200 NVL Graphic Card 141 GB Passive PCIe – 900-21010-0040-000 | Fiyat ve Teklif - Supermicro Sunucu Ve Server Donanımlarının Doğru Adresi",
+          "modelOnly": false
+        },
+        {
+          "url": "https://dlcdnets.asus.com/pub/ASUS/server/ESC8000A-E13P/AVL/ESC8000A-E13P_Add_on_AVL_20250205.pdf?model=ESC8000A-E13P",
+          "title": "ASUS — H200 NVL 900-21010-0040-000 в списке совместимости ESC8000A-E13P",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Класс GPU",
+          "value": "NVIDIA H200, PCIe Gen5 x16, passive, dual-slot (по описанию в источниках есть признаки, но требуется точное совпадение SKU)",
+          "sources": [
+            {
+              "url": "https://networking-docs.nvidia.com/connectx7hw/specifications",
+              "title": "Specifications | NVIDIA ConnectX-7 Adapter Cards User Manual",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Потребление",
+          "value": "600W TDP/TGP (по описанию в строке и частично в источниках)",
+          "sources": [
+            {
+              "url": "https://networking-docs.nvidia.com/connectx7hw/specifications",
+              "title": "Specifications | NVIDIA ConnectX-7 Adapter Cards User Manual",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Поколение PCIe",
+          "value": "PCIe 5.0",
+          "sources": [
+            {
+              "url": "https://networking-docs.nvidia.com/connectx7hw/specifications",
+              "title": "Specifications | NVIDIA ConnectX-7 Adapter Cards User Manual",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Охлаждение",
+          "value": "Passive (по описанию)",
+          "sources": [
+            {
+              "url": "https://networking-docs.nvidia.com/connectx7hw/specifications",
+              "title": "Specifications | NVIDIA ConnectX-7 Adapter Cards User Manual",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T13:43:51.562Z"
+    },
+    "900-23946-0000-000": {
+      "links": [
+        {
+          "url": "https://developer.nvidia.com/blog/deploying-nvidia-h200-nvl-at-scale-with-new-enterprise-reference-architecture",
+          "title": "Deploying NVIDIA H200 NVL at Scale with New Enterprise Reference Architecture | NVIDIA Technical Blog",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.exxactcorp.com/NVIDIA-900-23946-0000-000-E8533620",
+          "title": "NVIDIA NVLink - 4-Way Passive for H200 NVL - 900-23946-0000-000 | Exxact",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.sabrepc.com/900-23946-0000-000-NVIDIA-S8533620",
+          "title": "NVIDIA 900-23946-0000-000 NVLink - H200 NVL - Passive - 4-Way | SabrePC",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.centralcomputer.com/nvidia-900-23946-0000-000-nvlink-4-way-passive-for-h200-nvl.html",
+          "title": "Nvidia 900-23946-0000-000 NVLink 4-Way Passive for H200 NVL",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Назначение",
+          "value": "NVLink bridge 4-way passive для H200 NVL (по описанию аксессуара)",
+          "sources": [
+            {
+              "url": "https://developer.nvidia.com/blog/deploying-nvidia-h200-nvl-at-scale-with-new-enterprise-reference-architecture",
+              "title": "Deploying NVIDIA H200 NVL at Scale with New Enterprise Reference Architecture | NVIDIA Technical Blog",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Пропускная способность/пул памяти (описание)",
+          "value": "до 1.8 TB/s; combined 564 GB HBM3e (описание NVLink NVL)",
+          "sources": [
+            {
+              "url": "https://developer.nvidia.com/blog/deploying-nvidia-h200-nvl-at-scale-with-new-enterprise-reference-architecture",
+              "title": "Deploying NVIDIA H200 NVL at Scale with New Enterprise Reference Architecture | NVIDIA Technical Blog",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Совместимость",
+          "value": "указана как совместимая с H200 NVL",
+          "sources": [
+            {
+              "url": "https://developer.nvidia.com/blog/deploying-nvidia-h200-nvl-at-scale-with-new-enterprise-reference-architecture",
+              "title": "Deploying NVIDIA H200 NVL at Scale with New Enterprise Reference Architecture | NVIDIA Technical Blog",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T13:43:51.562Z"
+    },
+    "LRES1021PF-2SFP28": {
+      "links": [
+        {
+          "url": "https://cdrdv2-public.intel.com/739546/Dell_Intel%20Ethernet%20Network%20Adapter%20E810-XXVDA2.pdf",
+          "title": "Intel® Ethernet Network Adapter E810-XXVDA2",
+          "modelOnly": false
+        },
+        {
+          "url": "https://cdrdv2-public.intel.com/641674/Intel%20Ethernet%20Network%20Adapter%20E810-XXVDA2%20Product%20Brief.pdf",
+          "title": "[PDF] Intel® Ethernet Network Adapter E810-XXVDA2",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Порты",
+          "value": "2× SFP28 (Dual Port)",
+          "sources": [
+            {
+              "url": "https://cdrdv2-public.intel.com/739546/Dell_Intel%20Ethernet%20Network%20Adapter%20E810-XXVDA2.pdf",
+              "title": "Intel® Ethernet Network Adapter E810-XXVDA2",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "PCIe интерфейс",
+          "value": "PCIe 4.0 x8",
+          "sources": [
+            {
+              "url": "https://cdrdv2-public.intel.com/739546/Dell_Intel%20Ethernet%20Network%20Adapter%20E810-XXVDA2.pdf",
+              "title": "Intel® Ethernet Network Adapter E810-XXVDA2",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Тип карты",
+          "value": "Full/standard PCIe adapter (из спецификации — без указания LP/высоты в данном отрывке)",
+          "sources": [
+            {
+              "url": "https://cdrdv2-public.intel.com/641674/Intel%20Ethernet%20Network%20Adapter%20E810-XXVDA2%20Product%20Brief.pdf",
+              "title": "[PDF] Intel® Ethernet Network Adapter E810-XXVDA2",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Габарит/размер",
+          "value": "167 mm x 68 mm (из product brief)",
+          "sources": [
+            {
+              "url": "https://cdrdv2-public.intel.com/641674/Intel%20Ethernet%20Network%20Adapter%20E810-XXVDA2%20Product%20Brief.pdf",
+              "title": "[PDF] Intel® Ethernet Network Adapter E810-XXVDA2",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Потребление (типичное)",
+          "value": "Max 8.9W (25GbE), 8.0W idle",
+          "sources": [
+            {
+              "url": "https://cdrdv2-public.intel.com/739546/Dell_Intel%20Ethernet%20Network%20Adapter%20E810-XXVDA2.pdf",
+              "title": "Intel® Ethernet Network Adapter E810-XXVDA2",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T13:43:51.562Z"
+    },
+    "ST2000NX0433": {
+      "links": [
+        {
+          "url": "https://serverdiskdrives.com/products/seagate-2tb-enterprise-2-5-internal-drive-sas-12gb-s-7200-rpm-128mb-st2000nx0433",
+          "title": "Seagate 2TB Enterprise 2.5 Internal Drive SAS 12Gb/s 7200 RPM 128MB ST",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.walmart.com/ip/Seagate-2TB-Enterprise-Capacity-2-5-Internal-Hard-Disk-Drive-SAS-12Gb-s-7200-RPM-128MB-Cache-Model-ST2000NX0433/50926002",
+          "title": "Seagate 2TB Enterprise Capacity 2.5 Internal Hard Disk Drive SAS 12Gb/s 7200 RPM 128MB Cache Model ST2000NX0433 - Walmart.com",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": "2026-11-20T14:15:56.814Z",
+      "excludedUrls": [
+        "https://www.seagate.com/www-content/product-content/enterprise-hdd-fam/enterprise-capacity-2-5-hdd/en-us/docs/100751314b.pdf",
+        "https://www.seagate.com/files/www-content/product-content/_cross-product/en-gb/docs/storage-solutions-guide-sg1351-11-1210apac.pdf"
+      ],
+      "sourcesEdited": true
+    },
+    "05-50008-00": {
+      "links": [
+        {
+          "url": "https://www.cloudstorserver.com/lsi-9400-16i-05-50008-00-sas-sata-nvme-pcie-hbas-sff8643-12gbs",
+          "title": "LSI 05-50008-00 9400-16i 16-port Tri-Mode PCIe HBA manufacturer,LSI 05-50008-00 9400-16i 16-port Tri-Mode PCIe HBA factory price - Cloudstorserver.com",
+          "modelOnly": false
+        },
+        {
+          "url": "https://ru.cloudstorserver.com/lsi-9400-16i-05-50008-00-sas-sata-nvme-pcie-hbas-sff8643-12gbs",
+          "title": "LSI 9400-16i 05-50008-00 HBA SAS, SATA, NVMe (PCIe) sff8643 12 Гбит/с производитель,LSI 9400-16i 05-50008-00 HBA SAS, SATA, NVMe (PCIe) sff8643 12 Гбит/с заводская цена — cloudstorserver.com",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Количество внутренних портов",
+          "value": "16 internal (SAS/SATA) + NVMe via direct attach",
+          "sources": [
+            {
+              "url": "https://www.cloudstorserver.com/lsi-9400-16i-05-50008-00-sas-sata-nvme-pcie-hbas-sff8643-12gbs",
+              "title": "LSI 05-50008-00 9400-16i 16-port Tri-Mode PCIe HBA manufacturer,LSI 05-50008-00 9400-16i 16-port Tri-Mode PCIe HBA factory price - Cloudstorserver.com",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Коннекторы накопителей",
+          "value": "4× SFF-8643",
+          "sources": [
+            {
+              "url": "https://www.cloudstorserver.com/lsi-9400-16i-05-50008-00-sas-sata-nvme-pcie-hbas-sff8643-12gbs",
+              "title": "LSI 05-50008-00 9400-16i 16-port Tri-Mode PCIe HBA manufacturer,LSI 05-50008-00 9400-16i 16-port Tri-Mode PCIe HBA factory price - Cloudstorserver.com",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Host интерфейс",
+          "value": "PCIe 3.1 x8",
+          "sources": [
+            {
+              "url": "https://www.cloudstorserver.com/lsi-9400-16i-05-50008-00-sas-sata-nvme-pcie-hbas-sff8643-12gbs",
+              "title": "LSI 05-50008-00 9400-16i 16-port Tri-Mode PCIe HBA manufacturer,LSI 05-50008-00 9400-16i 16-port Tri-Mode PCIe HBA factory price - Cloudstorserver.com",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Поддерживаемые интерфейсы накопителей",
+          "value": "SAS/SATA и NVMe (PCIe)",
+          "sources": [
+            {
+              "url": "https://www.cloudstorserver.com/lsi-9400-16i-05-50008-00-sas-sata-nvme-pcie-hbas-sff8643-12gbs",
+              "title": "LSI 05-50008-00 9400-16i 16-port Tri-Mode PCIe HBA manufacturer,LSI 05-50008-00 9400-16i 16-port Tri-Mode PCIe HBA factory price - Cloudstorserver.com",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T14:15:58.766Z"
+    },
+    "900-2G153-0000-000": {
+      "links": [
+        {
+          "url": "https://www.nvidia.com/ja-jp/products/workstations/professional-desktop-gpus/rtx-pro-6000-family",
+          "title": "NVIDIA RTX 6000 でエージェントAI やフィジカル AI を強化 | NVIDIA",
+          "modelOnly": false
+        },
+        {
+          "url": "https://www.morele.net/karta-graficzna-pny-rtx-pro-6000-blackwell-server-edition-96gb-gddr7-900-2g153-0000-000-15457127",
+          "title": "PNY RTX PRO 6000 Blackwell Server Edition 96GB GDDR7 (900-2G153-0000-000) - Karta graficzna - Morele.net",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "GPU-память",
+          "value": "96 GB GDDR7 (ECC)",
+          "sources": [
+            {
+              "url": "https://www.nvidia.com/ja-jp/products/workstations/professional-desktop-gpus/rtx-pro-6000-family",
+              "title": "NVIDIA RTX 6000 でエージェントAI やフィジカル AI を強化 | NVIDIA",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "PCIe",
+          "value": "PCI Express Gen5 x16",
+          "sources": [
+            {
+              "url": "https://www.nvidia.com/ja-jp/products/workstations/professional-desktop-gpus/rtx-pro-6000-family",
+              "title": "NVIDIA RTX 6000 でエージェントAI やフィジカル AI を強化 | NVIDIA",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Питание/диапазон",
+          "value": "400–600 W (Server Edition) + пассивное охлаждение",
+          "sources": [
+            {
+              "url": "https://www.nvidia.com/ja-jp/products/workstations/professional-desktop-gpus/rtx-pro-6000-family",
+              "title": "NVIDIA RTX 6000 でエージェントAI やフィジカル AI を強化 | NVIDIA",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T14:15:56.814Z"
+    },
+    "RSL38-1067": {
+      "links": [
+        {
+          "url": "https://www.nix.ru/autocatalog/controllers_cables_sas_sata/DiliVing-DLSL38-1067-Slimline-SASx4-SFF8654-to-HD-MiniSAS-x4-SFF8643-PCIE-30-85-Ohm-100cm_980117.html",
+          "title": "SFF-8654 (x4)<->SFF-8643 (NVME) DiliVing DLSL38-1067 ()  ,   ,",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Интерфейсы разъёмов",
+          "value": "Slimline SASx4 (SFF8654) → HD MiniSAS x4 (SFF8643)",
+          "sources": [
+            {
+              "url": "https://www.nix.ru/autocatalog/controllers_cables_sas_sata/DiliVing-DLSL38-1067-Slimline-SASx4-SFF8654-to-HD-MiniSAS-x4-SFF8643-PCIE-30-85-Ohm-100cm_980117.html",
+              "title": "SFF-8654 (x4)<->SFF-8643 (NVME) DiliVing DLSL38-1067 ()  ,   ,",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T14:15:58.766Z"
+    },
+    "12VHPWR2X8PIN": {
+      "links": [
+        {
+          "url": "https://gpuconnect.com/products/16pin-to-2x8pin-12vhpwr-pcie-5-0-power-adapter-cable-braided-for-rtx",
+          "title": "16Pin to 2x8Pin 12VHPWR PCIE 5.0 Power Adapter Cable Braided for RTX 4 – GPUCONNECT.COM",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [
+        {
+          "name": "Назначение",
+          "value": "16-pin 12VHPWR → 2x8-pin (PCIE power adapter cable)",
+          "sources": [
+            {
+              "url": "https://gpuconnect.com/products/16pin-to-2x8pin-12vhpwr-pcie-5-0-power-adapter-cable-braided-for-rtx",
+              "title": "16Pin to 2x8Pin 12VHPWR PCIE 5.0 Power Adapter Cable Braided for RTX 4 – GPUCONNECT.COM",
+              "modelOnly": false
+            }
+          ]
+        },
+        {
+          "name": "Важное условие по питанию",
+          "value": "Кабель требует подачи через отдельные независимые 8-pin подключения от БП; 12VHPWR официально rated до 600W",
+          "sources": [
+            {
+              "url": "https://gpuconnect.com/products/16pin-to-2x8pin-12vhpwr-pcie-5-0-power-adapter-cable-braided-for-rtx",
+              "title": "16Pin to 2x8Pin 12VHPWR PCIE 5.0 Power Adapter Cable Braided for RTX 4 – GPUCONNECT.COM",
+              "modelOnly": false
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-11-20T14:11:59.026Z"
+    },
+    "100-000000053": {
+      "links": [],
+      "technicalSpecs": [],
+      "updatedAt": "2026-11-20T14:05:58.114Z",
+      "excludedUrls": [
+        "https://www.provantage.com/amd-100-000000053~7AAMD395.htm",
+        "https://www.cpu-world.com/CPUs/Zen/AMD-EPYC%207742.html"
+      ],
+      "sourcesEdited": true
+    },
+    "AS-4124GS-TNR": {
+      "links": [
+        {
+          "url": "https://www.supermicro.com/en/aplus/system/4u/4124/as-4124gs-tnr.php",
+          "title": "Supermicro AS-4124GS-TNR — страница производителя",
+          "modelOnly": false
+        }
+      ],
+      "technicalSpecs": [],
+      "updatedAt": ""
     }
   }
 }

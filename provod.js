@@ -1,10 +1,11 @@
 import { positionReportFormat, sourceTypeLabels } from './positions.js';
 import { compactEvidenceFormat, expandEvidenceReferences, provodBilling } from './provod-evidence.js';
 import { sourceConflictsWithPosition } from './source-identity.js';
+import { lookupKnownComponent } from './bom.js';
 
 const alternativeSourceInstructions = `Применяй источники по убыванию надёжности: документация производителя и её точные копии; технические каталоги/руководства дистрибьюторов и интеграторов; независимые профессиональные обзоры. Сначала ищи документацию производителя точной модели; если нужного факта там нет или источник недоступен, используй применимые каталоги дистрибьюторов, NIX и другие источники. Ссылайся на источник каждого факта. Не называй NIX документом производителя и не переноси сведения на другой артикул/ревизию. Другие источники используй как резерв; сверяй их с независимым источником или стандартом, когда факт критичен и доступна такая проверка. Не называй отсутствие первичного документа причиной неподтверждённости, если условия можно подтвердить альтернативными источниками. Для точной идентификации сверяй артикул и ревизию; сведения о другой ревизии или только о семействе используй лишь для общих свойств и явно обозначай ограничение. sourceType=manufacturer для документа производителя (включая его копию у продавца), иначе distributor, integrator, retailer, review или unknown. Рекламное заявление или одиночный пользовательский отзыв не подтверждает критичное условие.`;
 
-const comparisonInstructions = `Документы содержат общую доказательную базу сборки. Сначала используй применимые документы с приоритетных сайтов пользователя в переданном порядке, затем остальные источники; ссылки на применимые приоритетные документы указывай первыми. Приоритет сайта не заменяет проверку модели и достоверности фактов. Проверяй принадлежность каждого документа нужной модели и ревизии. Метки positionIds отражают позиции из поискового запроса, а не гарантированное совпадение артикула в тексте; проверяй каждую страницу по её содержимому. Поисковая сводка помогает ориентироваться, но фактический вывод подтверждай ссылками на источники. Неизвестная минимальная версия BIOS — замечание, а не обязательный критерий совместимости; учитывай её как блокер только при явном документированном ограничении. Для совместной установки допускается обоснованный вывод из совокупности отдельно применимых документов платформы и компонентов; не требуй единого документа с перечислением всей сборки.
+const comparisonInstructions = `Документы содержат общую доказательную базу сборки. Несколько самостоятельных серверов или платформ в списке не означают, что один сервер устанавливается внутрь другого; не придумывай такой монтаж. Если неизвестно, какие компоненты относятся к каждой платформе, укажи необходимость распределения. Сначала используй применимые документы с приоритетных сайтов пользователя в переданном порядке, затем остальные источники; ссылки на применимые приоритетные документы указывай первыми. Приоритет сайта не заменяет проверку модели и достоверности фактов. Проверяй принадлежность каждого документа нужной модели и ревизии. Метки positionIds отражают позиции из поискового запроса, а не гарантированное совпадение артикула в тексте; проверяй каждую страницу по её содержимому. Поисковая сводка помогает ориентироваться, но фактический вывод подтверждай ссылками на источники. Неизвестная минимальная версия BIOS — замечание, а не обязательный критерий совместимости; учитывай её как блокер только при явном документированном ограничении. Для совместной установки допускается обоснованный вывод из совокупности отдельно применимых документов платформы и компонентов; не требуй единого документа с перечислением всей сборки.
 Для PCIe/NVMe различай физический разъём, протокол, число линий и поколение скорости. Отсутствие PCIe 5.0 у платформы само по себе не доказывает несовместимость накопителя PCIe 5.0. Проверь документированную поддержку согласования скорости и подключения. Если возможна работа на меньшей скорости, укажи ограничение производительности.
 Совместную установку можно подтвердить совокупностью применимых схем и спецификаций. Отдельный документ с перечислением всей заказанной сборки не обязателен. Проверь распределение слотов, линий, отсеков, разъёмов, питание и охлаждение с учётом количества.
 Для CPU не требуй документов о дисках и GPU как условия поддержки самого CPU. Для памяти не требуй отдельного документа об отсутствии механического конфликта с дисками, если схема платформы уже определяет независимое размещение. Неизвестные параметры указывай конкретно.
@@ -86,18 +87,15 @@ function parseStructuredJson(raw) {
 }
 
 function positionQueries(position, local) {
-  const installed = local.positions.filter(item => item.quantity !== 0);
-  const platform = installed.find(item => ['platform', 'board'].includes(item.kind));
   const sku = String(position.sku || '').trim();
   const description = String(position.description || '').replace(sku, '').replace(/\s+/g, ' ').trim();
   const name = description.slice(0, 140);
   const traits = extractSearchTraits(description);
-  const platformSku = platform?.sku || platform?.description.slice(0, 100) || '';
   const componentIdentity = [sku && `"${sku}"`, name, traits].filter(Boolean).join(' ');
   const componentQuery = `${componentIdentity} technical specifications datasheet`;
-  const platformQuery = `"${platformSku}" ${name} ${traits} platform physical installation slots connectors form factor capacity manual`;
   const fallbackQuery = `${name} ${traits} product specifications datasheet manufacturer`;
-  return { queries: [componentQuery, platformQuery], fallbackQuery };
+  // Identify each product on its own; installation is assessed in the report.
+  return { queries: [componentQuery], fallbackQuery };
 }
 
 function extractSearchTraits(value) {
@@ -107,6 +105,17 @@ function extractSearchTraits(value) {
 
 function searchText(value) {
   return String(value || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zа-яё0-9]+/gi, ' ').trim();
+}
+
+export function platformModel(position) {
+  if (!['platform','board'].includes(position?.kind)) return '';
+  return `${position.description || ''} ${position.sku || ''}`.match(/\b(?=[A-Z0-9-]*[A-Z])(?=[A-Z0-9-]*\d)[A-Z0-9]+(?:-[A-Z0-9]+){2,}(?:\+)?(?=$|[^A-Z0-9+])/i)?.[0] || '';
+}
+
+export function includesExactPlatformModel(text, model) {
+  if (!model) return false;
+  const pattern = model.split('-').map(part => part.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('\\s*[-–—]\\s*');
+  return new RegExp(`(^|[^A-Z0-9])${pattern}(?![A-Z0-9+])`,'i').test(String(text || ''));
 }
 
 function sourcePriorityRank(url, resources = []) {
@@ -155,12 +164,14 @@ export function documentMatchesPosition(document, position) {
 function resultRelevance(result, position, platform, queryIndex) {
   const title = searchText(result.title);
   const url = searchText(result.url);
-  const content = searchText(result.content || result.raw_content);
+  const content = searchText(`${result.content || ''} ${result.raw_content || ''}`);
   const sku = searchText(position.sku);
   const platformSku = searchText(platform?.sku);
   const desc = searchText(position.description);
   const titleAndUrl = `${title} ${url}`;
   const fullText = `${titleAndUrl} ${content}`;
+  const exactPlatformModel = platformModel(position);
+  if (exactPlatformModel && !includesExactPlatformModel(`${result.title || ''} ${result.url || ''} ${result.content || ''} ${result.raw_content || ''}`,exactPlatformModel)) return -Infinity;
   const platformName = searchText(String(platform?.description || '').match(/VANDOR\s+Altura|Altura/i)?.[0]);
   const platformMatch = Boolean(platformSku && fullText.includes(platformSku))
     || Boolean(platformName && fullText.includes(platformName));
@@ -262,6 +273,7 @@ async function searchProvodCandidates(position, local, options) {
   const platform = local.positions.find(item => ['platform', 'board'].includes(item.kind));
   const candidates = [];
   const addCandidates = (response, index) => {
+    const found = [];
     for (const result of response.results || []) {
       const url = publicDocumentUrl(result.url);
       if (!url) continue;
@@ -269,30 +281,68 @@ async function searchProvodCandidates(position, local, options) {
         url,
         title: String(result.title || result.url),
         text: selectEvidenceExcerpt(result),
+        identityContent: String(result.raw_content || ''),
         queryIndex: index,
         relevance: resultRelevance(result, position, platform, index),
       });
+      const candidate = candidates.at(-1);
+      if (candidate.relevance >= 2) found.push({url:candidate.url,title:candidate.title});
     }
+    if (found.length) options.onProgress?.({phase:'sources',positionId:position.id,sources:found});
   };
-  const searchableText = `${position.sku || ''} ${position.description || ''}`.toLocaleLowerCase();
-  const preferred = (options.priorityResources || []).filter(item => searchableText.includes(item.manufacturer.toLocaleLowerCase()));
+  const searchableText = `${position.sku || ''} ${position.description || ''} ${lookupKnownComponent(position)?.text || ''}`.toLocaleLowerCase();
+  const exactModel = platformModel(position);
+  const catalogLinks = options.sourceCatalog?.[String(position.sku || '').toUpperCase()]?.links || [];
+  const preferred = (options.priorityResources || []).filter(item => searchableText.includes(item.manufacturer.toLocaleLowerCase()) || (exactModel && catalogLinks.some(link => sourcePriorityRank(link.url,[item]) === 0 && includesExactPlatformModel(`${link.title || ''} ${link.url || ''}`,exactModel))));
   if (/\bnvidia\b/i.test(searchableText) && !preferred.some(item => /(^|\.)nvidia\.com$/i.test(item.domain))) preferred.push({manufacturer:'NVIDIA',domain:'nvidia.com'});
-  const priorityResources = [...(options.priorityResources || []), ...preferred.filter(item => !(options.priorityResources || []).some(configured => configured.domain === item.domain))];
+  const priorityResources = [...preferred, ...(options.priorityResources || []).filter(item => !preferred.some(match => match.domain === item.domain))];
   const priorityRank = url => sourcePriorityRank(url,priorityResources);
-  for (const resource of preferred.slice(0, 4)) {
-    searches++;
-    const response = await tavilyRequest('search', {
-      query: `${position.sku || ''} ${position.description || ''} specifications`.slice(0,400),
+  // Read a matching, already known manufacturer page before judging the model.
+  // The supplier SKU and the manufacturer's model are kept distinct.
+  const exactSku = String(position.sku || '').trim();
+  const hasSku = text => exactSku.length >= 5 && searchText(text).includes(searchText(exactSku));
+  const savedManufacturer = catalogLinks.find(link => {
+    const safe = publicDocumentUrl(link.url);
+    return safe && sourcePriorityRank(safe,preferred) < preferred.length
+      && (hasSku(`${link.title || ''} ${link.url || ''}`) || (exactModel && includesExactPlatformModel(`${link.title || ''} ${link.url || ''}`,exactModel)));
+  });
+  if (savedManufacturer) {
+    try {
+      const extractKey = canonicalDocumentUrl(savedManufacturer.url);
+      let pending = options.extractCache?.get(extractKey);
+      if (!pending) {
+        pending = tavilyRequest('extract',{urls:[savedManufacturer.url],extract_depth:'basic',format:'markdown',include_images:false,timeout:45},options);
+        options.extractCache?.set(extractKey,pending);
+        pending.catch(() => { if (options.extractCache?.get(extractKey) === pending) options.extractCache.delete(extractKey); });
+      }
+      const extracted = await pending;
+      const page = (extracted.results || []).find(item => canonicalDocumentUrl(item.url) === canonicalDocumentUrl(savedManufacturer.url));
+      const content = String(page?.raw_content || page?.content || '');
+      if (content && !sourceConflictsWithPosition(position,{...savedManufacturer,text:content}) && (hasSku(content) || (exactModel && includesExactPlatformModel(content,exactModel)))) {
+        candidates.push({url:publicDocumentUrl(savedManufacturer.url),title:String(savedManufacturer.title || exactModel),text:selectEvidenceExcerpt({raw_content:content,content:content.slice(0,600)}),queryIndex:0,relevance:1000,identityContent:content});
+        options.onProgress?.({phase:'sources',positionId:position.id,sources:[{url:savedManufacturer.url,title:savedManufacturer.title}]});
+      }
+    } catch { /* Continue with search when the page cannot be read. */ }
+  }
+  const uniquePreferred = [...new Map(preferred.map(resource => [resource.domain.toLowerCase(),resource])).values()].slice(0,4);
+  const preferredResponses = candidates.length ? [] : await Promise.all(uniquePreferred.map(async resource => {
+    const payload = {
+      query: (exactModel ? `"${exactModel}" ${resource.manufacturer} specifications` : `${position.sku || ''} ${position.description || ''} specifications`).slice(0,400),
       include_domains: [resource.domain], search_depth:'fast', max_results:5,
       chunks_per_source:3, topic:'general', include_answer:'basic', include_raw_content:true,
-    }, options).catch(() => ({results:[]}));
+    };
+    const cacheKey = `preferred:${JSON.stringify(payload)}`;
+    let pending = options.searchCache?.get(cacheKey);
+    if (!pending) { searches++; pending = tavilyRequest('search',payload,options); options.searchCache?.set(cacheKey,pending); }
+    const response = await pending.catch(() => ({results:[]}));
     const start = candidates.length;
     addCandidates(response, 0);
     for (const candidate of candidates.slice(start)) if (candidate.relevance >= 2) candidate.relevance += 10;
-    responses.push(response);
-  }
-  const generalResponses = await Promise.all(queries.map(runQuery));
-  generalResponses.forEach((response, index) => addCandidates(response, index));
+    return response;
+  }));
+  responses.push(...preferredResponses);
+  const hasVerifiedManufacturer = candidates.some(candidate => candidate.relevance >= 2 && candidate.identityContent && priorityRank(candidate.url) < preferred.length && (hasSku(candidate.identityContent) || (exactModel && includesExactPlatformModel(candidate.identityContent,exactModel))) && !sourceConflictsWithPosition(position,candidate));
+  const generalResponses = hasVerifiedManufacturer ? [] : await Promise.all(queries.map(async (query,index) => { const response = await runQuery(query); addCandidates(response,index); return response; }));
   responses.push(...generalResponses);
   // A part number search can miss a product whose catalog uses a shortened or
   // alternate SKU. Search the product name and distinctive specs only then.
@@ -328,9 +378,9 @@ async function searchProvodCandidates(position, local, options) {
     seen.add(key);
   }
   selected.sort((a,b) => priorityRank(a.url) - priorityRank(b.url) || b.relevance - a.relevance);
-  const relevantDocuments = selected.map(({ queryIndex, relevance, ...document }) => ({
+  const relevantDocuments = selected.map(({ queryIndex, relevance, identityContent, ...document }) => ({
     ...document,
-    positionIds: [position.id, ...(platform && platform.id !== position.id ? [platform.id] : [])],
+    positionIds: [position.id],
   }));
   return {
     documents: relevantDocuments,
@@ -349,19 +399,22 @@ async function searchProvodCandidates(position, local, options) {
 
 export async function collectProvodAssemblyDocuments(positions, local, options) {
   const byPosition = new Map();
-  const searchCache = new Map();
-  const cachedOptions = { ...options, searchCache };
-  for (let offset = 0; offset < positions.length; offset += 4) {
-    const batch = positions.slice(offset, offset + 4);
-    const settled = await Promise.allSettled(batch.map(async (position, index) => {
-      options.onProgress?.({ phase: 'searching', positionId: position.id, sku: position.sku, completed: offset + index, total: positions.length });
+  const searchCache = new Map(), extractCache = new Map();
+  const cachedOptions = { ...options, searchCache, extractCache };
+  let next = 0, completed = 0;
+  const workers = Array.from({length:Math.min(4,positions.length)},async () => {
+    while (next < positions.length) {
+      const position = positions[next++];
+      options.onProgress?.({phase:'searching',positionId:position.id,sku:position.sku,completed,total:positions.length});
       const result = await searchProvodCandidates(position, local, cachedOptions);
-      byPosition.set(position.id, result);
-      options.onProgress?.({ phase: 'reviewed', positionId: position.id, sku: position.sku, searches: result.research.searches, openedDocuments: result.documents.length, completed: Math.min(positions.length, offset + index + 1), total: positions.length });
-    }));
-    const failed = settled.find(result => result.status === 'rejected');
-    if (failed) throw failed.reason;
-  }
+      byPosition.set(position.id,result);
+      completed++;
+      options.onProgress?.({phase:'reviewed',positionId:position.id,sku:position.sku,searches:result.research.searches,openedDocuments:result.documents.length,completed,total:positions.length});
+    }
+  });
+  const settled = await Promise.allSettled(workers);
+  const failed = settled.find(result => result.status === 'rejected');
+  if (failed) throw failed.reason;
   const shared = new Map();
   // Search completion order must not change the paid model request/cache key.
   for (const position of positions) {

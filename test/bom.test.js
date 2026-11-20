@@ -22,6 +22,21 @@ test('platform and RAID controller remain their own categories when NVMe is ment
   assert.equal(rows[1].facts.capacityGB,undefined);
 });
 
+test('Gooxi model with DDR4 and bays is recognized as platform, not memory or disk', () => {
+  for (const sku of ['0.95.004.1023','SYN-001']) {
+    const item = parseBom(`${sku}\tGooxi AS4105G-D12R-G3 4U-5GPU,16*DDR4,2*2200W,12disks\t1`).items[0];
+    assert.equal(item.kind,'platform');
+  }
+  assert.equal(lookupKnownComponent({sku:'0.95.004.1023'}).modelOnly,true);
+});
+
+test('standalone Supermicro part number resolves to its manufacturer platform', () => {
+  const item = parseBom('AS-4124GS-TNR').items[0];
+  assert.equal(item.kind,'platform');
+  assert.match(lookupKnownComponent(item).url,/supermicro\.com/);
+  assert.equal(item.quantity,null);
+});
+
 test('unrelated or explicitly nonmatching sources are not stored as product references', () => {
   assert.equal(isUsableProductSource('QLE2772-SR-SP',{title:'Marvell QLE2770-SR-SP HBA'}),false);
   assert.equal(isUsableProductSource('0.95.002.1070',{title:'Другая платформа G3; нельзя переносить на G4'}),false);
@@ -70,7 +85,7 @@ test('packaging rows are removed without removing hardware mentioning packaging'
 });
 
 test('Russian part-number column headers are ignored', () => {
-  for (const header of ['партномер\tОписание\tКол', 'Парт номер  Описание  Кол']) {
+  for (const header of ['партномер\tОписание\tКол', 'Парт номер  Описание  Кол', 'DAXId\tP/N\tDescription\tQty']) {
     const rows = parseBom(`${header}\nTEST-100\tExample server platform\t1`).items;
     assert.equal(rows.length, 1);
     assert.equal(rows[0].sku, 'TEST-100');

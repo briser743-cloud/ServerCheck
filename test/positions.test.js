@@ -3,7 +3,17 @@ import assert from 'node:assert/strict';
 import { prepareConfig } from '../bom.js';
 import { analyzeConfig } from '../engine.js';
 import { createPositions, reconcilePositions, countVerdicts } from '../positions.js';
-import { renderPositionsMarkup, omitRepeatedReferences, sortSourcesByPriority } from '../report-view.js';
+import { renderPositionsMarkup, omitRepeatedReferences, sortSourcesByPriority, sortSourcesForPosition, setSourcePriorities, previewSourceLinks } from '../report-view.js';
+
+test('each component manufacturer wins over other configured domains and resellers', t => {
+  setSourcePriorities([{manufacturer:'Intel',url:'https://intel.com'},{manufacturer:'Broadcom',url:'https://broadcom.com'},{manufacturer:'AMD',url:'https://amd.com'}]);
+  t.after(()=>setSourcePriorities([]));
+  const sources=[{url:'https://seller.example/item',title:'Seller'},{url:'https://intel.com/item',title:'Intel'},{url:'https://docs.broadcom.com/item',title:'Broadcom'},{url:'https://www.amd.com/item',title:'AMD'}];
+  assert.equal(sortSourcesForPosition(sources,{description:'AMD EPYC 9535'})[0].title,'AMD');
+  assert.equal(sortSourcesForPosition(sources,{sku:'100-000001147',description:'CPU SP5'})[0].title,'AMD');
+  assert.equal(sortSourcesForPosition(sources,{sku:'05-50134-03',description:'MegaRAID 9540-8i'})[0].title,'Broadcom');
+  assert.ok(previewSourceLinks(sources,{description:'AMD EPYC 9535'}).split('<details')[0].includes('www.amd.com'));
+});
 
 test('configured source domains appear first in order, including their subdomains', () => {
   const sources = [{url:'https://seller.example/p'}, {url:'https://www.intel.com/p'}, {url:'https://docs.asus.com/p'}, {url:'https://fakeintel.com/p'}];

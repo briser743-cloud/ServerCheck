@@ -5,11 +5,12 @@ import { resolve } from 'node:path';
 import { parseEnv } from 'node:util';
 import { validateConfig, fields } from './schema.js';
 import { analyzeConfig } from './engine.js';
-import { isUsableProductSource } from './bom.js';
+import { isUsableProductSource, knownComponentInfo } from './bom.js';
 import { countVerdicts } from './positions.js';
 import { researchConfiguration } from './research.js';
 import { createCachedProvodFetch } from './provod-cache.js';
-import { cleanComponentFacts } from './component-knowledge.js';
+import { cleanComponentFacts, cleanComponentLink } from './component-knowledge.js';
+import { checkSourceLink } from './link-check.js';
 export { extractReport } from './research.js';
 
 const model = process.env.OPENAI_MODEL || 'gpt-5.4';
@@ -193,24 +194,35 @@ async function loadSettings(overrides) {
   return { provider, apiKey, tavilyApiKey, model: modelId, setupMessage, researchReady: !setupMessage };
 }
 
-export function createApp({apiKey, provider, tavilyApiKey, fetchImpl = fetch, sourceCatalogPath = new URL('./data/component-sources.json', import.meta.url), prioritySettingsPath = new URL('./data/priority-resources.json', import.meta.url)} = {}) {
+export function createApp({apiKey, provider, tavilyApiKey, fetchImpl = fetch, linkChecker = checkSourceLink, sourceCatalogPath = new URL('./data/component-sources.json', import.meta.url), prioritySettingsPath = new URL('./data/priority-resources.json', import.meta.url)} = {}) {
   const researchFetch = fetchImpl === fetch ? createCachedProvodFetch(fetchImpl) : fetchImpl;
   const overrides = { apiKey, provider, tavilyApiKey };
   let activeRequests = 0;
+  const sourceKey = value => { try { const url = new URL(value); url.hash = ''; url.hostname = url.hostname.toLowerCase().replace(/^www\./,''); return url.href.replace(/\/$/,''); } catch { return ''; } };
   let catalogWrites = Promise.resolve();
   let priorityWrites = Promise.resolve();
   async function readCatalog() {
     try {
-      const data = JSON.parse(await readFile(sourceCatalogPath,'utf8'));
+      const raw = await readFile(sourceCatalogPath,'utf8').catch(error => { if (error.code === 'ENOENT') return '{"version":1,"components":{}}'; throw error; });
+      const data = JSON.parse(raw);
       if (data?.version !== 1 || !data.components || typeof data.components !== 'object' || Array.isArray(data.components)) throw new Error('invalid');
       for (const [sku,entry] of Object.entries(data.components)) {
         if (!entry || typeof entry !== 'object') continue;
-        entry.links = (Array.isArray(entry.links) ? entry.links : []).filter(link => isUsableProductSource(sku,link));
-        if (Array.isArray(entry.technicalSpecs)) entry.technicalSpecs = cleanComponentFacts(sku,entry.technicalSpecs,isUsableProductSource);
+        const excluded = new Set((entry.excludedUrls || []).map(sourceKey));
+        entry.links = (Array.isArray(entry.links) ? entry.links : []).filter(link => !excluded.has(sourceKey(link.url)) && isUsableProductSource(sku,link));
+        if (Array.isArray(entry.technicalSpecs)) entry.technicalSpecs = cleanComponentFacts(sku,entry.technicalSpecs,isUsableProductSource).map(fact => ({...fact,sources:fact.sources.filter(source => !excluded.has(sourceKey(source.url)))})).filter(fact => fact.sources.length);
+      }
+      for (const [sku,known] of Object.entries(knownComponentInfo)) {
+        const entry = data.components[sku] || {links:[],technicalSpecs:[],updatedAt:''};
+        if (!entry.sourcesEdited) {
+          const defaults = [{url:known.url,title:known.source,modelOnly:known.modelOnly === true},...(known.additionalUrl ? [{url:known.additionalUrl,title:known.additionalSource}] : [])].map(link => cleanComponentLink(sku,link,isUsableProductSource)).filter(Boolean);
+          entry.links = [...new Map([...defaults,...entry.links].map(link => [link.url,link])).values()];
+        }
+        data.components[sku] = entry;
       }
       return data;
     }
-    catch (error) { if (error.code === 'ENOENT') return {version:1,components:{}}; throw error; }
+    catch (error) { throw error; }
   }
   return http.createServer(async (request,response) => {
     response.setHeader('X-Content-Type-Options','nosniff');
@@ -256,12 +268,45 @@ export function createApp({apiKey, provider, tavilyApiKey, fetchImpl = fetch, so
       try { return json(response,200,await readCatalog()); }
       catch { return json(response,500,{error:'Не удалось прочитать справочник ссылок.'}); }
     }
+    if (pathname === '/api/component-sources/edit' && request.method === 'PUT') {
+      const origin = request.headers.origin;
+      if (origin && origin !== `http://${request.headers.host}` && origin !== `https://${request.headers.host}`) return json(response,403,{error:'Запрос с другого сайта запрещён.'});
+      let body; try { body = await readJson(request); } catch (error) { return json(response,error.status || 400,{error:error.message}); }
+      const sku = typeof body?.sku === 'string' ? body.sku.trim().toUpperCase() : '';
+      if (!/^(?:MODEL:)?[A-Z0-9][A-Z0-9._/, -]{3,99}$/.test(sku) || !Array.isArray(body.links) || body.links.length > 20 || typeof body.updatedAt !== 'string') return json(response,400,{error:'Некорректные данные записи.'});
+      const links = body.links.map(link => cleanComponentLink(sku,link,isUsableProductSource));
+      if (links.some(link => !link) || new Set(links.map(link => link?.url)).size !== links.length) return json(response,400,{error:'Проверьте адреса и удалите повторяющиеся или запрещённые ссылки.'});
+      const operation = catalogWrites.then(async () => {
+        const catalog = await readCatalog();
+        const previous = catalog.components[sku] || (body.removedUrl ? {links:[],technicalSpecs:[],updatedAt:''} : null);
+        if (!previous || previous.updatedAt !== body.updatedAt) throw Object.assign(new Error('Запись изменилась. Обновите список и повторите редактирование.'),{status:409});
+        const oldUrls = new Set([...(previous.links || []),...(previous.technicalSpecs || []).flatMap(fact => fact.sources || [])].map(link => link.url));
+        for (const link of links) if (!oldUrls.has(link.url)) {
+          const status = await linkChecker(link.url).catch(() => 'unknown');
+          if (status !== 'ok') throw Object.assign(new Error(status === 'blocked' ? 'Новая ссылка заблокирована или страница не найдена.' : 'Новая ссылка недоступна для проверки. Попробуйте позже.'),{status:422});
+        }
+        const byUrl = new Map(links.map(link => [link.url,link]));
+        const technicalSpecs = cleanComponentFacts(sku,previous.technicalSpecs,isUsableProductSource).map(fact => ({...fact,sources:fact.sources.filter(source => byUrl.has(source.url)).map(source => byUrl.get(source.url))})).filter(fact => fact.sources.length);
+        const retained = new Set(links.map(link => sourceKey(link.url)));
+        const removed = [...(previous.excludedUrls || []),...[...(previous.links || []),...(previous.technicalSpecs || []).flatMap(fact => fact.sources || [])].map(link => link.url).filter(url => !retained.has(sourceKey(url))),...(typeof body.removedUrl === 'string' && sourceKey(body.removedUrl) ? [body.removedUrl] : [])];
+        const excludedUrls = [...new Map(removed.filter(url => !retained.has(sourceKey(url))).map(url => [sourceKey(url),url])).values()];
+        catalog.components[sku] = {...previous,links,technicalSpecs,excludedUrls,sourcesEdited:true,updatedAt:new Date().toISOString()};
+        await mkdir(new URL('.',sourceCatalogPath),{recursive:true});
+        const temporary = new URL('component-sources.json.tmp',sourceCatalogPath);
+        await writeFile(temporary,JSON.stringify(catalog,null,2)+'\n','utf8');
+        await rename(temporary,sourceCatalogPath);
+        return catalog.components[sku];
+      });
+      catalogWrites = operation.catch(() => {});
+      try { return json(response,200,{entry:await operation}); }
+      catch (error) { return json(response,error.status || 500,{error:error.status ? error.message : 'Не удалось сохранить запись.'}); }
+    }
     if (pathname === '/api/component-sources' && request.method === 'POST') {
       const origin = request.headers.origin;
       if (origin && origin !== `http://${request.headers.host}` && origin !== `https://${request.headers.host}`) return json(response,403,{error:'Запрос с другого сайта запрещён.'});
       let body; try { body = await readJson(request,1024 * 1024); } catch (error) { return json(response,error.status || 400,{error:error.message}); }
       if (!Array.isArray(body?.entries) || body.entries.length > 100) return json(response,400,{error:'Некорректный список источников.'});
-      const entries = body.entries.flatMap(entry => {
+      let entries = body.entries.flatMap(entry => {
         const sku = typeof entry?.sku === 'string' ? entry.sku.trim().toUpperCase() : '';
         if (!/^(?:MODEL:)?[A-Z0-9][A-Z0-9._/, -]{3,99}$/.test(sku) || !Array.isArray(entry.links)) return [];
         const links = entry.links.slice(0,5).flatMap(link => {
@@ -271,14 +316,27 @@ export function createApp({apiKey, provider, tavilyApiKey, fetchImpl = fetch, so
         const allLinks = [...new Map([...links,...technicalSpecs.flatMap(fact => fact.sources)].map(link => [link.url,link])).values()].slice(0,5);
         return allLinks.length ? [{sku,links:allLinks,technicalSpecs}] : [];
       });
-      if (!entries.length) return json(response,200,{saved:0,rejected:body.entries.length});
+      const urls = [...new Set(entries.flatMap(entry => entry.links.map(link => link.url)))];
+      const checked = new Map();
+      let nextUrl = 0;
+      await Promise.all(Array.from({length:Math.min(8,urls.length)},async () => {
+        while (nextUrl < urls.length) { const url = urls[nextUrl++]; try { checked.set(url,await linkChecker(url)); } catch { checked.set(url,'unknown'); } }
+      }));
+      const blocked = new Set([...checked].filter(([,status]) => status === 'blocked').map(([url]) => url));
+      entries = entries.map(entry => ({...entry,links:entry.links.filter(link => checked.get(link.url) === 'ok'),technicalSpecs:entry.technicalSpecs.map(fact => ({...fact,sources:fact.sources.filter(source => checked.get(source.url) === 'ok')})).filter(fact => fact.sources.length)}));
+      if (!entries.length) return json(response,200,{saved:0,rejected:body.entries.length,blocked:[...blocked]});
       const operation = catalogWrites.then(async () => {
         const catalog = await readCatalog();
-        for (const {sku,links,technicalSpecs} of entries) {
-          const previous = Array.isArray(catalog.components[sku]?.links) ? catalog.components[sku].links.filter(link => isUsableProductSource(sku,link)) : [];
+        for (const entry of entries) {
+          const {sku} = entry;
+          const excluded = new Set((catalog.components[sku]?.excludedUrls || []).map(sourceKey));
+          const links = entry.links.filter(link => !excluded.has(sourceKey(link.url)));
+          const technicalSpecs = entry.technicalSpecs.map(fact => ({...fact,sources:fact.sources.filter(source => !excluded.has(sourceKey(source.url)))})).filter(fact => fact.sources.length);
+          const previous = Array.isArray(catalog.components[sku]?.links) ? catalog.components[sku].links.filter(link => !blocked.has(link.url) && isUsableProductSource(sku,link)) : [];
           const merged = [...new Map([...links,...previous].map(link => [link.url,link])).values()].slice(0,5);
-          const previousFacts = cleanComponentFacts(sku,catalog.components[sku]?.technicalSpecs,isUsableProductSource);
-          catalog.components[sku] = {links:merged,technicalSpecs:technicalSpecs.length ? technicalSpecs : previousFacts,updatedAt:new Date().toISOString()};
+          const previousFacts = cleanComponentFacts(sku,catalog.components[sku]?.technicalSpecs,isUsableProductSource).map(fact => ({...fact,sources:fact.sources.filter(source => !blocked.has(source.url))})).filter(fact => fact.sources.length);
+          if (merged.length) catalog.components[sku] = {...catalog.components[sku],links:merged,technicalSpecs:technicalSpecs.length ? technicalSpecs : previousFacts,updatedAt:new Date().toISOString()};
+          else if (!catalog.components[sku]?.sourcesEdited && !catalog.components[sku]?.excludedUrls?.length) delete catalog.components[sku];
         }
         await mkdir(new URL('.',sourceCatalogPath),{recursive:true});
         const temporary = new URL('component-sources.json.tmp',sourceCatalogPath);
@@ -286,7 +344,7 @@ export function createApp({apiKey, provider, tavilyApiKey, fetchImpl = fetch, so
         await rename(temporary,sourceCatalogPath);
       });
       catalogWrites = operation.catch(() => {});
-      try { await operation; return json(response,200,{saved:entries.length,rejected:body.entries.length-entries.length}); }
+      try { await operation; const saved = entries.filter(entry => entry.links.length).length; return json(response,200,{saved,rejected:body.entries.length-saved,blocked:[...blocked],unchecked:urls.filter(url => checked.get(url) === 'unknown').length}); }
       catch { return json(response,500,{error:'Не удалось сохранить справочник ссылок.'}); }
     }
     if (request.method === 'GET' && pathname === '/api/status') {
@@ -385,7 +443,7 @@ export function createApp({apiKey, provider, tavilyApiKey, fetchImpl = fetch, so
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(),150000);
       try {
-        const research = await readChatSources(context,messages,settings,fetchImpl,controller.signal);
+        const research = await readChatSources(context,messages,settings,researchFetch,controller.signal);
         const sourceBlock = research.sources.length
           ? `\n\nПрочитанные веб-источники:\n${JSON.stringify(research.sources.map(({url,title,text}) => ({url,title,text})))}`
           : `\n\nПрочитанные веб-источники: отсутствуют.${research.note ? ` Причина: ${research.note}` : ''}`;
@@ -498,6 +556,7 @@ export function createApp({apiKey, provider, tavilyApiKey, fetchImpl = fetch, so
           model: settings.model,
           outputTokenParameter: settings.outputTokenParameter,
           priorityResources,
+          sourceCatalog:(await readCatalog()).components,
           targetPositionId,
           fetchImpl: researchFetch,
           signal: controller.signal,
@@ -545,4 +604,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
   const server = createApp();
   server.listen(port,'127.0.0.1',() => console.log(`ServerCheck: http://localhost:${server.address().port}`));
   server.on('error',error => { console.error(error.code === 'EADDRINUSE' ? 'Порт занят. Укажите другой PORT в .env.' : 'Не удалось запустить сервер.'); process.exitCode = 1; });
+  const alternatePort = Number(process.env.SERVER_ALTERNATE_PORT || 0);
+  if (Number.isInteger(alternatePort) && alternatePort > 0 && alternatePort <= 65535 && alternatePort !== port) {
+    const alternate = http.createServer((request,response) => server.emit('request',request,response));
+    alternate.on('error',() => console.error('Не удалось открыть дополнительный порт.'));
+    alternate.listen(alternatePort,'127.0.0.1');
+  }
 }

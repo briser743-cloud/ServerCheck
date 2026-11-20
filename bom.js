@@ -1,10 +1,11 @@
 // Универсальный разбор спецификации. Последняя колонка — число изделий в строке.
 // Числа внутри описания (DIMM-слоты, отсеки, БП, VRAM) не заменяют количество строки.
 import { validateConfig, fields } from './schema.js';
-import { sourceConflictsWithPosition } from './source-identity.js';
+import { sourceConflictsWithPosition, isKnownBlockedSource } from './source-identity.js';
 
 export const kindLabels = { platform:'Платформа / корпус', board:'Материнская плата', cpu:'Процессор', memory:'Оперативная память', storage:'Накопитель', gpu:'GPU', controller:'Контроллер / HBA', network:'Сетевая карта', cable:'Кабель', psu:'Блок питания', cooler:'Охлаждение', unknown:'Не распознано' };
 export function isUsableProductSource(sku, source) {
+  if (isKnownBlockedSource(source?.url)) return false;
   if (sourceConflictsWithPosition({sku},source)) return false;
   const title = String(source?.title || '');
   if (/не содержит|нет техданных|без подтверждения|не подтвержда(?:ет|ется|ют|ются)|другая платформа|нельзя переносить|не относится к|другая (?:модель|ревизия)/i.test(title)) return false;
@@ -15,6 +16,13 @@ export function isUsableProductSource(sku, source) {
   return true;
 }
 export const knownComponentInfo = {
+  '900-21010-0040-000': { text:'NVIDIA H200 NVL · 141 ГБ HBM3e · PCIe Gen5 · до 600 Вт (настраивается)', url:'https://www.nvidia.com/en-us/data-center/h200/', source:'NVIDIA H200 NVL — страница производителя', modelOnly:true },
+  '100-000001147': { text:'AMD EPYC 9535 · SP5 · 64 ядра / 128 потоков · 300 Вт', url:'https://www.amd.com/en/products/processors/server/epyc/9005-series/amd-epyc-9535.html', source:'AMD EPYC 9535 — страница производителя, 100-000001147' },
+  '05-50134-03': { text:'Broadcom MegaRAID 9540-8i · контроллер PCIe 4.0 x8 · SAS/SATA/NVMe', url:'https://docs.broadcom.com/doc/MegaRAID-9500-Tri-Mode-Storage-Adapters', source:'Broadcom MegaRAID 9540-8i — спецификация производителя, 05-50134-03' },
+  'ASG-2015S-E1CR24L': { text:'Supermicro ASG-2015S-E1CR24L · платформа хранения 2U · 24 отсека 3,5″ SAS/SATA', url:'https://www.supermicro.com/en/products/system/storage/2u/asg-2015s-e1cr24l', source:'Supermicro ASG-2015S-E1CR24L — страница производителя' },
+  '0.81.606.1000': { text:'Gooxi SYR6108G-D12R-G5 · серверная платформа 6U · AMD EPYC 9004/9005 · DDR5', url:'https://www.gooxi.us/uploadfiles/2025/06/20250609151540147.pdf', source:'Gooxi SYR6108G-D12R-G5 — спецификация производителя', modelOnly:true },
+  'AS-4124GS-TNR': { text:'Supermicro AS-4124GS-TNR · серверная платформа 4U · AMD EPYC 7002/7003 · DDR4', url:'https://www.supermicro.com/en/aplus/system/4u/4124/as-4124gs-tnr.php', source:'Supermicro AS-4124GS-TNR — страница производителя' },
+  '0.95.004.1023': { text:'Gooxi AS4105G-D12R-G3 · 4U · Intel Xeon Scalable 3-го поколения · 16 DDR4 · 12 отсеков', url:'https://www.gooxi.us/ProductList/info_lcid_148_itemid_1201.html', source:'Gooxi AS4105G-D12R-G3 — страница производителя', modelOnly:true },
   'CD8068904657502': { text:'Intel Xeon Gold 6326 · 16 ядер / 32 потока · 185 Вт', url:'https://www.intel.com/content/www/us/en/products/sku/215274/intel-xeon-gold-6326-processor-24m-cache-2-90-ghz/ordering.html', source:'Официальная страница Intel с партномером' },
   '0.95.002.1070': { text:'Gooxi SL201-D12R-G4 · серверная платформа 2U · DDR5 RDIMM', url:'https://www.gooxi.us/ProductList/info_lcid_65_itemid_2808.html', source:'Страница производителя для модели', additionalUrl:'https://brtrade.ru/catalog/servery/komplektuyushchie_dlya_serverov/servernye_platformy/10379/', additionalSource:'Партномер у поставщика' },
   'PK8072205559500': { text:'Intel Xeon Gold 6526Y · заказной код PK8072205559500', url:'https://www.intel.com/content/www/us/en/products/sku/237560/intel-xeon-gold-6526y-processor-37-5m-cache-2-80-ghz/ordering.html', source:'Документация производителя' },
@@ -94,6 +102,7 @@ const storageSize = text => {
 
 export function classify(text) {
   if (/^(?:cable\b|кабель(?=\s|[/:,]|$))/i.test(text.trim())) return 'cable';
+  if (/\bgooxi\s+[a-z0-9]+(?:-[a-z0-9]+){2,}\b/i.test(text) && /\b[1-9]\s*u\b/i.test(text)) return 'platform';
   if (/\b(?:platform|barebone|chassis)\b|платформ|корпус|\bserver\b(?=.*(?:\d+\s*bay\b|\b(?:bay|riser|psu)\b))|\b\d\s*U\b(?=.*(?:LGA\s*\d+|\bSP[3456]\b))|\d\s*U\s*[/,].*(?:DIMM|LGA|SP[345])/i.test(text)) return 'platform';
   if (/\b(?:HBA|RAID|MegaRAID|controller)\b|контроллер/i.test(text)) return 'controller';
   if (/\b(?:SSD|HDD|NVMe)\b|накопител|ж[её]стк.*диск/i.test(text) && !/\b(?:HBA|RAID|controller)\b|контроллер/i.test(text)) return 'storage';
@@ -110,6 +119,7 @@ export function classify(text) {
 function parseRow(raw,line) {
   const cleaned = raw.trim().replace(/^\|\s*|\s*\|$/g,'').replace(/^\d{10}(?:\s+|\s*[;|]\s*)(?=\S)/,'');
   if (isPackagingRow(cleaned)) return null;
+  if (/^dax\s*id(?:\s|[;|])+p\s*\/\s*n(?:\s|[;|])+description(?:\s|[;|])+(?:qty|quantity)\b/i.test(cleaned)) return null;
   if (!cleaned || /^[-:|\s]+$/.test(cleaned) || /^(?:артикул|парт\s*номер|part\s*(?:number|no)|sku)[\s\t;|]/i.test(cleaned)) return null;
   let cells = cleaned.includes('\t') ? cleaned.split(/\t+/) : cleaned.includes('|') ? cleaned.split('|') : cleaned.includes(';') ? cleaned.split(';') : cleaned.split(/\s{2,}/);
   cells = cells.map(value => value.trim()).filter(Boolean);
@@ -140,7 +150,7 @@ function parseRow(raw,line) {
   if (description.length > 4000) issue = 'Слишком длинное описание позиции; сократите его до 4000 символов.';
   // Exact identification only; supported interfaces in the description do not
   // make the platform itself a drive. This is not a compatibility claim.
-  const knownKinds = { '0.95.001.1001':'platform', '0.95.002.1070':'platform', '05-25420-081':'controller', '05-50077-01':'controller', 'QLE2772-SR-SP':'controller', 'LRES4164PF-2SFP28':'network', 'LRES3039PF-OCP':'network', '05-50077-02':'controller', '05-60004-00':'cable', '05-26112-001, LSI00405':'cable' };
+  const knownKinds = { '0.95.001.1001':'platform', '0.95.002.1070':'platform', '0.95.004.1023':'platform', '05-25420-081':'controller', '05-50077-01':'controller', 'QLE2772-SR-SP':'controller', 'LRES4164PF-2SFP28':'network', 'LRES3039PF-OCP':'network', '05-50077-02':'controller', '05-60004-00':'cable', '05-26112-001, LSI00405':'cable' };
   const knownInfo = lookupKnownComponent({sku,description});
   const kind = knownKinds[sku.trim().toUpperCase()] || (classify(description) === 'unknown' && knownInfo ? classify(knownInfo.text) : classify(description));
   const facts = {};
@@ -183,7 +193,9 @@ function parseRow(raw,line) {
 
 export function parseBom(text = '') {
   const lines = text.replace(/\r\n?/g,'\n').split('\n');
-  const items = lines.map((raw,index) => parseRow(raw,index+1)).filter(Boolean);
+  // Keep the physical line for editing, but number only recognized positions.
+  const items = lines.map((raw,index) => parseRow(raw,index+1)).filter(Boolean)
+    .map((item,index) => ({...item,sourceLine:item.line,line:index+1}));
   const active = items.filter(item => item.quantity !== 0 && !item.issue);
   const totalsFor = (kind,key) => {
     const rows = active.filter(item => item.kind === kind);

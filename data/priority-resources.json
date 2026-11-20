@@ -37,6 +37,26 @@
     {
       "manufacturer": "Samsung",
       "url": "https://www.nix.ru"
+    },
+    {
+      "manufacturer": "Phison",
+      "url": "https://www.phisonenterprise.com"
+    },
+    {
+      "manufacturer": "Supermicro",
+      "url": "https://www.supermicro.com"
+    },
+    {
+      "manufacturer": "AMD",
+      "url": "https://www.amd.com"
+    },
+    {
+      "manufacturer": "Seagate",
+      "url": "https://www.seagate.com"
+    },
+    {
+      "manufacturer": "Dapustor",
+      "url": "https://en.dapustor.com"
     }
   ]
 }

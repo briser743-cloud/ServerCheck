@@ -1,5 +1,5 @@
 import { positionReportFormat, reconcilePositions } from './positions.js';
-import { collectProvodAssemblyDocuments, researchAssemblyWithProvod } from './provod.js';
+import { collectProvodAssemblyDocuments, researchAssemblyWithProvod, platformModel, includesExactPlatformModel } from './provod.js';
 
 function normalizeUrl(value) {
   try {
@@ -167,6 +167,7 @@ export async function researchConfiguration(local, options) {
     const updated = { ...position, research: result.research, readSources: result.readSources.map(({ text: evidenceText, ...source }) => ({
       ...source,
       exactSkuMentioned: skuKey.length >= 5 && String(`${source.title || ''} ${source.url || ''} ${evidenceText || ''}`).toLowerCase().replace(/[^a-z0-9]/g,'').includes(skuKey),
+      exactModelMentioned: includesExactPlatformModel(evidenceText,platformModel(position)),
     })) };
     if (position.status === 'unconfirmed' && !(result.research.documentsSelected ?? result.research.openedDocuments)) {
       updated.reason = 'После поиска не удалось прочитать применимый источник по этой позиции.';

@@ -3,7 +3,7 @@ import { cleanLegacyDraft } from './draft.js';
 import { analyzeConfig } from './engine.js';
 import { parseBom, describeFacts, kindLabels, knownComponentInfo, lookupKnownComponent, classify, removePackagingRows, modelSourceKey, isUsableProductSource } from './bom.js';
 import { verdictLabels, sourceTypeLabels } from './positions.js';
-import { renderPositionsMarkup, escapeHtml, safeUrl, omitRepeatedReferences, setSourcePriorities, sortSourcesByPriority, previewSourceLinks } from './report-view.js';
+import { renderPositionsMarkup, escapeHtml, safeUrl, omitRepeatedReferences, setSourcePriorities, sortSourcesByPriority, sortSourcesForPosition, previewSourceLinks, canonicalReferenceUrl, numberedSourceLinks } from './report-view.js';
 import { cleanComponentFacts } from './component-knowledge.js';
 
 const $ = selector => document.querySelector(selector);
@@ -12,6 +12,9 @@ const storageKey = 'servercheck.config.v1';
 const statusLabels = verdictLabels;
 let currentReport = null;
 let productLookup = new Map();
+let pendingPreviewSources = new Map();
+let attemptedPreviewSources = new Set();
+let showingLivePreliminary = false;
 
 let selectedFilter = 'all';
 let busy = false;
@@ -140,6 +143,7 @@ function changed() {
   const parsed = parseBom($('#bom').value);
   $('#bom-preview').innerHTML = parsed.items.length ? inventoryHtml(parsed,'Распознано из списка',true) : '';
   updateStale();
+  refreshPreliminaryForCurrentInput();
   try {
     localStorage.setItem(storageKey, JSON.stringify(Object.fromEntries(new FormData(form))));
     $('#save-status').textContent = 'Черновик сохранён в этом браузере';
@@ -148,19 +152,25 @@ function changed() {
 
 const productLinkCacheKey = 'servercheck.productLinks.v1';
 const productFactsCacheKey = 'servercheck.productFacts.v1';
+const productSourceOverridesKey = 'servercheck.productSourceOverrides.v1';
+const sourceExclusionsKey = 'servercheck.sourceExclusions.v1';
+function readSourceExclusions() { try { return JSON.parse(localStorage.getItem(sourceExclusionsKey) || '{}'); } catch { return {}; } }
+function sourceExcluded(key,url) { return (readSourceExclusions()[String(key || '').toUpperCase()] || []).some(item => canonicalReferenceUrl(item) === canonicalReferenceUrl(url)); }
+function saveSourceExclusions(sku,entry) { const exclusions = readSourceExclusions(); exclusions[sku] = entry.excludedUrls || []; try { localStorage.setItem(sourceExclusionsKey,JSON.stringify(exclusions)); } catch {} }
+function readSourceOverrides() { try { return JSON.parse(localStorage.getItem(productSourceOverridesKey) || '{}'); } catch { return {}; } }
 function loadProductFactsCache() {
   try { const value = JSON.parse(localStorage.getItem(productFactsCacheKey) || '{}'); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; } catch { return {}; }
 }
 function savedComponentFacts(item) {
   const key = item.sku ? item.sku.toUpperCase() : modelSourceKey(item.description);
-  return key ? cleanComponentFacts(key,loadProductFactsCache()[key],isUsableProductSource) : [];
+  return key ? cleanComponentFacts(key,loadProductFactsCache()[key],(sku,source) => isUsableProductSource(sku,source) && !sourceExcluded(sku,source.url)) : [];
 }
 function savedComponentSummary(item) {
   const facts = savedComponentFacts(item);
   return facts.length ? `Из сохранённых характеристик: ${facts.slice(0,3).map(fact => `${fact.name}: ${fact.value}`).join(' · ')}` : '';
 }
 function loadProductLinkCache() {
-  try { const value = JSON.parse(localStorage.getItem(productLinkCacheKey) || '{}'); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; } catch { return {}; }
+  try { const value = JSON.parse(localStorage.getItem(productLinkCacheKey) || '{}'); if (!value || typeof value !== 'object' || Array.isArray(value)) return {}; for (const [sku,links] of Object.entries(value)) { if (Array.isArray(links)) value[sku] = links.filter(link => isUsableProductSource(sku,link)); } return value; } catch { return {}; }
 }
 function showSourceSaveStatus(message) {
   const status = $('#source-save-status');
@@ -170,13 +180,30 @@ function showSourceSaveStatus(message) {
 async function saveProjectSources(entries) {
   if (!entries.length) return true;
   try {
-    let rejected = 0;
-    for (let offset = 0; offset < entries.length; offset += 100) {
-      const response = await fetch('/api/component-sources',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({entries:entries.slice(offset,offset+100)})});
+    let rejected = 0, blocked = 0, unchecked = 0;
+    // Keep batches small so the browser can finish saving when the page reloads.
+    for (let offset = 0; offset < entries.length; offset += 5) {
+      const response = await fetch('/api/component-sources',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({entries:entries.slice(offset,offset+5)}),keepalive:true});
       if (!response.ok) throw new Error('Сервер не сохранил ссылки.');
-      rejected += (await response.json()).rejected || 0;
+      const result = await response.json();
+      rejected += result.rejected || 0;
+      blocked += result.blocked?.length || 0;
+      unchecked += result.unchecked || 0;
     }
-    showSourceSaveStatus(rejected ? `Ссылки сохранены в справочнике проекта; не удалось перенести позиций: ${rejected}.` : 'Ссылки сохранены в справочнике проекта.');
+    const catalogResponse = await fetch('/api/component-sources');
+    if (!catalogResponse.ok) throw new Error('Сервер не вернул проверенные ссылки.');
+    const catalog = await catalogResponse.json();
+    const cache = loadProductLinkCache(), facts = loadProductFactsCache();
+    for (const {sku} of entries) {
+      const entry = catalog.components?.[sku];
+      if (entry?.links?.length) cache[sku] = entry.links; else delete cache[sku];
+      if (entry?.technicalSpecs?.length) facts[sku] = entry.technicalSpecs; else delete facts[sku];
+    }
+    try { localStorage.setItem(productLinkCacheKey,JSON.stringify(cache)); localStorage.setItem(productFactsCacheKey,JSON.stringify(facts)); } catch {}
+    const parsed = parseBom($('#bom').value);
+    const open = $('#bom-preview .inventory')?.open ?? true;
+    $('#bom-preview').innerHTML = parsed.items.length ? inventoryHtml(parsed,'Распознано из списка',open) : '';
+    showSourceSaveStatus(blocked || unchecked || rejected ? `Проверка ссылок: отклонено сайтом или недоступно ${blocked}, не удалось проверить ${unchecked}; без новых сохранённых ссылок: ${rejected} позиций. Сайт может открываться в браузере, даже если он отклонил автоматическую проверку.` : 'Проверенные ссылки сохранены в справочнике проекта.');
     return true;
   } catch {
     showSourceSaveStatus('Не удалось сохранить ссылки в справочник проекта; они остались в этом браузере.');
@@ -190,21 +217,26 @@ async function syncProjectSources() {
     const data = await response.json();
     const local = loadProductLinkCache();
     const facts = loadProductFactsCache();
-    const entries = Object.entries(local).filter(([,links]) => Array.isArray(links) && links.length).map(([sku,links]) => ({sku,links,technicalSpecs:cleanComponentFacts(sku,facts[sku],isUsableProductSource)}));
+    const overrides = readSourceOverrides();
+    for (const [sku,storedFacts] of Object.entries(facts)) facts[sku] = cleanComponentFacts(sku,storedFacts,isUsableProductSource);
     for (const [sku,entry] of Object.entries(data.components || {})) {
       if (!Array.isArray(entry?.links)) continue;
-      local[sku] = [...new Map([...entry.links,...(Array.isArray(local[sku]) ? local[sku] : [])].filter(link => safeUrl(link?.url) && isUsableProductSource(sku,link)).map(link => [safeUrl(link.url),link])).values()].slice(0,5);
+      saveSourceExclusions(sku,entry);
+      if (entry.sourcesEdited) overrides[sku] = true; else delete overrides[sku];
+      local[sku] = entry.links.filter(link => safeUrl(link?.url) && isUsableProductSource(sku,link));
       const savedFacts = cleanComponentFacts(sku,entry.technicalSpecs,isUsableProductSource);
-      if (savedFacts.length) facts[sku] = savedFacts;
+      if (savedFacts.length) facts[sku] = savedFacts; else delete facts[sku];
     }
     try { localStorage.setItem(productLinkCacheKey,JSON.stringify(local)); } catch {}
     try { localStorage.setItem(productFactsCacheKey,JSON.stringify(facts)); } catch {}
+    try { localStorage.setItem(productSourceOverridesKey,JSON.stringify(overrides)); } catch {}
     const parsed = parseBom($('#bom').value);
-    $('#bom-preview').innerHTML = parsed.items.length ? inventoryHtml(parsed,'Распознано из списка',true) : '';
-    await saveProjectSources(entries.map(entry => ({...entry,technicalSpecs:cleanComponentFacts(entry.sku,facts[entry.sku],isUsableProductSource)})));
+    const open = $('#bom-preview .inventory')?.open ?? true;
+    $('#bom-preview').innerHTML = parsed.items.length ? inventoryHtml(parsed,'Распознано из списка',open) : '';
   } catch { showSourceSaveStatus('Не удалось открыть справочник ссылок проекта.'); }
 }
 function sourceMatchesModel(position, source) {
+  if (source.exactModelMentioned === true) return true;
   const modelKey = modelSourceKey(position.description);
   const model = modelKey.replace(/^MODEL:(?:ASUS |INTEL |AMD |SOLIDIGM )/, '');
   const evidence = `${source.title || ''} ${source.url || ''}`.toUpperCase().replace(/[^A-Z0-9]+/g,' ');
@@ -233,9 +265,9 @@ function rememberProductLinks(report) {
     const sku = position.sku || modelSourceKey(position.description); const key = norm(sku);
     if (key.length < 5) continue;
     const sources = [...(position.sources || []), ...(position.readSources || []), ...(position.technicalSpecs || []).flatMap(spec => spec.sources || [])];
-    const matches = sortSourcesByPriority(sources).filter(source => { const url = safeUrl(source.url); if (!url || !isUsableProductSource(sku,source)) return false; let decoded = url; try { decoded = decodeURIComponent(url); } catch {} return source.exactSkuMentioned === true || norm((source.title || '') + ' ' + decoded).includes(key) || sourceMatchesModel(position,source); }).map(source => ({url:safeUrl(source.url),title:String(source.title || 'Страница товара').slice(0,250),modelOnly:sku.startsWith('MODEL:') || (!source.exactSkuMentioned && !norm((source.title || '') + ' ' + source.url).includes(key))})).slice(0,3);
+    const matches = sortSourcesForPosition(sources,position).filter(source => { const url = safeUrl(source.url); if (!url || !isUsableProductSource(sku,source)) return false; let decoded = url; try { decoded = decodeURIComponent(url); } catch {} return source.exactSkuMentioned === true || norm((source.title || '') + ' ' + decoded).includes(key) || sourceMatchesModel(position,source); }).map(source => ({url:safeUrl(source.url),title:String(source.exactModelMentioned ? `${source.title || 'Страница товара'} — ${String(position.description || '').match(/\b(?=[A-Z0-9-]*[A-Z])(?=[A-Z0-9-]*\d)[A-Z0-9]+(?:-[A-Z0-9]+){2,}\b/i)?.[0] || ''}` : source.title || 'Страница товара').slice(0,250),modelOnly:sku.startsWith('MODEL:') || (!source.exactSkuMentioned && !norm((source.title || '') + ' ' + source.url).includes(key))})).slice(0,3);
     const technicalSpecs = cleanComponentFacts(sku,position.technicalSpecs,isUsableProductSource);
-    const links = omitRepeatedReferences(sortSourcesByPriority([...matches,...technicalSpecs.flatMap(fact => fact.sources)]),[]).slice(0,5);
+    const links = omitRepeatedReferences(sortSourcesForPosition([...matches,...technicalSpecs.flatMap(fact => fact.sources)],position),[]).slice(0,5);
     if (technicalSpecs.length) facts[sku.toUpperCase()] = technicalSpecs;
     if (links.length) { cache[sku.toUpperCase()] = links; newEntries.push({sku,links,technicalSpecs}); }
   }
@@ -244,14 +276,14 @@ function rememberProductLinks(report) {
   void saveProjectSources(newEntries);
 }
 
-function productSourceMarkup(item) {
+function previewProductSources(item) {
   const known = lookupKnownComponent(item);
   const identifier = item.sku ? item.sku.toUpperCase() : modelSourceKey(item.description);
   const cached = identifier ? loadProductLinkCache()[identifier] : [];
   const saved = Array.isArray(cached) ? cached : [];
   const position = currentReport && !isStale() ? currentReport.positions?.find(row => row.line === item.line && row.sku === item.sku) : null;
-  const knownSources = known ? [{url:known.url,title:known.source,modelOnly:!item.sku},...(known.additionalUrl ? [{url:known.additionalUrl,title:known.additionalSource,modelOnly:false}] : [])] : [];
-  const researchSources = [...(position?.sources || []), ...(position?.readSources || []), ...(position?.technicalSpecs || []).flatMap(spec => spec.sources || [])];
+  const knownSources = known && !readSourceOverrides()[identifier] ? [{url:known.url,title:known.source,modelOnly:known.modelOnly === true || !item.sku},...(known.additionalUrl ? [{url:known.additionalUrl,title:known.additionalSource,modelOnly:false}] : [])] : [];
+  const researchSources = [...(position?.sources || []), ...(position?.readSources || []), ...(position?.technicalSpecs || []).flatMap(spec => spec.sources || []), ...(position ? pendingPreviewSources.get(position.id) || [] : [])];
   const normalize = value => String(value || '').toLowerCase().replace(/[^a-z0-9]/g,'');
   const sku = normalize(item.sku);
   const matches = researchSources.filter(source => {
@@ -265,9 +297,17 @@ function productSourceMarkup(item) {
     .flatMap(fact => fact.sources || [])
     .filter(source => safeUrl(source?.url) && isUsableProductSource(item.sku,source))
     .map(source => ({...source,factOnly:true}));
-  const sources = [...knownSources, ...saved.filter(source => isUsableProductSource(item.sku,source)), ...matches, ...factSources].filter(source => safeUrl(source?.url));
-  const selected = omitRepeatedReferences(sortSourcesByPriority(sources),[]).slice(0,5);
-  return previewSourceLinks(selected);
+  const sources = [...knownSources, ...saved.filter(source => isUsableProductSource(item.sku,source)), ...matches, ...factSources].filter(source => safeUrl(source?.url) && !sourceExcluded(identifier,source.url));
+  return omitRepeatedReferences(sortSourcesForPosition(sources,item),[]);
+}
+function productSourceMarkup(item) { return previewSourceLinks(previewProductSources(item),item); }
+
+function savedReferenceSources(item) {
+  const identifier = item.sku ? item.sku.toUpperCase() : modelSourceKey(item.description);
+  const known = lookupKnownComponent(item);
+  const defaults = known && !readSourceOverrides()[identifier] ? [{url:known.url,title:known.source,modelOnly:known.modelOnly === true || !item.sku}] : [];
+  const links = [...defaults,...(loadProductLinkCache()[identifier] || [])].filter(link => safeUrl(link.url) && isUsableProductSource(identifier,link) && !sourceExcluded(identifier,link.url));
+  return omitRepeatedReferences(sortSourcesForPosition(links,item),[]);
 }
 
 function previewKind(item) {
@@ -278,18 +318,20 @@ function previewKind(item) {
 
 function previewResearchFacts(item) {
   const position = currentReport && !isStale() ? currentReport.positions?.find(row => row.line === item.line && row.sku === item.sku) : null;
-  const facts = (position?.technicalSpecs?.length ? position.technicalSpecs : savedComponentFacts(item)).filter(fact => fact.name && fact.value && fact.sources?.some(source => safeUrl(source.url) && isUsableProductSource(item.sku,source))).slice(0,6);
+  const identifier = item.sku ? item.sku.toUpperCase() : modelSourceKey(item.description);
+  const facts = (position?.technicalSpecs?.length ? position.technicalSpecs : savedComponentFacts(item)).filter(fact => fact.name && fact.value && fact.sources?.some(source => safeUrl(source.url) && isUsableProductSource(item.sku,source) && !sourceExcluded(identifier,source.url))).slice(0,6);
   if (!facts.length) return '';
+  const sources = previewProductSources(item);
   return `<details class="more-information"><summary>Характеристики с источниками (${facts.length})</summary><div class="field-hint"><strong>Найдено при проверке:</strong> ${facts.map(fact => {
-    const source = sortSourcesByPriority(fact.sources).find(entry => safeUrl(entry.url) && isUsableProductSource(item.sku,entry));
-    return `<span>${escapeHtml(fact.name)}: ${escapeHtml(fact.value)} (<a href="${escapeHtml(safeUrl(source.url))}" target="_blank" rel="noopener noreferrer">источник</a>)</span>`;
-  }).join(' · ')}</div></details>`;
+    const indexes = [...new Set((fact.sources || []).map(source => sources.findIndex(item => canonicalReferenceUrl(item.url) === canonicalReferenceUrl(source.url))).filter(index => index >= 0).map(index => index + 1))];
+    return `<span>${escapeHtml(fact.name)}: ${escapeHtml(fact.value)}${indexes.length ? ` ${numberedSourceLinks(indexes,sources)}` : ''}</span>`;
+  }).join(' · ')}<p>Нажмите на номер, чтобы открыть источник.</p></div></details>`;
 }
 
 function inventoryHtml(parsed,title,open = false) {
   const t = parsed.totals;
   const metrics = [[t.cpuCount,'CPU'],[t.memoryGB,'ГБ RAM'],[t.storageCount,'накопителей'],[t.storageGB,'ГБ до RAID'],[t.gpuCount,'GPU']].filter(([value]) => value !== null);
-  return `<details class="inventory" ${open ? 'open' : ''}><summary>${title}: ${parsed.items.length} строк${t.units != null ? ` · ${t.units} ед.` : ''}</summary><p class="field-hint">Итоги по всему списку. Количество — после описания; цена игнорируется. Характеристики из описания требуют проверки.</p>${metrics.length ? `<div class="inventory-totals">${metrics.map(([value,label]) => `<span><strong>${value}</strong> ${label}</span>`).join('')}</div>` : ''}<div class="table-scroll"><table class="inventory-table"><thead><tr><th scope="col">Артикул и категория</th><th scope="col">Извлечённые характеристики</th><th scope="col">Кол-во</th><th scope="col"><span class="visually-hidden">Удаление</span></th></tr></thead><tbody>${parsed.items.map(item => `<tr${item.quantity === 0 ? ' class="inactive-row"' : ''}><td><strong>${escapeHtml(item.sku || `Строка ${item.line}`)}</strong><small>${escapeHtml(previewKind(item))}</small><p class="source-description">${escapeHtml(item.description)}</p></td><td>${escapeHtml(lookupKnownComponent(item)?.text || savedComponentSummary(item) || describeFacts(item) || 'Характеристики не найдены в описании.')}${productSourceMarkup(item)}${previewResearchFacts(item)}${item.issue ? `<p class="warn">${escapeHtml(item.issue)}</p>` : ''}</td><td><strong class="${item.quantity === null ? 'warn' : 'accent'}">${item.quantity ?? '?'}</strong>${item.quantity === 0 ? '<small>исключено</small>' : ''}</td><td><button type="button" class="remove-position" data-remove-line="${item.line}" aria-label="Удалить ${escapeHtml(item.sku || `строку ${item.line}`)} из спецификации" title="Удалить строку">×</button></td></tr>`).join('')}</tbody></table></div></details>`;
+  return `<details class="inventory" ${open ? 'open' : ''}><summary>${title}: ${parsed.items.length} строк${t.units != null ? ` · ${t.units} ед.` : ''}</summary><p class="field-hint">Итоги по всему списку. Количество — после описания; цена игнорируется. Характеристики из описания требуют проверки.</p>${metrics.length ? `<div class="inventory-totals">${metrics.map(([value,label]) => `<span><strong>${value}</strong> ${label}</span>`).join('')}</div>` : ''}<div class="table-scroll"><table class="inventory-table"><thead><tr><th scope="col" class="inventory-line-number">Строка</th><th scope="col">Артикул и категория</th><th scope="col">Извлечённые характеристики</th><th scope="col">Кол-во</th><th scope="col"><span class="visually-hidden">Удаление</span></th></tr></thead><tbody>${parsed.items.map(item => `<tr data-source-key="${escapeHtml(item.sku ? item.sku.toUpperCase() : modelSourceKey(item.description))}"${item.quantity === 0 ? ' class="inactive-row"' : ''}><td class="inventory-line-number" aria-label="Строка ${item.line}">${item.line}</td><td><strong>${escapeHtml(item.sku || `Строка ${item.line}`)}</strong><small>${escapeHtml(previewKind(item))}</small><p class="source-description">${escapeHtml(item.description)}</p></td><td>${escapeHtml(savedComponentSummary(item) || (!readSourceOverrides()[item.sku ? item.sku.toUpperCase() : modelSourceKey(item.description)] && lookupKnownComponent(item)?.text) || describeFacts(item) || 'Характеристики не найдены в описании.')}${productSourceMarkup(item)}${previewResearchFacts(item)}${item.issue ? `<p class="warn">${escapeHtml(item.issue)}</p>` : ''}</td><td><strong class="${item.quantity === null ? 'warn' : 'accent'}">${item.quantity ?? '?'}</strong>${item.quantity === 0 ? '<small>исключено</small>' : ''}</td><td><button type="button" class="remove-position" data-remove-line="${item.sourceLine ?? item.line}" aria-label="Удалить ${escapeHtml(item.sku || `строку ${item.line}`)} из спецификации" title="Удалить строку">×</button></td></tr>`).join('')}</tbody></table></div></details>`;
 }
 
 function reportHeader(report) {
@@ -299,7 +341,8 @@ function reportHeader(report) {
 function basicReportHeader(report) {
   if (report.preliminary) {
     const issues = (report.findings || []).filter(finding => ['bad','warn'].includes(finding.status));
-    return `<section class="decision-hero verdict-unconfirmed" aria-label="Предварительный результат"><div><p class="decision-kicker">ПРЕДВАРИТЕЛЬНЫЙ РЕЗУЛЬТАТ</p><h3>Список разобран: ${report.positions.length} строк</h3><p>Это быстрая проверка введённых данных. ${report.preliminaryError ? 'Подробная проверка не завершена. Исправьте указанную ошибку и повторите проверку.' : 'Документы ещё проверяются в фоне; техническая совместимость пока не подтверждена.'}</p>${issues.length ? `<ul>${issues.slice(0,6).map(issue => `<li>${escapeHtml(issue.title)}: ${escapeHtml(issue.detail)}</li>`).join('')}</ul>` : '<p>Явных противоречий в доступных введённых данных не обнаружено. Это не подтверждение совместимости.</p>'}</div></section>`;
+    const state = report.preliminaryEdited ? 'Данные изменились; для них необходимо заново запустить проверку документов.' : report.preliminaryError ? 'Подробная проверка не завершена. Исправьте указанную ошибку и повторите проверку.' : 'Документы ещё проверяются в фоне; техническая совместимость пока не подтверждена.';
+    return `<section class="decision-hero verdict-unconfirmed preliminary-result ${issues.length || report.preliminaryError ? 'preliminary-warning' : 'preliminary-clear'}" aria-label="Предварительный результат"><div><p class="decision-kicker">ПРЕДВАРИТЕЛЬНЫЙ РЕЗУЛЬТАТ</p><h3>Список разобран: ${report.positions.length} строк</h3><p>Это быстрая проверка введённых данных. ${state}</p>${issues.length ? `<ul>${issues.slice(0,6).map(issue => `<li>${escapeHtml(issue.title)}: ${escapeHtml(issue.detail)}</li>`).join('')}</ul>` : '<p>Явных противоречий в доступных введённых данных не обнаружено. Это не подтверждение совместимости.</p>'}</div></section>`;
   }
   const positions = report.positions || [];
   const counts = { compatible: 0, incompatible: 0, unconfirmed: 0 };
@@ -314,7 +357,31 @@ function renderPositionReport(report) {
   const parsed = parseBom($('#bom').value);
   const wasOpen = $('#bom-preview .inventory')?.open ?? true;
   $('#bom-preview').innerHTML = parsed.items.length ? inventoryHtml(parsed,'Распознано из списка',wasOpen) : '';
-  $('#report-content').innerHTML = reportHeader(report) + renderPositionsMarkup(report,selectedFilter);
+  const displayed = report.preliminary || report.mode === 'local' ? {...report,positions:(report.positions || []).map(position => ({...position,referenceSources:savedReferenceSources(position)}))} : report;
+  $('#report-content').innerHTML = reportHeader(report) + renderPositionsMarkup(displayed,selectedFilter);
+}
+
+function refreshPreliminaryForCurrentInput() {
+  if (!currentReport || (!currentReport.preliminary && !showingLivePreliminary)) return;
+  try {
+    const config = readConfig();
+    if (signature(config) === signature(currentReport.config)) {
+      if (showingLivePreliminary) {
+        const progress = document.querySelector('#report-content .research-progress');
+        showingLivePreliminary = false; renderPositionReport(currentReport);
+        if (progress && busy) $('#report-content').append(progress);
+        $('#export-report').disabled = false;
+      }
+      return;
+    }
+    showingLivePreliminary = true;
+    const progress = document.querySelector('#report-content .research-progress');
+    const report = {...analyzeConfig(config),config,preliminary:true,preliminaryEdited:true};
+    renderPositionReport(report);
+    if (progress && busy) $('#report-content').append(progress);
+    $('#export-report').disabled = true;
+    $('#action-note').textContent = 'Данные изменились. После завершения текущего запроса запустите проверку заново.';
+  } catch { /* Keep the last valid preview while input is incomplete. */ }
 }
 
 function showError(message) { $('#form-error').textContent = message; $('#form-error').hidden = false; }
@@ -325,9 +392,24 @@ function showResearchProgress(config) {
 }
 
 function updateResearchProgress(progress) {
+  if (progress.phase === 'sources') {
+    const position = currentReport?.preliminary && currentReport.positions?.find(item => item.id === progress.positionId);
+    if (!position || isStale()) return;
+    const previous = pendingPreviewSources.get(position.id) || [];
+    const found = (Array.isArray(progress.sources) ? progress.sources : []).filter(source => safeUrl(source?.url) && isUsableProductSource(position.sku || modelSourceKey(position.description),source)).map(source => ({url:safeUrl(source.url),title:String(source.title || 'страница').slice(0,210)}));
+    const sources = found.map(source => ({...source,title:`Найдена, до проверки доступности: ${source.title}`}));
+    pendingPreviewSources.set(position.id,[...new Map([...previous,...sources].map(source => [source.url,source])).values()].slice(0,20));
+    const parsed = parseBom($('#bom').value);
+    const open = $('#bom-preview .inventory')?.open ?? true;
+    $('#bom-preview').innerHTML = parsed.items.length ? inventoryHtml(parsed,'Распознано из списка',open) : '';
+    const fresh = found.filter(source => { const key = `${position.sku || modelSourceKey(position.description)}\n${source.url}`; if (attemptedPreviewSources.has(key)) return false; attemptedPreviewSources.add(key); return true; });
+    if (fresh.length) rememberProductLinks({positions:[{...position,sources:fresh,readSources:[],technicalSpecs:[]}]});
+    return;
+  }
   const row = document.querySelector(`[data-research-id="${CSS.escape(progress.positionId)}"] strong`);
   if (row) row.textContent = progress.phase === 'searching' ? 'Поиск и чтение документов…' : `Поиск выполнен · прочитано документов: ${progress.openedDocuments}${progress.fromCache ? ' · ответ из кеша, новый запрос к модели не выполнялся' : ''}`;
-  $('#research-state').textContent = `Завершена проверка позиций: ${progress.completed} из ${progress.total}. Итоговый отчёт формируется после завершения всех проверок.`;
+  const state = $('#research-state');
+  if (state) state.textContent = `Завершена проверка позиций: ${progress.completed} из ${progress.total}. Итоговый отчёт формируется после завершения всех проверок.`;
 }
 
 async function readResearchResponse(response) {
@@ -374,6 +456,9 @@ async function runAnalysis(event) {
   try { config = readConfig(); } catch(error) { showError(error.message); return; }
   if (!hasHardware(config)) { showError('Добавьте список моделей или заполните характеристики комплектующих.'); $('#bom').focus(); return; }
   busy = true;
+  showingLivePreliminary = false;
+  pendingPreviewSources = new Map();
+  attemptedPreviewSources = new Set();
   const button = $('#analyze-button');
   button.disabled = true;
   button.textContent = 'Подключаем проверку документов…';
@@ -381,6 +466,7 @@ async function runAnalysis(event) {
   selectedFilter = 'all';
   renderPositionReport(currentReport);
   $('#export-report').disabled = false;
+  $('#export-report').textContent = 'Скачать предварительный отчёт ↓';
   $('#action-note').textContent = 'Предварительный результат готов. Подробная проверка документов продолжается в фоне.';
   $('#report').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
   try {
@@ -394,14 +480,16 @@ async function runAnalysis(event) {
     const response = await fetch('/api/analyze', { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/x-ndjson'}, body:JSON.stringify({config,model:selectedModel,priorityResources:readPriorityResources()}), signal:AbortSignal.timeout(1810000) });
     const data = await readResearchResponse(response);
     const report = {...data, config};
+    pendingPreviewSources = new Map();
     currentReport = report;
     rememberProductLinks(report);
     selectedFilter = 'all';
-    renderPositionReport(report);
-    $('#export-report').disabled = false;
+    if (showingLivePreliminary && isStale()) refreshPreliminaryForCurrentInput(); else { showingLivePreliminary = false; renderPositionReport(report); }
+    $('#export-report').disabled = showingLivePreliminary;
+    $('#export-report').textContent = 'Скачать отчёт ↓';
     $('#report').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
   } catch(error) {
-    if (currentReport?.preliminary) { currentReport.preliminaryError = true; renderPositionReport(currentReport); }
+    if (currentReport?.preliminary) { currentReport.preliminaryError = true; if (showingLivePreliminary && isStale()) refreshPreliminaryForCurrentInput(); else renderPositionReport(currentReport); }
     showError(error.name === 'TimeoutError' ? 'Время проверки документов истекло. Итоговый отчёт не сформирован.' : error.message === 'Failed to fetch' ? 'Нет соединения с сервером. Проверьте, что npm start запущен.' : error.message);
     const progress = $('#research-state');
     if (progress) progress.textContent = 'Проверка прервана. Устраните ошибку подключения и повторите запрос.';
@@ -409,7 +497,7 @@ async function runAnalysis(event) {
     busy = false;
     button.disabled = false;
     button.innerHTML = 'Проверить документы и совместимость <span aria-hidden="true">↗</span>';
-    $('#action-note').textContent = currentReport?.preliminary ? 'Показан предварительный результат. Проверка документов не завершена.' : 'Проверка документов завершена. Подробный результат готов.';
+    $('#action-note').textContent = showingLivePreliminary ? 'Данные изменились. Запустите проверку заново для текущего списка.' : currentReport?.preliminary ? 'Показан предварительный результат. Проверка документов не завершена.' : 'Проверка документов завершена. Подробный результат готов.';
   }
 }
 
@@ -454,10 +542,14 @@ function exportReport() {
     if (position.missing?.length) lines.push('Не подтверждено:', ...position.missing.map(item => '- '+item), '');
     if (position.research) lines.push(
       `Поисковых запросов по позиции: ${position.research.searches}. Прочитано документов по позиции: ${position.research.openedDocuments}. Отброшено нерелевантных документов: ${position.research.rejectedDocuments ?? 0}. Документов передано для анализа: ${position.research.sharedDocuments ?? position.research.openedDocuments}.`, '');
-    if (position.readSources?.length) lines.push('Прочитанные документы:', ...sortSourcesByPriority(position.readSources).map(source => '- '+source.title+': '+source.url), '');
-    lines.push('Источники:', ...(position.sources?.length ? sortSourcesByPriority(position.sources).map(source => '- '+source.title+' ('+(sourceTypeLabels[source.sourceType] || sourceTypeLabels.unknown)+'): '+source.url) : ['Документальные подтверждения не получены.']), '');
+    if (position.readSources?.length) lines.push('Прочитанные документы:', ...sortSourcesForPosition(position.readSources,position).map(source => '- '+source.title+': '+source.url), '');
+    if (r.preliminary || r.mode === 'local') {
+      const references = savedReferenceSources(position);
+      if (references.length) lines.push('Справочные ссылки из каталога (документы в этой проверке ещё не прочитаны):',...references.map(source => '- '+source.title+': '+source.url),'');
+    }
+    lines.push('Источники:', ...(position.sources?.length ? sortSourcesForPosition(position.sources,position).map(source => '- '+source.title+' ('+(sourceTypeLabels[source.sourceType] || sourceTypeLabels.unknown)+'): '+source.url) : ['Документальные подтверждения не получены.']), '');
     for (const check of position.checks || []) lines.push(`- ${check.aspect}: ${verdictLabels[check.status]}. ${check.reason}`,
-      ...sortSourcesByPriority(check.sources || []).map(source => '  Источник: '+source.url));
+      ...sortSourcesForPosition(check.sources || [],position).map(source => '  Источник: '+source.url));
   }
   lines.push('', '## Проверенная конфигурация', '```json', JSON.stringify(r.config,null,2), '```');
   const url = URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/markdown;charset=utf-8'}));
@@ -467,7 +559,7 @@ function exportReport() {
 function formatRub(value) { return new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:8}).format(value); }
 function buildAssistantContext(position) {
   const allSources = [...(position.sources || []),...(position.checks || []).flatMap(check => check.sources || []),...(position.technicalSpecs || []).flatMap(spec => spec.sources || [])];
-  const sources = [...new Map(allSources.filter(source => /^https?:\/\//i.test(source.url || '')).map(source => [source.url,source])).values()].map(source => `- ${source.title || source.url}: ${source.url}`);
+  const sources = [...new Map(allSources.filter(source => /^https?:\/\//i.test(source.url || '')).map(source => [canonicalReferenceUrl(source.url),source])).values()].map(source => `- ${source.title || source.url}: ${source.url}`);
   const unresolved = (position.missing || []).map(item => `- ${item}`);
   const checks = (position.checks || []).map(check => `- ${check.aspect}: ${check.status}; ${check.reason}`);
   const specifications = (position.technicalSpecs || []).map(spec => `- ${spec.name}: ${spec.value}`);
@@ -635,6 +727,9 @@ changed();
 priorityPreviewReady = true;
 void syncProjectSources();
 function handleFormChange(event) {
+  // The textarea already updates on input. Its change event fires on blur,
+  // immediately before a click in the preview, and must not replace that target.
+  if (event.type === 'change' && event.target.id === 'bom') return;
   if (event.target.id === 'bom') { $('#manual-mode').checked = false; productLookup.clear(); }
   if (event.target.closest('#component-fields')) $('#manual-mode').checked = true;
   changed();
@@ -642,7 +737,30 @@ function handleFormChange(event) {
 form.addEventListener('input',handleFormChange);
 form.addEventListener('change',handleFormChange);
 form.addEventListener('submit',runAnalysis);
+async function removePreviewSource(button) {
+  const sku = button.closest('tr')?.dataset.sourceKey, url = button.dataset.removeSource;
+  if (!sku || !url) { showSourceSaveStatus('Не удалось определить позицию для удаления ссылки.'); return; }
+  button.disabled = true;
+  try {
+    const response = await fetch('/api/component-sources');
+    if (!response.ok) throw new Error('Не удалось открыть справочник.');
+    const catalog = await response.json();
+    const entry = catalog.components?.[sku] || {links:[],technicalSpecs:[],updatedAt:''};
+    const links = catalogLinks(entry).filter(link => canonicalReferenceUrl(link.url) !== canonicalReferenceUrl(url));
+    const result = await fetch('/api/component-sources/edit',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({sku,links,updatedAt:entry.updatedAt || '',removedUrl:url})});
+    const data = await result.json(); if (!result.ok) throw new Error(data.error || 'Не удалось удалить ссылку.');
+    const cache = loadProductLinkCache(), facts = loadProductFactsCache(), overrides = readSourceOverrides();
+    cache[sku] = data.entry.links; facts[sku] = data.entry.technicalSpecs; overrides[sku] = true;
+    localStorage.setItem(productLinkCacheKey,JSON.stringify(cache)); localStorage.setItem(productFactsCacheKey,JSON.stringify(facts)); localStorage.setItem(productSourceOverridesKey,JSON.stringify(overrides)); saveSourceExclusions(sku,data.entry);
+    if (catalogEntries[sku]) catalogEntries[sku] = data.entry;
+    const parsed = parseBom($('#bom').value), open = $('#bom-preview .inventory')?.open ?? true;
+    $('#bom-preview').innerHTML = parsed.items.length ? inventoryHtml(parsed,'Распознано из списка',open) : '';
+    showSourceSaveStatus('Ссылка удалена из справочника. Характеристики без других источников также удалены.');
+  } catch (error) { showSourceSaveStatus(error.message || 'Не удалось удалить ссылку.'); button.disabled = false; }
+}
 $('#bom-preview').addEventListener('click', event => {
+  const sourceButton = event.target.closest('[data-remove-source]');
+  if (sourceButton) { event.preventDefault(); void removePreviewSource(sourceButton); return; }
   const button = event.target.closest('[data-remove-line]');
   if (!button) return;
   const lines = $('#bom').value.replace(/\r\n?/g, '\n').split('\n');
@@ -741,3 +859,63 @@ $('#connection-test').addEventListener('click', async () => {
   }
 });
 checkConnection();
+
+let catalogEntries = {};
+function catalogLinks(entry) {
+  return [...new Map([...(entry.links || []),...(entry.technicalSpecs || []).flatMap(fact => fact.sources || [])].filter(link => safeUrl(link.url)).map(link => [canonicalReferenceUrl(link.url),link])).values()];
+}
+function catalogLinkFields(link = {}) {
+  const url = safeUrl(link.url) || '';
+  return `<div class="catalog-link-row" data-model-only="${link.modelOnly === true}"><label>Название<input class="catalog-link-title" maxlength="250" value="${escapeHtml(link.title || '')}" placeholder="Описание источника"></label><label>Адрес страницы<input class="catalog-link-url" type="url" required value="${escapeHtml(url)}" placeholder="https://..."></label>${url ? `<a class="catalog-icon" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" aria-label="Открыть ссылку в новой вкладке" title="Открыть ссылку в новой вкладке"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M19 13v6H5V5h6"/></svg></a>` : ''}<button type="button" class="catalog-icon catalog-icon-remove" data-catalog-remove aria-label="Убрать ссылку" title="Убрать ссылку"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13M10 10v7M14 10v7"/></svg></button></div>`;
+}
+function renderCatalog() {
+  const query = $('#catalog-search').value.trim().toLocaleLowerCase();
+  const entries = Object.entries(catalogEntries).filter(([sku,entry]) => `${sku} ${catalogLinks(entry).map(link => `${link.title} ${link.url}`).join(' ')}`.toLocaleLowerCase().includes(query)).sort(([a],[b]) => a.localeCompare(b));
+  $('#catalog-message').textContent = `Показано позиций: ${entries.length} из ${Object.keys(catalogEntries).length}.`;
+  $('#catalog-list').innerHTML = entries.length ? entries.map(([sku,entry]) => {
+    const links = catalogLinks(entry);
+    return `<details class="catalog-entry"><summary><strong>${escapeHtml(sku)}</strong><span>Источников: ${links.length} · открыть</span></summary><form class="catalog-entry-form" data-sku="${escapeHtml(sku)}"><div class="catalog-links">${links.map(catalogLinkFields).join('')}</div><div class="catalog-actions"><button type="button" class="secondary-button" data-catalog-add>Добавить ссылку</button><button type="submit" class="secondary-button">Сохранить изменения</button></div><p class="catalog-entry-message" role="status"></p></form></details>`;
+  }).join('') : '<p>Позиций не найдено.</p>';
+}
+async function loadCatalog() {
+  $('#catalog-message').textContent = 'Загружаем справочник…';
+  try { const response = await fetch('/api/component-sources'); if (!response.ok) throw new Error('Не удалось загрузить справочник.'); catalogEntries = (await response.json()).components || {}; renderCatalog(); }
+  catch (error) { $('#catalog-message').textContent = error.message; }
+}
+$('#source-catalog').addEventListener('toggle',event => { if (event.currentTarget.open) void loadCatalog(); });
+$('#catalog-search').addEventListener('input',renderCatalog);
+$('#catalog-list').addEventListener('click',event => {
+  const form = event.target.closest('.catalog-entry-form');
+  if (!form) return;
+  if (event.target.closest('[data-catalog-remove]')) event.target.closest('.catalog-link-row')?.remove();
+  if (event.target.closest('[data-catalog-add]')) {
+    const container = form.querySelector('.catalog-links');
+    if (container.children.length >= 20) { form.querySelector('.catalog-entry-message').textContent = 'Максимум 20 ссылок на позицию.'; return; }
+    container.insertAdjacentHTML('beforeend',catalogLinkFields());
+    container.lastElementChild.querySelector('.catalog-link-url').focus();
+  }
+});
+$('#catalog-list').addEventListener('submit',async event => {
+  const form = event.target.closest('.catalog-entry-form');
+  if (!form) return;
+  event.preventDefault();
+  const sku = form.dataset.sku, existing = catalogEntries[sku];
+  const links = [...form.querySelectorAll('.catalog-link-row')].map(row => ({title:row.querySelector('.catalog-link-title').value.trim(),url:row.querySelector('.catalog-link-url').value.trim(),modelOnly:row.dataset.modelOnly === 'true'}));
+  const message = form.querySelector('.catalog-entry-message'), button = form.querySelector('[type="submit"]');
+  button.disabled = true; message.textContent = 'Проверяем новые ссылки и сохраняем…';
+  try {
+    const response = await fetch('/api/component-sources/edit',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({sku,links,updatedAt:existing.updatedAt || ''})});
+    const data = await response.json(); if (!response.ok) throw new Error(data.error || 'Не удалось сохранить запись.');
+    catalogEntries[sku] = data.entry;
+    saveSourceExclusions(sku,data.entry);
+    const cache = loadProductLinkCache(), facts = loadProductFactsCache(); cache[sku] = data.entry.links; facts[sku] = data.entry.technicalSpecs;
+    const overrides = readSourceOverrides(); overrides[sku] = true;
+    try { localStorage.setItem(productLinkCacheKey,JSON.stringify(cache)); localStorage.setItem(productFactsCacheKey,JSON.stringify(facts)); localStorage.setItem(productSourceOverridesKey,JSON.stringify(overrides)); } catch {}
+    const parsed = parseBom($('#bom').value); const open = $('#bom-preview .inventory')?.open ?? true;
+    $('#bom-preview').innerHTML = parsed.items.length ? inventoryHtml(parsed,'Распознано из списка',open) : '';
+    form.querySelector('.catalog-links').innerHTML = catalogLinks(data.entry).map(catalogLinkFields).join('');
+    message.textContent = 'Изменения сохранены в файле проекта.';
+    form.closest('.catalog-entry').querySelector('summary span').textContent = `Источников: ${catalogLinks(data.entry).length} · открыть`;
+  } catch (error) { message.textContent = error.message; }
+  finally { button.disabled = false; }
+});

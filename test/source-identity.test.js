@@ -5,6 +5,22 @@ import { documentMatchesPosition } from '../provod.js';
 import { reconcilePositions } from '../positions.js';
 import { cleanComponentFacts } from '../component-knowledge.js';
 import { renderPositionsMarkup } from '../report-view.js';
+import { isKnownBlockedSource } from '../source-identity.js';
+
+test('browser-confirmed blocked page is excluded without excluding the entire vendor', () => {
+  const url = 'https://global.microless.com/product/wd-ultrastar-dc-hdd-server-7k6-internal-hard-drive-3-5-form-factor-4tb-capacity-256mb-cache-size-7200-rpm-disk-speed-sas-12gb-s-interface-512e-se-0b36048';
+  assert.equal(isKnownBlockedSource(url + '?ref=search'),true);
+  assert.equal(isUsableProductSource('HUS726T4TAL5204',{url,title:'HUS726T4TAL5204'}),false);
+  assert.equal(isKnownBlockedSource('https://global.microless.com/product/another-product'),false);
+});
+
+test('quick report labels catalogue references without claiming documents were read', () => {
+  const url = 'https://www.supermicro.com/en/aplus/system/4u/4124/as-4124gs-tnr.php';
+  const html = renderPositionsMarkup({positions:[{id:'line-1',sku:'AS-4124GS-TNR',description:'AS-4124GS-TNR',kind:'platform',status:'unconfirmed',referenceSources:[{url,title:'Supermicro AS-4124GS-TNR'}]}]});
+  assert.match(html,/Справочные ссылки \(документы ещё не прочитаны\)/);
+  assert.ok(html.includes(url));
+  assert.match(html,/Документальные подтверждения не получены/);
+});
 
 const disk = {id:'synthetic-disk',sku:'MZILG-SYNTHETIC',description:'Samsung SSD PM1653 1.92TB SAS 24Gb/s',kind:'storage',quantity:1,requiredChecks:['dimensions'],missing:[]};
 const wrong = {url:'https://seller.example/wd-ss530',title:'SSD WD 1.92TB SAS Ultrastar SS530',text:'1.92TB SAS 2.5 inch',positionIds:[disk.id]};
