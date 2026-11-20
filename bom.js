@@ -1,9 +1,11 @@
 // Универсальный разбор спецификации. Последняя колонка — число изделий в строке.
 // Числа внутри описания (DIMM-слоты, отсеки, БП, VRAM) не заменяют количество строки.
 import { validateConfig, fields } from './schema.js';
+import { sourceConflictsWithPosition } from './source-identity.js';
 
 export const kindLabels = { platform:'Платформа / корпус', board:'Материнская плата', cpu:'Процессор', memory:'Оперативная память', storage:'Накопитель', gpu:'GPU', controller:'Контроллер / HBA', network:'Сетевая карта', cable:'Кабель', psu:'Блок питания', cooler:'Охлаждение', unknown:'Не распознано' };
 export function isUsableProductSource(sku, source) {
+  if (sourceConflictsWithPosition({sku},source)) return false;
   const title = String(source?.title || '');
   if (/не содержит|нет техданных|без подтверждения|не подтвержда(?:ет|ется|ют|ются)|другая платформа|нельзя переносить|не относится к|другая (?:модель|ревизия)/i.test(title)) return false;
   const wantedQle = String(sku || '').match(/\bQLE\d{4}\b/i)?.[0]?.toUpperCase();

@@ -1,4 +1,5 @@
 import { groups } from './schema.js';
+import { sourceConflictsWithPosition } from './source-identity.js';
 
 export const verdictLabels = { compatible:'Совместимо', incompatible:'Не совместимо', unconfirmed:'Не подтверждено' };
 export const sourceTypeLabels = { manufacturer:'производитель', distributor:'дистрибьютор', integrator:'интегратор', retailer:'продавец', review:'технический обзор', unknown:'тип не установлен' };
@@ -207,7 +208,8 @@ export function reconcilePositions(baseline,candidates,searchedSources = []) {
         const ids = evidence?.positionIds;
         const applicable = !Array.isArray(ids) || ids.length === 0 || ids.includes(position.id)
           || source.scope === 'platform' && ids.some(id => platformIds.has(id));
-        return ['component','platform','joint'].includes(source?.scope) && Boolean(evidence) && applicable;
+        return ['component','platform','joint'].includes(source?.scope) && Boolean(evidence) && applicable
+          && !sourceConflictsWithPosition(position,evidence) && !sourceConflictsWithPosition(position,source);
       }).map(source => ({url:source.url,title:text(source.title) || source.url,scope:source.scope,sourceType:Object.hasOwn(sourceTypeLabels,source.sourceType) ? source.sourceType : 'unknown'}));
       return sources.length ? [{name,value,sources}] : [];
     }).slice(0,6);
@@ -219,7 +221,8 @@ export function reconcilePositions(baseline,candidates,searchedSources = []) {
         const ids = evidence?.positionIds;
         const applicable = !Array.isArray(ids) || ids.length === 0 || ids.includes(position.id)
           || source.scope === 'platform' && ids.some(id => platformIds.has(id));
-        return ['component','platform','joint'].includes(source?.scope) && Boolean(evidence) && applicable;
+        return ['component','platform','joint'].includes(source?.scope) && Boolean(evidence) && applicable
+          && !sourceConflictsWithPosition(position,evidence) && !sourceConflictsWithPosition(position,source);
       }).map(source => ({url:source.url,title:text(source.title) || source.url,scope:source.scope,sourceType:Object.hasOwn(sourceTypeLabels,source.sourceType) ? source.sourceType : 'unknown'}));
       const platformEvidence = sources.some(source => ['platform','joint'].includes(source.scope));
       const componentEvidence = sources.some(source => ['component','joint'].includes(source.scope));

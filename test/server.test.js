@@ -16,6 +16,31 @@ async function withServer(options,run) {
 }
 const post = (base,body,headers = {}) => fetch(`${base}/api/analyze`,{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(body)});
 
+test('sourced component facts survive restart and a later links-only save', async t => {
+  const dir = await mkdtemp(join(tmpdir(),'servercheck-facts-'));
+  t.after(() => rm(dir,{recursive:true,force:true}));
+  const sourceCatalogPath = pathToFileURL(join(dir,'component-sources.json'));
+  const sku = 'SYNTHETIC-CPU-123';
+  const fact = {name:'Socket',value:'LGA test',sources:[{url:'https://manufacturer.example/spec',title:'CPU datasheet'}]};
+  const options = {apiKey:'',sourceCatalogPath,fetchImpl:async () => assert.fail('Preview must not call an external API')};
+  await withServer(options,async base => {
+    const response = await fetch(`${base}/api/component-sources`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({entries:[{sku,links:[],technicalSpecs:[fact,{name:'Unsupported',value:'No source',sources:[]}],quantity:4,verdict:'compatible',config:'private BOM'}]})});
+    assert.equal(response.status,200);
+    assert.equal((await response.json()).saved,1);
+  });
+  await withServer(options,async base => {
+    await fetch(`${base}/api/component-sources`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({entries:[{sku,links:[{url:'https://seller.example/spec',title:'Seller data'}]}]})});
+    const data = await (await fetch(`${base}/api/component-sources`)).json();
+    const component = data.components[sku];
+    assert.equal(component.technicalSpecs.length,1);
+    assert.equal(component.technicalSpecs[0].value,'LGA test');
+    assert.equal(component.technicalSpecs[0].sources[0].url,fact.sources[0].url);
+    assert.ok(!Object.hasOwn(component,'quantity'));
+    assert.ok(!Object.hasOwn(component,'verdict'));
+    assert.ok(!Object.hasOwn(component,'config'));
+  });
+});
+
 test('priority resources persist in project order and empty deletion survives restart', async t => {
   const dir = await mkdtemp(join(tmpdir(),'servercheck-priority-'));
   t.after(() => rm(dir,{recursive:true,force:true}));

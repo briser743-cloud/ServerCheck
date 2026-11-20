@@ -3,7 +3,8 @@ import { cleanLegacyDraft } from './draft.js';
 import { analyzeConfig } from './engine.js';
 import { parseBom, describeFacts, kindLabels, knownComponentInfo, lookupKnownComponent, classify, removePackagingRows, modelSourceKey, isUsableProductSource } from './bom.js';
 import { verdictLabels, sourceTypeLabels } from './positions.js';
-import { renderPositionsMarkup, escapeHtml, safeUrl, omitRepeatedReferences, setSourcePriorities, sortSourcesByPriority } from './report-view.js';
+import { renderPositionsMarkup, escapeHtml, safeUrl, omitRepeatedReferences, setSourcePriorities, sortSourcesByPriority, previewSourceLinks } from './report-view.js';
+import { cleanComponentFacts } from './component-knowledge.js';
 
 const $ = selector => document.querySelector(selector);
 const form = $('#config-form');
@@ -146,6 +147,18 @@ function changed() {
 }
 
 const productLinkCacheKey = 'servercheck.productLinks.v1';
+const productFactsCacheKey = 'servercheck.productFacts.v1';
+function loadProductFactsCache() {
+  try { const value = JSON.parse(localStorage.getItem(productFactsCacheKey) || '{}'); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; } catch { return {}; }
+}
+function savedComponentFacts(item) {
+  const key = item.sku ? item.sku.toUpperCase() : modelSourceKey(item.description);
+  return key ? cleanComponentFacts(key,loadProductFactsCache()[key],isUsableProductSource) : [];
+}
+function savedComponentSummary(item) {
+  const facts = savedComponentFacts(item);
+  return facts.length ? `Из сохранённых характеристик: ${facts.slice(0,3).map(fact => `${fact.name}: ${fact.value}`).join(' · ')}` : '';
+}
 function loadProductLinkCache() {
   try { const value = JSON.parse(localStorage.getItem(productLinkCacheKey) || '{}'); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; } catch { return {}; }
 }
@@ -176,15 +189,19 @@ async function syncProjectSources() {
     if (!response.ok) throw new Error('Справочник недоступен.');
     const data = await response.json();
     const local = loadProductLinkCache();
-    const entries = Object.entries(local).filter(([,links]) => Array.isArray(links) && links.length).map(([sku,links]) => ({sku,links}));
+    const facts = loadProductFactsCache();
+    const entries = Object.entries(local).filter(([,links]) => Array.isArray(links) && links.length).map(([sku,links]) => ({sku,links,technicalSpecs:cleanComponentFacts(sku,facts[sku],isUsableProductSource)}));
     for (const [sku,entry] of Object.entries(data.components || {})) {
       if (!Array.isArray(entry?.links)) continue;
       local[sku] = [...new Map([...entry.links,...(Array.isArray(local[sku]) ? local[sku] : [])].filter(link => safeUrl(link?.url) && isUsableProductSource(sku,link)).map(link => [safeUrl(link.url),link])).values()].slice(0,5);
+      const savedFacts = cleanComponentFacts(sku,entry.technicalSpecs,isUsableProductSource);
+      if (savedFacts.length) facts[sku] = savedFacts;
     }
     try { localStorage.setItem(productLinkCacheKey,JSON.stringify(local)); } catch {}
+    try { localStorage.setItem(productFactsCacheKey,JSON.stringify(facts)); } catch {}
     const parsed = parseBom($('#bom').value);
     $('#bom-preview').innerHTML = parsed.items.length ? inventoryHtml(parsed,'Распознано из списка',true) : '';
-    await saveProjectSources(entries);
+    await saveProjectSources(entries.map(entry => ({...entry,technicalSpecs:cleanComponentFacts(entry.sku,facts[entry.sku],isUsableProductSource)})));
   } catch { showSourceSaveStatus('Не удалось открыть справочник ссылок проекта.'); }
 }
 function sourceMatchesModel(position, source) {
@@ -209,6 +226,7 @@ function sourceMatchesModel(position, source) {
 }
 function rememberProductLinks(report) {
   const cache = loadProductLinkCache();
+  const facts = loadProductFactsCache();
   const newEntries = [];
   const norm = value => String(value || '').toLowerCase().replace(/[^a-z0-9]/g,'');
   for (const position of report.positions || []) {
@@ -216,9 +234,13 @@ function rememberProductLinks(report) {
     if (key.length < 5) continue;
     const sources = [...(position.sources || []), ...(position.readSources || []), ...(position.technicalSpecs || []).flatMap(spec => spec.sources || [])];
     const matches = sortSourcesByPriority(sources).filter(source => { const url = safeUrl(source.url); if (!url || !isUsableProductSource(sku,source)) return false; let decoded = url; try { decoded = decodeURIComponent(url); } catch {} return source.exactSkuMentioned === true || norm((source.title || '') + ' ' + decoded).includes(key) || sourceMatchesModel(position,source); }).map(source => ({url:safeUrl(source.url),title:String(source.title || 'Страница товара').slice(0,250),modelOnly:sku.startsWith('MODEL:') || (!source.exactSkuMentioned && !norm((source.title || '') + ' ' + source.url).includes(key))})).slice(0,3);
-    if (matches.length) { cache[sku.toUpperCase()] = matches; newEntries.push({sku,links:matches}); }
+    const technicalSpecs = cleanComponentFacts(sku,position.technicalSpecs,isUsableProductSource);
+    const links = omitRepeatedReferences(sortSourcesByPriority([...matches,...technicalSpecs.flatMap(fact => fact.sources)]),[]).slice(0,5);
+    if (technicalSpecs.length) facts[sku.toUpperCase()] = technicalSpecs;
+    if (links.length) { cache[sku.toUpperCase()] = links; newEntries.push({sku,links,technicalSpecs}); }
   }
   try { localStorage.setItem(productLinkCacheKey,JSON.stringify(cache)); } catch {}
+  try { localStorage.setItem(productFactsCacheKey,JSON.stringify(facts)); } catch {}
   void saveProjectSources(newEntries);
 }
 
@@ -237,9 +259,15 @@ function productSourceMarkup(item) {
     let decoded = source.url; try { decoded = decodeURIComponent(decoded); } catch {}
     return (sku.length >= 5 && (source.exactSkuMentioned || normalize(`${source.title || ''} ${decoded}`).includes(sku))) || sourceMatchesModel(item,source);
   }).map(source => ({...source,modelOnly:!item.sku || (!source.exactSkuMentioned && !normalize(`${source.title || ''} ${source.url}`).includes(sku))}));
-  const sources = [...knownSources, ...saved.filter(source => isUsableProductSource(item.sku,source)), ...matches].filter(source => safeUrl(source?.url));
+  // A specification can have an applicable source whose title/URL omits the
+  // ordering SKU. Keep the same sources already offered in the facts disclosure.
+  const factSources = (position?.technicalSpecs?.length ? position.technicalSpecs : savedComponentFacts(item)).filter(fact => fact.name && fact.value)
+    .flatMap(fact => fact.sources || [])
+    .filter(source => safeUrl(source?.url) && isUsableProductSource(item.sku,source))
+    .map(source => ({...source,factOnly:true}));
+  const sources = [...knownSources, ...saved.filter(source => isUsableProductSource(item.sku,source)), ...matches, ...factSources].filter(source => safeUrl(source?.url));
   const selected = omitRepeatedReferences(sortSourcesByPriority(sources),[]).slice(0,5);
-  return selected.length ? `<p class="field-hint">Источники: ${selected.map((source,index) => `<a href="${escapeHtml(safeUrl(source.url))}" target="_blank" rel="noopener noreferrer">${escapeHtml(source.title || 'Источник ' + (index + 1))}</a>${source.modelOnly ? ' (по модели; артикул не подтверждён)' : ''}`).join(' · ')}</p>` : '';
+  return previewSourceLinks(selected);
 }
 
 function previewKind(item) {
@@ -250,18 +278,18 @@ function previewKind(item) {
 
 function previewResearchFacts(item) {
   const position = currentReport && !isStale() ? currentReport.positions?.find(row => row.line === item.line && row.sku === item.sku) : null;
-  const facts = (position?.technicalSpecs || []).filter(fact => fact.name && fact.value && fact.sources?.some(source => safeUrl(source.url) && isUsableProductSource(item.sku,source))).slice(0,4);
+  const facts = (position?.technicalSpecs?.length ? position.technicalSpecs : savedComponentFacts(item)).filter(fact => fact.name && fact.value && fact.sources?.some(source => safeUrl(source.url) && isUsableProductSource(item.sku,source))).slice(0,6);
   if (!facts.length) return '';
-  return `<div class="field-hint"><strong>Найдено при проверке:</strong> ${facts.map(fact => {
+  return `<details class="more-information"><summary>Характеристики с источниками (${facts.length})</summary><div class="field-hint"><strong>Найдено при проверке:</strong> ${facts.map(fact => {
     const source = sortSourcesByPriority(fact.sources).find(entry => safeUrl(entry.url) && isUsableProductSource(item.sku,entry));
     return `<span>${escapeHtml(fact.name)}: ${escapeHtml(fact.value)} (<a href="${escapeHtml(safeUrl(source.url))}" target="_blank" rel="noopener noreferrer">источник</a>)</span>`;
-  }).join(' · ')}</div>`;
+  }).join(' · ')}</div></details>`;
 }
 
 function inventoryHtml(parsed,title,open = false) {
   const t = parsed.totals;
   const metrics = [[t.cpuCount,'CPU'],[t.memoryGB,'ГБ RAM'],[t.storageCount,'накопителей'],[t.storageGB,'ГБ до RAID'],[t.gpuCount,'GPU']].filter(([value]) => value !== null);
-  return `<details class="inventory" ${open ? 'open' : ''}><summary>${title}: ${parsed.items.length} строк${t.units != null ? ` · ${t.units} ед.` : ''}</summary><p class="field-hint">Итоги по всему списку. Количество — после описания; цена игнорируется. Характеристики из описания требуют проверки.</p>${metrics.length ? `<div class="inventory-totals">${metrics.map(([value,label]) => `<span><strong>${value}</strong> ${label}</span>`).join('')}</div>` : ''}<div class="table-scroll"><table class="inventory-table"><thead><tr><th scope="col">Артикул и категория</th><th scope="col">Извлечённые характеристики</th><th scope="col">Кол-во</th><th scope="col"><span class="visually-hidden">Удаление</span></th></tr></thead><tbody>${parsed.items.map(item => `<tr${item.quantity === 0 ? ' class="inactive-row"' : ''}><td><strong>${escapeHtml(item.sku || `Строка ${item.line}`)}</strong><small>${escapeHtml(previewKind(item))}</small><p class="source-description">${escapeHtml(item.description)}</p></td><td>${escapeHtml(lookupKnownComponent(item)?.text || describeFacts(item) || 'Характеристики не найдены в описании.')}${productSourceMarkup(item)}${previewResearchFacts(item)}${item.issue ? `<p class="warn">${escapeHtml(item.issue)}</p>` : ''}</td><td><strong class="${item.quantity === null ? 'warn' : 'accent'}">${item.quantity ?? '?'}</strong>${item.quantity === 0 ? '<small>исключено</small>' : ''}</td><td><button type="button" class="remove-position" data-remove-line="${item.line}" aria-label="Удалить ${escapeHtml(item.sku || `строку ${item.line}`)} из спецификации" title="Удалить строку">×</button></td></tr>`).join('')}</tbody></table></div></details>`;
+  return `<details class="inventory" ${open ? 'open' : ''}><summary>${title}: ${parsed.items.length} строк${t.units != null ? ` · ${t.units} ед.` : ''}</summary><p class="field-hint">Итоги по всему списку. Количество — после описания; цена игнорируется. Характеристики из описания требуют проверки.</p>${metrics.length ? `<div class="inventory-totals">${metrics.map(([value,label]) => `<span><strong>${value}</strong> ${label}</span>`).join('')}</div>` : ''}<div class="table-scroll"><table class="inventory-table"><thead><tr><th scope="col">Артикул и категория</th><th scope="col">Извлечённые характеристики</th><th scope="col">Кол-во</th><th scope="col"><span class="visually-hidden">Удаление</span></th></tr></thead><tbody>${parsed.items.map(item => `<tr${item.quantity === 0 ? ' class="inactive-row"' : ''}><td><strong>${escapeHtml(item.sku || `Строка ${item.line}`)}</strong><small>${escapeHtml(previewKind(item))}</small><p class="source-description">${escapeHtml(item.description)}</p></td><td>${escapeHtml(lookupKnownComponent(item)?.text || savedComponentSummary(item) || describeFacts(item) || 'Характеристики не найдены в описании.')}${productSourceMarkup(item)}${previewResearchFacts(item)}${item.issue ? `<p class="warn">${escapeHtml(item.issue)}</p>` : ''}</td><td><strong class="${item.quantity === null ? 'warn' : 'accent'}">${item.quantity ?? '?'}</strong>${item.quantity === 0 ? '<small>исключено</small>' : ''}</td><td><button type="button" class="remove-position" data-remove-line="${item.line}" aria-label="Удалить ${escapeHtml(item.sku || `строку ${item.line}`)} из спецификации" title="Удалить строку">×</button></td></tr>`).join('')}</tbody></table></div></details>`;
 }
 
 function reportHeader(report) {
@@ -269,6 +297,10 @@ function reportHeader(report) {
 }
 
 function basicReportHeader(report) {
+  if (report.preliminary) {
+    const issues = (report.findings || []).filter(finding => ['bad','warn'].includes(finding.status));
+    return `<section class="decision-hero verdict-unconfirmed" aria-label="Предварительный результат"><div><p class="decision-kicker">ПРЕДВАРИТЕЛЬНЫЙ РЕЗУЛЬТАТ</p><h3>Список разобран: ${report.positions.length} строк</h3><p>Это быстрая проверка введённых данных. ${report.preliminaryError ? 'Подробная проверка не завершена. Исправьте указанную ошибку и повторите проверку.' : 'Документы ещё проверяются в фоне; техническая совместимость пока не подтверждена.'}</p>${issues.length ? `<ul>${issues.slice(0,6).map(issue => `<li>${escapeHtml(issue.title)}: ${escapeHtml(issue.detail)}</li>`).join('')}</ul>` : '<p>Явных противоречий в доступных введённых данных не обнаружено. Это не подтверждение совместимости.</p>'}</div></section>`;
+  }
   const positions = report.positions || [];
   const counts = { compatible: 0, incompatible: 0, unconfirmed: 0 };
   for (const position of positions) counts[Object.hasOwn(counts, position.status) ? position.status : 'unconfirmed']++;
@@ -289,7 +321,7 @@ function showError(message) { $('#form-error').textContent = message; $('#form-e
 function showResearchProgress(config) {
   const positions = analyzeConfig(config).positions;
   const active = positions.filter(position => position.quantity !== 0);
-  $('#report-content').innerHTML = `<section class="research-progress"><h3>Проверка первичных документов</h3><p id="research-state">Подготовка поиска. Позиций для проверки: ${active.length}.</p><ul>${positions.map(position => `<li data-research-id="${escapeHtml(position.id)}"><span>${escapeHtml(position.sku || position.description)}</span><strong>${position.quantity === 0 ? 'Не устанавливается' : 'Ожидает поиска'}</strong></li>`).join('')}</ul></section>`;
+  $('#report-content').insertAdjacentHTML('beforeend', `<section class="research-progress"><h3>Проверка первичных документов в фоне</h3><p id="research-state">Подготовка поиска. Позиций для проверки: ${active.length}.</p><ul>${positions.map(position => `<li data-research-id="${escapeHtml(position.id)}"><span>${escapeHtml(position.sku || position.description)}</span><strong>${position.quantity === 0 ? 'Не устанавливается' : 'Ожидает поиска'}</strong></li>`).join('')}</ul></section>`);
 }
 
 function updateResearchProgress(progress) {
@@ -345,14 +377,17 @@ async function runAnalysis(event) {
   const button = $('#analyze-button');
   button.disabled = true;
   button.textContent = 'Подключаем проверку документов…';
-  currentReport = null;
-  $('#export-report').disabled = true;
-  $('#report-content').innerHTML = '';
+  currentReport = {...analyzeConfig(config), config, preliminary:true};
+  selectedFilter = 'all';
+  renderPositionReport(currentReport);
+  $('#export-report').disabled = false;
+  $('#action-note').textContent = 'Предварительный результат готов. Подробная проверка документов продолжается в фоне.';
+  $('#report').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
   try {
     await priorityLoadPromise;
     await priorityWrites;
-    await checkConnection();
-    if (!apiReady) throw new Error(connectionError || 'Поиск первичных документов не подключён. Добавьте OPENAI_API_KEY в локальный файл .env.');
+    // /api/analyze checks configuration, credentials and model capabilities.
+    // Avoid a second key/catalog round trip before the actual analysis.
     button.textContent = 'Проверяем первичные документы…';
     $('#action-note').textContent = 'Поиск и чтение выполняются отдельно по каждой позиции. Дождитесь завершения.';
     showResearchProgress(config);
@@ -366,6 +401,7 @@ async function runAnalysis(event) {
     $('#export-report').disabled = false;
     $('#report').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
   } catch(error) {
+    if (currentReport?.preliminary) { currentReport.preliminaryError = true; renderPositionReport(currentReport); }
     showError(error.name === 'TimeoutError' ? 'Время проверки документов истекло. Итоговый отчёт не сформирован.' : error.message === 'Failed to fetch' ? 'Нет соединения с сервером. Проверьте, что npm start запущен.' : error.message);
     const progress = $('#research-state');
     if (progress) progress.textContent = 'Проверка прервана. Устраните ошибку подключения и повторите запрос.';
@@ -373,7 +409,7 @@ async function runAnalysis(event) {
     busy = false;
     button.disabled = false;
     button.innerHTML = 'Проверить документы и совместимость <span aria-hidden="true">↗</span>';
-    $('#action-note').textContent = 'Результаты появятся после проверки документов по всем позициям.';
+    $('#action-note').textContent = currentReport?.preliminary ? 'Показан предварительный результат. Проверка документов не завершена.' : 'Проверка документов завершена. Подробный результат готов.';
   }
 }
 
@@ -542,6 +578,7 @@ $('#report-content').addEventListener('submit',async event => {
   event.preventDefault();
   const position = currentReport.positions.find(item => item.id === chatForm.dataset.positionId);
   const question = new FormData(chatForm).get('question')?.toString().trim();
+  const recheckRequested = new FormData(chatForm).get('recheck') === 'on';
   if (!position || !question || position.chatPending) return;
   position.chatMessages ||= [];
   if (position.chatMessages.length >= 10) position.chatMessages.splice(0,2);
@@ -558,6 +595,8 @@ $('#report-content').addEventListener('submit',async event => {
     if (!response.ok) throw new Error(`${data.error || 'Не удалось получить ответ ИИ.'}${data.costRub == null ? '' : ` Фактическое списание: ${formatRub(data.costRub)}.`}`);
     messageHistory.push({role:'assistant',content:data.answer,costRub:data.costRub,sources:data.sources || []});
     position.chatImage = '';
+    // A normal question needs only the answer, not another paid analysis.
+    if (!recheckRequested) return;
     position.chatError = 'Ответ получен. Повторно проверяем этот компонент с учётом сборки; выполняется дополнительный запрос к ИИ.';
     renderPositionChat(position);
     const previousReport = currentReport;
